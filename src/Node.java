@@ -6,14 +6,14 @@ public class Node {
 	public String nodeID = null;
 	public ArrayList<Message> localMSG = new ArrayList<Message>();
 	public ArrayList<Node> networkNodes = new ArrayList<Node>();
-	public Main main = new Main();
+	public Main main;
 	
 	public Node(String id) {
 		this.nodeID = id;
 	}
 
-	public Node(String string, Main main) {
-		// TODO Auto-generated constructor stub
+	public Node(String id, Main main) {
+		this.nodeID = id;
 		this.main = main;
 	}
 
