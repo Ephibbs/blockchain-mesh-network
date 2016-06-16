@@ -1,3 +1,10 @@
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -6,10 +13,21 @@ public class Node {
 	public String nodeID = null;
 	public ArrayList<Message> localMSG = new ArrayList<Message>();
 	public ArrayList<Node> networkNodes = new ArrayList<Node>();
-
+	public ArrayList<PublicKey> publicKeySet = new ArrayList<PublicKey>();
+	KeyPair pair = null;
+	PrivateKey privKey = null;
+	PublicKey pubKey = null;
+	
 	// These are the constructors for the node class
-	public Node(String id) {
+	public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
 		this.nodeID = id;
+		
+		KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA", "SUN");
+		SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
+		keyGen.initialize(1024, random);
+		this.pair = keyGen.generateKeyPair();
+		this.privKey = pair.getPrivate();
+		this.pubKey = pair.getPublic();
 	}
 
 	// This allows other classes to get the name of the node
@@ -42,13 +60,40 @@ public class Node {
 	// from a nodes friend list. The message is then distribute to this nodes
 	// friend
 	public void createMessage(Object data) {
+		
+		distributePublicKey();
+		System.out.println("I distributed my public key");
+		
 		Random rand = new Random();
 		int receiverNum = rand.nextInt(networkNodes.size());
 
-		Message text = new TextMessage("hello ", networkNodes.get(receiverNum));
+		Message text = new TextMessage(data, this, networkNodes.get(receiverNum));
 
 		localMSG.add(text);
 		this.distributeMessage(text);
+	}
+
+	private void distributePublicKey() {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < networkNodes.size(); i++) {
+			networkNodes.get(i).addPublicKey(this.getPublicKey());
+		}
+	}
+
+	private void addPublicKey(PublicKey publicKey) {
+		// TODO Auto-generated method stub
+		if(this.localMSG.contains(publicKey)) {
+			// do nothing
+		}
+		else {
+			this.publicKeySet.add(publicKey);
+			this.publicKeySet.add(publicKey);
+		}
+	}
+
+	private PublicKey getPublicKey() {
+		// TODO Auto-generated method stub
+		return this.pubKey;
 	}
 
 	// THis is how the message is distributed to its friends
@@ -60,6 +105,12 @@ public class Node {
 
 	// Adding a message to a nodes list of messages it has received
 	private void addMessage(Message text) {
-		this.localMSG.add(text);
+		if(this.localMSG.contains(text)) {
+			// do nothing
+		}
+		else {
+			this.localMSG.add(text);
+			this.distributeMessage(text);
+		}
 	}
 }
