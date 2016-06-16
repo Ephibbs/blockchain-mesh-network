@@ -20,7 +20,7 @@ public class Blockchain {
 
         while (!verified) {
             // Get hash
-            nonce = new BigInteger(130, new SecureRandom()).toString(32);
+            String nonce = new BigInteger(130, new SecureRandom()).toString(32);
             int hc = (blockStr + nonce).hashCode();
             String hash = String.format("%32s", Integer.toBinaryString(hc)).replace(" ", "0");
 
