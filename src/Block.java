@@ -22,4 +22,8 @@ public class Block {
     void addMessage(Message msg) {
         msgs.add(msg);
     }
+
+    void setNonce(String nonce) {
+        this.nonce = nonce;
+    }
 }
