@@ -4,14 +4,15 @@
  */
 
 public class Blockchain {
-	private 
     public Blockchain() {
 
     }
 
     Block solvePuzzle(Block block, int difficulty) {
-		if (difficulty < 1) {
+        if (difficulty < 1) {
             difficulty = 1;
+        } else if (difficulty > 32) {
+            difficulty = 32;
         }
 
         boolean verified = false;
@@ -27,9 +28,7 @@ public class Blockchain {
             for (int i = 0; i < hash.length(); i++) {
                 if (hash.charAt(i) == '1') {
                     break;
-                }
-
-                if (i == difficulty-1) {
+                } else if (i == difficulty-1) {
                     verified = true;
                     break;
                 }
