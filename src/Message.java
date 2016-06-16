@@ -11,10 +11,8 @@ import java.util.ArrayList;
 
 public abstract class Message {
 
-//	public Node author = new Node(null);
-//	public Node recipient = new Node(null);
-	public Node author = null;
-	public Node recipient = null;
+	public Node author = new Node(null);
+	public Node recipient = new Node(null);
 	public Object messageData = new Object();
 	
 	public Message(Object data, Node auth, Node rec) {
@@ -36,18 +34,10 @@ public abstract class Message {
 	}
 
 	/**
-	 * @return the author of the message
+	 * @return the author
 	 */
 	public Node getAuthor() {
 		return author;
-	}
-	
-	/**
-	 * 
-	 * @return the recipient of the message
-	 */
-	public Node getRecipient() {
-		return recipient;
 	}
 	
 	public void printMessage() {
