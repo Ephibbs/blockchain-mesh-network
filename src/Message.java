@@ -11,8 +11,10 @@ import java.util.ArrayList;
 
 public abstract class Message {
 
-	public Node author = new Node(null);
-	public Node recipient = new Node(null);
+//	public Node author = new Node(null);
+//	public Node recipient = new Node(null);
+	public Node author = null;
+	public Node recipient = null;
 	public Object messageData = new Object();
 	
 	public Message(Object data, Node auth, Node rec) {
