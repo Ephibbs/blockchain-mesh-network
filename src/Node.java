@@ -1,3 +1,4 @@
+import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -5,6 +6,8 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,20 +17,26 @@ public class Node {
 	public ArrayList<Message> localMSG = new ArrayList<Message>();
 	public ArrayList<Node> networkNodes = new ArrayList<Node>();
 	public ArrayList<PublicKey> publicKeySet = new ArrayList<PublicKey>();
-	KeyPair pair = null;
-	PrivateKey privKey = null;
-	PublicKey pubKey = null;
-	
+	public KeyPairGenerator keyGen = null;
+	public SecureRandom random = null;
+	public Signature dsa = null;
+	public KeyPair pair = null;
+	public PrivateKey privKey = null;
+	public PublicKey pubKey = null;
+	public byte[] byteArray = new byte[1024];
+
 	// These are the constructors for the node class
 	public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
 		this.nodeID = id;
-		
-		KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA", "SUN");
-		SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
+
+		this.keyGen = KeyPairGenerator.getInstance("DSA", "SUN");
+		this.random = SecureRandom.getInstance("SHA1PRNG", "SUN");
+		this.dsa = Signature.getInstance("SHA1withDSA", "SUN");
 		keyGen.initialize(1024, random);
 		this.pair = keyGen.generateKeyPair();
 		this.privKey = pair.getPrivate();
 		this.pubKey = pair.getPublic();
+		// distributePublicKey()
 	}
 
 	// This allows other classes to get the name of the node
@@ -60,55 +69,111 @@ public class Node {
 	// from a nodes friend list. The message is then distribute to this nodes
 	// friend
 	public void createMessage(Object data) {
-		
-		distributePublicKey();
+
+		distributePublicKey(this.getPublicKey());
 		System.out.println("I distributed my public key");
-		
+
 		Random rand = new Random();
 		int receiverNum = rand.nextInt(networkNodes.size());
 
 		Message text = new TextMessage(data, this, networkNodes.get(receiverNum));
 
+		// byteArray = text.getMessageData().toString().getBytes();
+
 		localMSG.add(text);
 		this.distributeMessage(text);
 	}
 
-	private void distributePublicKey() {
+	// This is the method for creating a message and adding a random recipient
+	// from a nodes friend list. The message is then distribute to this nodes
+	// friend
+	public void createMessageWithSignature(Object data) throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, NoSuchProviderException {
+
+		// distributePublicKey(this.getPublicKey());
+		System.out.println("I distributed my public key");
+
+		Random rand = new Random();
+		int receiverNum = rand.nextInt(networkNodes.size());
+
+		Message text = new TextMessage(data, this, networkNodes.get(receiverNum));
+
+		byteArray = text.getMessageData().toString().getBytes();
+
+		byte[] realSig = new byte[1024];
+
+		dsa.initSign(this.privKey);
+		dsa.update(byteArray);
+		realSig = dsa.sign();
+
+		localMSG.add(text);
+		this.distributeSignedMessage(realSig, byteArray, text);
+	}
+
+	public void distributeSignedMessage(byte[] realSig, byte[] byteArray2, Message text) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < networkNodes.size(); i++) {
-			networkNodes.get(i).addPublicKey(this.getPublicKey());
+			networkNodes.get(i).addSignedMessage(realSig, byteArray2, text);
 		}
 	}
 
-	private void addPublicKey(PublicKey publicKey) {
+	public void addSignedMessage(byte[] realSig, byte[] byteArray2, Message text) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException {
+		Signature sig = Signature.getInstance("SHA1withDSA", "SUN");
+		for (int i = 0; i < publicKeySet.size(); i++) {
+			sig.initVerify(publicKeySet.get(i));
+			sig.update(byteArray2);
+			boolean verifies = sig.verify(realSig);
+			//System.out.println("signature verifies: " + verifies);
+			//System.out.println("the public key I verified with was: " + publicKeySet.get(i).toString());
+			//System.out.println("I am node: " + this.getNodeID());
+
+			if (verifies == true) {
+				if (!this.localMSG.contains(text)) {
+					localMSG.add(text);
+					this.distributeSignedMessage(realSig, byteArray2, text);
+					System.out.println("I sent the message out");
+					return;
+				}
+			} else {
+				// System.out.println("I broke the program");
+				// return;
+			}
+		}
+	}
+
+	public void distributePublicKey(PublicKey publicKey) {
 		// TODO Auto-generated method stub
-		if(this.localMSG.contains(publicKey)) {
-			// do nothing
-		}
-		else {
-			this.publicKeySet.add(publicKey);
-			this.publicKeySet.add(publicKey);
+		for (int i = 0; i < networkNodes.size(); i++) {
+			networkNodes.get(i).addPublicKey(publicKey);
 		}
 	}
 
-	private PublicKey getPublicKey() {
+	public void addPublicKey(PublicKey publicKey) {
+		// TODO Auto-generated method stub
+		if (this.publicKeySet.contains(publicKey)) {
+			// do nothing
+		} else {
+			this.publicKeySet.add(publicKey);
+			this.distributePublicKey(publicKey);
+		}
+	}
+
+	public PublicKey getPublicKey() {
 		// TODO Auto-generated method stub
 		return this.pubKey;
 	}
 
 	// THis is how the message is distributed to its friends
-	private void distributeMessage(Message text) {
+	public void distributeMessage(Message text) {
 		for (int i = 0; i < networkNodes.size(); i++) {
 			networkNodes.get(i).addMessage(text);
 		}
 	}
 
 	// Adding a message to a nodes list of messages it has received
-	private void addMessage(Message text) {
-		if(this.localMSG.contains(text)) {
+	public void addMessage(Message text) {
+		if (this.localMSG.contains(text)) {
 			// do nothing
-		}
-		else {
+		} else {
 			this.localMSG.add(text);
 			this.distributeMessage(text);
 		}
