@@ -83,5 +83,9 @@ public class Main {
 				System.out.println("I have a message: " + this.networkNodes.get(j).getNodeID());
 			}
 		}
+		
+		System.out.println("The message was sent from: " + node4.localMSG.get(0).getAuthor().getNodeID());
+		System.out.println("The message was sent to: " + node4.localMSG.get(0).getRecipient().getNodeID());
+		System.out.println("The message said: " + node4.localMSG.get(0).getMessageData().toString());
 	}
 }

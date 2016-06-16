@@ -34,10 +34,18 @@ public abstract class Message {
 	}
 
 	/**
-	 * @return the author
+	 * @return the author of the message
 	 */
 	public Node getAuthor() {
 		return author;
+	}
+	
+	/**
+	 * 
+	 * @return the recipient of the message
+	 */
+	public Node getRecipient() {
+		return recipient;
 	}
 	
 	public void printMessage() {

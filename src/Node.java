@@ -45,7 +45,7 @@ public class Node {
 		Random rand = new Random();
 		int receiverNum = rand.nextInt(networkNodes.size());
 
-		Message text = new TextMessage("hello ", networkNodes.get(receiverNum));
+		Message text = new TextMessage(data, this, networkNodes.get(receiverNum));
 
 		localMSG.add(text);
 		this.distributeMessage(text);
