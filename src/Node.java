@@ -60,6 +60,12 @@ public class Node {
 
 	// Adding a message to a nodes list of messages it has received
 	private void addMessage(Message text) {
-		this.localMSG.add(text);
+		if(this.localMSG.contains(text)) {
+			// do nothing
+		}
+		else {
+			this.localMSG.add(text);
+			this.distributeMessage(text);
+		}
 	}
 }
