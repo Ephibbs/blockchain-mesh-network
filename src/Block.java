@@ -1,23 +1,25 @@
 /**
  * Created by evan on 6/15/16.
  */
+import java.util.ArrayList;
+
 public class Block {
-    private String myHash;
+    private String myHash = "";
     private String prevHash;
-    private Message[] msgs;
+    private ArrayList<Message> msgs;
     private String nonce;
     Block(){
 
     }
-    void setMyHash(myHash) {
+    void setMyHash(String myHash) {
         this.myHash = myHash;
     }
 
-    void setPrevHash(prevHash) {
+    void setPrevHash(String prevHash) {
         this.prevHash = prevHash;
     }
 
-    void addMessage(msg) {
-        ;
+    void addMessage(Message msg) {
+        msgs.add(msg);
     }
 }
