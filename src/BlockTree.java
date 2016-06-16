@@ -1,9 +1,9 @@
+import java.util.ArrayList;
 
 public class BlockTree extends Tree<Block> {
-
-	public BlockTree(Block rootData) {
-		super(rootData);
-		
+	private Node<Block> root;
+	public BlockTree(Block rootBlock) {
+		super(rootBlock);
+		root = new Node<Block>(rootBlock);
 	}
-	
 }

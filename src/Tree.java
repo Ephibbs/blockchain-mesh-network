@@ -1,21 +1,27 @@
 import java.util.ArrayList;
 
-public abstract class Tree<T> {
-    private Node<T> root;
-    private ArrayList<Node<T>> leaves;
+public class Tree<T> {
+    private TreeNode<T> root;
+    private ArrayList<TreeNode<T>> leaves;
     public Tree(T rootData) {
-        root = new Node<T>();
-        root.data = rootData;
-        root.children = new ArrayList<Node<T>>();
+        root = new TreeNode<T>(rootData);
     }
-
-    public static class Node<T> {
-        private T data;
-        private Node<T> parent;
-        private ArrayList<Node<T>> children;
+    public void addTreeNode(TreeNode p, TreeNode c) {
+    	long cDepth = p.getDepth()+1;
+    	c.setDepth(cDepth);
+    	p.addChild(c);
+    	if (leaves.contains(p)) {
+    		leaves.remove(p);
+    	}
+    	int i = 0;
+    	while(c.getDepth() > leaves.get(i).getDepth()) {i++;}
+    	leaves.add(i--, c);
+    	leaves.add(c);
     }
-    
-    public ArrayList getLeaves(){
+    public ArrayList<TreeNode<T>> getLeaves(){
     	return leaves;
+    }
+    public TreeNode<T> getDeepestTreeNode() {
+    	return leaves.get(0);
     }
 }
