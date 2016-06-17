@@ -19,7 +19,7 @@ public class Blockchain implements Runnable {
 	
     public Blockchain(Node node) {
     	this.node = node;
-    	this.run();
+    	this.difficulty = 1;
     }
     public class PuzzleSolver implements Runnable {
     	public PuzzleSolver() {

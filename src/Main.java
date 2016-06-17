@@ -26,26 +26,6 @@ public class Main {
 		node8 = new Node("Dylan");
 		node9 = new Node("Colby");
 		
-		chain1 = new Blockchain(node1);
-		chain2 = new Blockchain(node2);
-		chain3 = new Blockchain(node3);
-		chain4 = new Blockchain(node4);
-		chain5 = new Blockchain(node5);
-		chain6 = new Blockchain(node6);
-		chain7 = new Blockchain(node7);
-		chain8 = new Blockchain(node8);
-		chain9 = new Blockchain(node9);
-		
-		node1.receiveChain(chain1);
-		node2.receiveChain(chain2);
-		node3.receiveChain(chain3);
-		node4.receiveChain(chain4);
-		node5.receiveChain(chain5);
-		node6.receiveChain(chain6);
-		node7.receiveChain(chain7);
-		node8.receiveChain(chain8);
-		node9.receiveChain(chain9);
-		
 		//adding the nodes to the "network"
 		networkNodes.add(node1);
 		networkNodes.add(node2);
@@ -61,15 +41,7 @@ public class Main {
 		generateCommunicationLines();
 		distributePublicKeys();
 		
-		chain1.run();
-		chain2.run();
-		chain3.run();
-		chain4.run();
-		chain5.run();
-		chain6.run();
-		chain7.run();
-		chain8.run();
-		chain9.run();
+		runWithBlockChain();
 		
 	}
 	private void distributePublicKeys() {
@@ -117,6 +89,10 @@ public class Main {
 	 * This method is to just test run making messages
 	 */
 	public void run() throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, NoSuchProviderException {
+		for(Node n : networkNodes) {
+			n.run();
+		}
+		
 		node1.createMessageWithSignature("Colby and Dylan are watching snapchats");
 		
 		System.out.println("Size of node 5 public keyset = " + node5.publicKeySet.size());

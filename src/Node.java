@@ -44,7 +44,13 @@ public class Node implements Serializable {
 		this.pair = keyGen.generateKeyPair();
 		this.privKey = pair.getPrivate();
 		this.pubKey = pair.getPublic();
+		this.blockChain = new Blockchain(this);
 		// distributePublicKey()
+	}
+	
+	public void run() {
+		System.out.println(nodeID);
+		blockChain.run();
 	}
 
 	// This allows other classes to get the name of the node
