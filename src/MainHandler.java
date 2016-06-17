@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class MainHandler {
 	public static void main(String args[]) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException {
 		Main main = new Main();
-		main.run();
+		//main.run();
+		main.runWithBlockChain();
 	}
 }

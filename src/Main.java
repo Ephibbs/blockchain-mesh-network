@@ -9,6 +9,7 @@ public class Main {
 	// These nodes are available nodes in the global network.
 	public Node node1, node2, node3, node4, node5, node6, node7, node8,node9;
 	public ArrayList<Node> networkNodes = new ArrayList<Node>();
+	public Blockchain chain1,chain2,chain3,chain4,chain5,chain6,chain7,chain8,chain9;
 	
 	/*
 	 * This function is to basically just give each node a name and add the
@@ -25,6 +26,26 @@ public class Main {
 		node8 = new Node("Dylan");
 		node9 = new Node("Colby");
 		
+		chain1 = new Blockchain(node1);
+		chain2 = new Blockchain(node2);
+		chain3 = new Blockchain(node3);
+		chain4 = new Blockchain(node4);
+		chain5 = new Blockchain(node5);
+		chain6 = new Blockchain(node6);
+		chain7 = new Blockchain(node7);
+		chain8 = new Blockchain(node8);
+		chain9 = new Blockchain(node9);
+		
+		node1.receiveChain(chain1);
+		node2.receiveChain(chain2);
+		node3.receiveChain(chain3);
+		node4.receiveChain(chain4);
+		node5.receiveChain(chain5);
+		node6.receiveChain(chain6);
+		node7.receiveChain(chain7);
+		node8.receiveChain(chain8);
+		node9.receiveChain(chain9);
+		
 		//adding the nodes to the "network"
 		networkNodes.add(node1);
 		networkNodes.add(node2);
@@ -39,6 +60,17 @@ public class Main {
 		//This is a method call to the generate communication lines method
 		generateCommunicationLines();
 		distributePublicKeys();
+		
+		chain1.run();
+		chain2.run();
+		chain3.run();
+		chain4.run();
+		chain5.run();
+		chain6.run();
+		chain7.run();
+		chain8.run();
+		chain9.run();
+		
 	}
 	private void distributePublicKeys() {
 		// TODO Auto-generated method stub
@@ -75,6 +107,10 @@ public class Main {
 				possibleFriends.remove(randomFriend);
 			}
 		}
+	}
+	
+	public void runWithBlockChain() {
+		node1.createMessage("help");
 	}
 
 	/*

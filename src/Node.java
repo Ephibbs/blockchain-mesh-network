@@ -30,12 +30,10 @@ public class Node implements Serializable {
 	public PrivateKey privKey = null;
 	public PublicKey pubKey = null;
 	public byte[] byteArray = new byte[1024];
-	public Blockchain blockChain;
+	public Blockchain blockChain = null;
 
 	// These are the constructors for the node class
 	public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
-		
-		blockChain = new Blockchain(this);
 		
 		this.nodeID = id;
 
@@ -89,6 +87,8 @@ public class Node implements Serializable {
 		Message text = new TextMessage(data, this, networkNodes.get(receiverNum));
 
 		// byteArray = text.getMessageData().toString().getBytes();
+		
+		this.blockChain.addMessage(text);
 
 		localMSG.add(text);
 		this.distributeMessage(text);
@@ -198,5 +198,10 @@ public class Node implements Serializable {
 		for (int i = 0; i < networkNodes.size(); i++) {
 			networkNodes.get(i).blockChain.receiveBlock(b);
 		}
+	}
+
+	public void receiveChain(Blockchain chain1) {
+		// TODO Auto-generated method stub
+		this.blockChain = chain1;
 	}
 }
