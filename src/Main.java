@@ -1,5 +1,7 @@
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -36,6 +38,13 @@ public class Main {
 		
 		//This is a method call to the generate communication lines method
 		generateCommunicationLines();
+		distributePublicKeys();
+	}
+	private void distributePublicKeys() {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < networkNodes.size(); i++) {
+			networkNodes.get(i).distributePublicKey(networkNodes.get(i).getPublicKey());
+		}
 	}
 	/*
 	 * This method is for giving each node the other nodes that it can talk to.
@@ -71,12 +80,14 @@ public class Main {
 	/*
 	 * This method is to just test run making messages
 	 */
-	public void run() {
-		node1.createMessage("I like tacos");
+	public void run() throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, NoSuchProviderException {
+		node1.createMessageWithSignature("Colby and Dylan are watching snapchats");
 		
-		System.out.println("A list of all of node 1's friends");
+		System.out.println("Size of node 5 public keyset = " + node5.publicKeySet.size());
+		
+		//System.out.println("A list of all of node 1's friends");
 		for(int i = 0; i < node1.networkNodes.size();i++){
-			System.out.println("Friend" + (1+i) + " is: " + node1.networkNodes.get(i).getNodeID());
+			//System.out.println("Friend" + (1+i) + " is: " + node1.networkNodes.get(i).getNodeID());
 		}
 		
 		System.out.println("A list of who all has a message: ");
@@ -86,8 +97,9 @@ public class Main {
 			}
 		}
 		
-		System.out.println("The message was sent from: " + node4.localMSG.get(0).getAuthor().getNodeID());
-		System.out.println("The message was sent to: " + node4.localMSG.get(0).getRecipient().getNodeID());
-		System.out.println("The message said: " + node4.localMSG.get(0).getMessageData().toString());
+		//System.out.println("The message was sent from: " + node4.localMSG.get(0).getAuthor().getNodeID());
+		//System.out.println("The message was sent to: " + node4.localMSG.get(0).getRecipient().getNodeID());
+		//System.out.println("The message said: " + node4.localMSG.get(0).getMessageData().toString());
 	}
 }
+
