@@ -40,7 +40,7 @@ public class Blockchain implements Runnable {
 	    			b.setNonce(String.valueOf(nonce));
 	    			this.removefromMsgsInBlock(b);
 	    			blockTree.addTreeNode(blockTree.getDeepestTreeNode(), b);
-	    			//node.distributeBlock(b);
+	    			node.distributeBlock(b);
     			}
     		}
     	}
@@ -84,7 +84,7 @@ public class Blockchain implements Runnable {
     				if(!parent.equals(null) && this.checkHash(b)) {
     					this.removefromMsgsInBlock(b);
     					blockTree.addTreeNode(parent, b);
-    					//node.distributeBlock(b);
+    					node.distributeBlock(b);
     				}
     				incBlks.remove(b);
     			}

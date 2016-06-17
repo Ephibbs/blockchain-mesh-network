@@ -193,19 +193,10 @@ public class Node implements Serializable {
 		// TODO Auto-generated method stub
 		return true;
 	}
-
-	public void broadcast(Block b) {
-		// TODO Undo the below comments once you add a method in Blockchain to get the blocks
-//		if(this.blockChain.getBlocks.contains(b)){
-//			//do nothing
-//		}
-		//else {
-			this.blockChain.receiveBlock(b);
-		//}
-	}
-	public void distrubuteBlock(Block b) {
+	
+	public void distributeBlock(Block b) {
 		for (int i = 0; i < networkNodes.size(); i++) {
-			networkNodes.get(i).broadcast(b);
+			networkNodes.get(i).blockChain.receiveBlock(b);
 		}
 	}
 }
