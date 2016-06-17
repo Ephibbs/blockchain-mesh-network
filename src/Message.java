@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.security.Signature;
 import java.security.Timestamp;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
  * used solely for constructing a message.
  */
 
-public abstract class Message {
+public abstract class Message implements Serializable {
 
 //	public Node author = new Node(null);
 //	public Node recipient = new Node(null);

@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class TextMessage extends Message {
+public class TextMessage extends Message implements Serializable {
 
 	public TextMessage(Object data, Node auth, Node rec) {
 		super(data, auth, rec);
