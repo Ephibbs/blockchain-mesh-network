@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -16,7 +17,7 @@ import java.util.Random;
  * but I am not sure if that would work or not because then someone could
  * possible alter the contents of it without having to alter the signature.
  */
-public class Node {
+public class Node implements Serializable {
 
 	public String nodeID = null;
 	public ArrayList<Message> localMSG = new ArrayList<Message>();
@@ -29,9 +30,13 @@ public class Node {
 	public PrivateKey privKey = null;
 	public PublicKey pubKey = null;
 	public byte[] byteArray = new byte[1024];
+	public Blockchain blockChain;
 
 	// These are the constructors for the node class
 	public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
+		
+		blockChain = new Blockchain(this);
+		
 		this.nodeID = id;
 
 		this.keyGen = KeyPairGenerator.getInstance("DSA", "SUN");
@@ -181,6 +186,26 @@ public class Node {
 		} else {
 			this.localMSG.add(text);
 			this.distributeMessage(text);
+		}
+	}
+
+	public boolean isOnline() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	public void broadcast(Block b) {
+		// TODO Undo the below comments once you add a method in Blockchain to get the blocks
+//		if(this.blockChain.getBlocks.contains(b)){
+//			//do nothing
+//		}
+		//else {
+			this.blockChain.receiveBlock(b);
+		//}
+	}
+	public void distrubuteBlock(Block b) {
+		for (int i = 0; i < networkNodes.size(); i++) {
+			networkNodes.get(i).broadcast(b);
 		}
 	}
 }
