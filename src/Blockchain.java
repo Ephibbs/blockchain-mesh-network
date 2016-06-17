@@ -88,7 +88,12 @@ public class Blockchain implements Runnable {
     				}
     				incBlks.remove(b);
     			}
-    			Thread.sleep(1000);
+    			try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
     		}
     	}
     	public void removefromMsgsInBlock(Block block) {
