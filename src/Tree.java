@@ -7,16 +7,17 @@ public class Tree<T> {
         root = new TreeNode<T>(rootData);
     }
     public void addTreeNode(TreeNode p, T c) {
+    	TreeNode<T> cn = new TreeNode<T>(c);
     	long cDepth = p.getDepth()+1;
-    	c.setDepth(cDepth);
-    	p.addChild(c);
+    	cn.setDepth(cDepth);
+    	p.addChild(cn);
     	if (leaves.contains(p)) {
     		leaves.remove(p);
     	}
     	int i = 0;
-    	while(c.getDepth() > leaves.get(i).getDepth()) {i++;}
-    	leaves.add(i--, c);
-    	leaves.add(c);
+    	while(cn.getDepth() > leaves.get(i).getDepth()) {i++;}
+    	leaves.add(i--, cn);
+    	leaves.add(cn);
     }
     public ArrayList<TreeNode<T>> getLeaves(){
     	return leaves;

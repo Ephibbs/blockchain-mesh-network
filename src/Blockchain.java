@@ -9,7 +9,7 @@ import java.lang.Thread;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
-public class Blockchain {
+public class Blockchain implements Runnable {
 	private Block root = new Block();
 	private Tree<Block> blockTree = new Tree<Block>(root);
 	private ArrayList<Message> msgs = new ArrayList<Message>();
@@ -40,7 +40,7 @@ public class Blockchain {
 	    			b.setNonce(String.valueOf(nonce));
 	    			this.removefromMsgsInBlock(b);
 	    			blockTree.addTreeNode(blockTree.getDeepestTreeNode(), b);
-	    			node.broadcast(b);
+	    			//node.distributeBlock(b);
     			}
     		}
     	}
@@ -67,7 +67,7 @@ public class Blockchain {
             }
             return false;
     	}
-    	void removefromMsgsInBlock(Block block) {
+    	public void removefromMsgsInBlock(Block block) {
     		for(Message m : block.getMsgs()) {
     			msgs.remove(m);
     		}
@@ -78,19 +78,20 @@ public class Blockchain {
     	}
     	public void run() {
     		while(node.isOnline()) {
-    			for(Block b : incBlks) {
+    			for(int i = incBlks.size()-1; i >= 0; i--) {
+    				Block b = incBlks.get(i);
     				TreeNode<Block> parent = this.findInLeaves(b.getPrevHash());
     				if(!parent.equals(null) && this.checkHash(b)) {
     					this.removefromMsgsInBlock(b);
     					blockTree.addTreeNode(parent, b);
-    					node.broadcast(b);
+    					//node.distributeBlock(b);
     				}
+    				incBlks.remove(b);
     			}
-    			incBlks = new ArrayList<Block>();
     			Thread.sleep(1000);
     		}
     	}
-    	void removefromMsgsInBlock(Block block) {
+    	public void removefromMsgsInBlock(Block block) {
     		for(Message m : block.getMsgs()) {
     			msgs.remove(m);
     		}
