@@ -43,7 +43,7 @@ public class Block {
     int getDifficulty(){
     	return difficulty;
     }
-    String toString() {
+    public String toString() {
     	String out = "";
     	out += prevHash;
     	for (Message m : this.msgs) {

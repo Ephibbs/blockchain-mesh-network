@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class TreeNode<T> {
         private T data;
         private long depth;
-        private TreeNode<T> parent;
+        private TreeNode<T> parent = null;
         private ArrayList<TreeNode<T>> children = new ArrayList<TreeNode<T>>();;
         public TreeNode(T data) {
         	this.data = data;
@@ -20,7 +20,7 @@ public class TreeNode<T> {
         public void setDepth(long depth) {
         	this.depth = depth;
         }
-        T getData() {
+        public T getData() {
         	return data;
         }
     }
