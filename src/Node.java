@@ -11,6 +11,11 @@ import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.Random;
 
+/*
+ * When I am sending a message, I should try and verify the header of the message
+ * but I am not sure if that would work or not because then someone could
+ * possible alter the contents of it without having to alter the signature.
+ */
 public class Node {
 
 	public String nodeID = null;
