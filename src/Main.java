@@ -1,3 +1,5 @@
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -10,7 +12,7 @@ public class Main {
 	 * This function is to basically just give each node a name and add the
 	 * nodes to an arraylist to similar the network
 	 */
-	public Main() {
+	public Main() throws NoSuchAlgorithmException, NoSuchProviderException {
 		node1 = new Node("Steve");
 		node2 = new Node("Damian");
 		node3 = new Node("Lawrence");
@@ -83,5 +85,9 @@ public class Main {
 				System.out.println("I have a message: " + this.networkNodes.get(j).getNodeID());
 			}
 		}
+		
+		System.out.println("The message was sent from: " + node4.localMSG.get(0).getAuthor().getNodeID());
+		System.out.println("The message was sent to: " + node4.localMSG.get(0).getRecipient().getNodeID());
+		System.out.println("The message said: " + node4.localMSG.get(0).getMessageData().toString());
 	}
 }
