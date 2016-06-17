@@ -6,7 +6,7 @@ public class Tree<T> {
     public Tree(T rootData) {
         root = new TreeNode<T>(rootData);
     }
-    public void addTreeNode(TreeNode p, TreeNode c) {
+    public void addTreeNode(TreeNode p, T c) {
     	long cDepth = p.getDepth()+1;
     	c.setDepth(cDepth);
     	p.addChild(c);

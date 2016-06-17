@@ -7,7 +7,8 @@ public class Block {
     private String myHash = "";
     private String prevHash;
     private ArrayList<Message> msgs;
-    private String nonce;
+    private String nonce = "";
+    private int difficulty;
     Block() {
     	
     }
@@ -19,6 +20,9 @@ public class Block {
     }
     String getMyHash() {
     	return myHash;
+    }
+    String getPrevHash() {
+    	return prevHash;
     }
     void setPrevHash(String prevHash) {
         this.prevHash = prevHash;
@@ -33,5 +37,20 @@ public class Block {
     ArrayList<Message> getMsgs() {
     	return msgs;
     }
+    String getNonce() {
+    	return nonce;
+    }
+    int getDifficulty(){
+    	return difficulty;
+    }
+    String toString() {
+    	String out = "";
+    	out += prevHash;
+    	for (Message m : this.msgs) {
+    		out += m.toString();
+    	}
+    	out += String.valueOf(this.difficulty);
+    	out += this.nonce;
+    	return out;
     }
 }
