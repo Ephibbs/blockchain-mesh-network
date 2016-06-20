@@ -82,6 +82,9 @@ public class Main {
 	}
 	
 	public void runWithBlockChain() {
+		for(Node n : networkNodes) {
+			n.run();
+		}
 		node1.createMessage("help");
 	}
 
@@ -89,9 +92,6 @@ public class Main {
 	 * This method is to just test run making messages
 	 */
 	public void run() throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, NoSuchProviderException {
-		for(Node n : networkNodes) {
-			n.run();
-		}
 		
 		node1.createMessageWithSignature("Colby and Dylan are watching snapchats");
 		

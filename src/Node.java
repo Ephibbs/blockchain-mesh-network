@@ -44,13 +44,13 @@ public class Node implements Serializable {
 		this.pair = keyGen.generateKeyPair();
 		this.privKey = pair.getPrivate();
 		this.pubKey = pair.getPublic();
-		this.blockChain = new Blockchain(this);
+		//this.blockChain = new Blockchain(this);
 		// distributePublicKey()
 	}
 	
 	public void run() {
 		System.out.println(nodeID);
-		blockChain.run();
+		//blockChain.run();
 	}
 
 	// This allows other classes to get the name of the node
@@ -190,6 +190,7 @@ public class Node implements Serializable {
 		if (this.localMSG.contains(text)) {
 			// do nothing
 		} else {
+			this.blockChain.addMessage(text);
 			this.localMSG.add(text);
 			this.distributeMessage(text);
 		}
@@ -204,10 +205,5 @@ public class Node implements Serializable {
 		for (int i = 0; i < networkNodes.size(); i++) {
 			networkNodes.get(i).blockChain.receiveBlock(b);
 		}
-	}
-
-	public void receiveChain(Blockchain chain1) {
-		// TODO Auto-generated method stub
-		this.blockChain = chain1;
 	}
 }

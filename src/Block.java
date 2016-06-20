@@ -9,6 +9,7 @@ public class Block {
     private ArrayList<Message> msgs;
     private String nonce = "";
     private int difficulty;
+    private int id;
     Block() {
     	
     }
@@ -52,5 +53,8 @@ public class Block {
     	out += String.valueOf(this.difficulty);
     	out += this.nonce;
     	return out;
+    }
+    int getID() {
+    	return id;
     }
 }

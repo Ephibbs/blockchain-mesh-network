@@ -8,6 +8,7 @@ import java.util.Queue;
 import java.lang.Thread;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.lang.Thread;
 
 public class Blockchain implements Runnable {
 	private Block root = new Block();
@@ -18,30 +19,42 @@ public class Blockchain implements Runnable {
 	private int difficulty;
 	
     public Blockchain(Node node) {
+    	System.out.println(node.nodeID);
     	this.node = node;
-    	this.difficulty = 1;
+    	this.difficulty = 10;
     }
     public class PuzzleSolver implements Runnable {
     	public PuzzleSolver() {
     	}
     	public void run() {
     		while(node.isOnline()) {
-    			Block b = new Block(blockTree.getDeepestTreeNode().getData().getMyHash(), msgs);
-    			TreeNode<Block> head = blockTree.getDeepestTreeNode();
-    			long nonce = -1;
-    			boolean isVerified = this.checkHashWithNonce(b, nonce++);
-    			while(!isVerified && node.isOnline()) {
-    				if(!head.equals(blockTree.getDeepestTreeNode())) {
-    					break;
-    				}
-    				isVerified = this.checkHashWithNonce(b, nonce++);
+    			if(!msgs.isEmpty()) {
+	    			Block b = new Block(blockTree.getDeepestTreeNode().getData().getMyHash(), msgs);
+	    			TreeNode<Block> head = blockTree.getDeepestTreeNode();
+	    			long nonce = -1;
+	    			boolean isVerified = this.checkHashWithNonce(b, nonce++);
+	    			while(!isVerified && node.isOnline()) {
+	    				if(!head.equals(blockTree.getDeepestTreeNode())) {
+	    					break;
+	    				}
+	    				isVerified = this.checkHashWithNonce(b, nonce++);
+	    			}
+	    			if(isVerified) {
+	    				System.out.print("verified block:");
+	    				System.out.println(b.getID());
+		    			b.setNonce(String.valueOf(nonce));
+		    			this.removefromMsgsInBlock(b);
+		    			blockTree.addTreeNode(blockTree.getDeepestTreeNode(), b);
+		    			node.distributeBlock(b);
+	    			}
+	    			try {
+	    				Thread.sleep(1000);
+	    			} catch (InterruptedException e) {
+	    				// TODO Auto-generated catch block
+	    				e.printStackTrace();
+	    			}
     			}
-    			if(isVerified) {
-	    			b.setNonce(String.valueOf(nonce));
-	    			this.removefromMsgsInBlock(b);
-	    			blockTree.addTreeNode(blockTree.getDeepestTreeNode(), b);
-	    			node.distributeBlock(b);
-    			}
+    			
     		}
     	}
     	public boolean checkHashWithNonce(Block b, long nonce) {
@@ -56,7 +69,8 @@ public class Blockchain implements Runnable {
         	b.setNonce(String.valueOf(nonce));
             int hc = (b.toString()).hashCode();
             String hash = String.format("%32s", Integer.toBinaryString(hc)).replace(" ", "0");
-
+            
+            
             // Verified?
             for (int i = 0; i < hash.length(); i++) {
                 if (hash.charAt(i) == '1') {
@@ -140,6 +154,7 @@ public class Blockchain implements Runnable {
      */
     public void addMessage(Message msg) {
     	msgs.add(msg);
+    	System.out.println("added message");
     }
     
     /**
