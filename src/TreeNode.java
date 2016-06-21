@@ -23,4 +23,10 @@ public class TreeNode<T> {
         public T getData() {
         	return data;
         }
+        public ArrayList<TreeNode<T>> getChildren() {
+        	return children;
+        }
+        public TreeNode<T> getParent() {
+        	return parent;
+        }
     }

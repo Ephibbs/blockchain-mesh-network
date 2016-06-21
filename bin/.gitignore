@@ -1,2 +1,5 @@
 /BlockChainTesting.class
 /BlockChainTestingHandler.class
+/BlockStore.class
+/BlockStoreInterface.class
+/Utils.class

@@ -8,7 +8,7 @@ import java.lang.Thread;
 public class BlockChainTesting {
 	Node node1;
 	public Blockchain blockChain = null;
-	
+	Thread thread;
 	//public Blockchain chain1,chain2,chain3,chain4,chain5,chain6,chain7,chain8,chain9;
 	
 	/*
@@ -21,10 +21,9 @@ public class BlockChainTesting {
 	}
 	
 	public void runWithBlockChain() throws InterruptedException {
-		System.out.println("runWithBlockChain");
-		Thread bCThread = new Thread(new Blockchain(node1), "blockChain");
-		bCThread.run();
-
+		blockChain = new Blockchain(node1);
+		blockChain.start();
+		
 		System.out.println("look at me");
 		
 		Message text = new TextMessage("help", node1, node1);

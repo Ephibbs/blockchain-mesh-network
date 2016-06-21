@@ -9,95 +9,84 @@ import java.lang.Thread;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.lang.Thread;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 
 public class Blockchain implements Runnable {
-	private Block root = new Block();
-	private Tree<Block> blockTree = new Tree<Block>(root);
+	private BlockStore blockStore = new BlockStore();
 	private ArrayList<Message> msgs = new ArrayList<Message>();
 	private ArrayList<Block> incBlks = new ArrayList<Block>();
 	private Node node;
 	private int difficulty;
+	private PuzzleSolver puzzleSolver;
+	private BlockChecker blockChecker;
+	private Thread t;
 	
     public Blockchain(Node node) {
     	System.out.println(node.nodeID);
     	this.node = node;
-    	this.difficulty = 10;
+    	this.difficulty = 2;
     }
+    
     public class PuzzleSolver implements Runnable {
+    	Thread t;
     	public PuzzleSolver() {
     	}
     	public void run() {
     		while(node.isOnline()) {
     			if(!msgs.isEmpty()) {
-	    			Block b = new Block(blockTree.getDeepestTreeNode().getData().getMyHash(), msgs);
-	    			TreeNode<Block> head = blockTree.getDeepestTreeNode();
+	    			Block b = new Block(blockStore.getLastBlock().getData().getMyHash(), msgs);
+	    			TreeNode<Block> head = blockStore.getLastBlock();
 	    			long nonce = -1;
-	    			boolean isVerified = this.checkHashWithNonce(b, nonce++);
+	    			boolean isVerified = Utils.checkHashWithNonce(b, nonce++, difficulty);
 	    			while(!isVerified && node.isOnline()) {
-	    				if(!head.equals(blockTree.getDeepestTreeNode())) {
+	    				if(!head.equals(blockStore.getLastBlock())) {
 	    					break;
 	    				}
-	    				isVerified = this.checkHashWithNonce(b, nonce++);
+	    				isVerified = Utils.checkHashWithNonce(b, nonce++, difficulty);
 	    			}
 	    			if(isVerified) {
 	    				System.out.print("verified block:");
 	    				System.out.println(b.getID());
+	    				System.out.println(nonce);
 		    			b.setNonce(String.valueOf(nonce));
 		    			this.removefromMsgsInBlock(b);
-		    			blockTree.addTreeNode(blockTree.getDeepestTreeNode(), b);
+		    			blockStore.addTreeNode(blockStore.getLastBlock(), b);
 		    			node.distributeBlock(b);
 	    			}
 	    			try {
 	    				Thread.sleep(1000);
 	    			} catch (InterruptedException e) {
-	    				// TODO Auto-generated catch block
 	    				e.printStackTrace();
 	    			}
     			}
     			
     		}
     	}
-    	public boolean checkHashWithNonce(Block b, long nonce) {
-    		int diff = b.getDifficulty();
-        	if (diff < 1) {
-        		diff = 1;
-            } else if (diff > 32) {
-            	diff = 32;
-            }
-            
-            // Get hash
-        	b.setNonce(String.valueOf(nonce));
-            int hc = (b.toString()).hashCode();
-            String hash = String.format("%32s", Integer.toBinaryString(hc)).replace(" ", "0");
-            
-            
-            // Verified?
-            for (int i = 0; i < hash.length(); i++) {
-                if (hash.charAt(i) == '1') {
-                    break;
-                } else if (i == diff-1) {
-                    return true;
-                }
-            }
-            return false;
+    	public void start() {
+    		t = new Thread(this, "puzzleSolver");
+    		t.start();
     	}
     	public void removefromMsgsInBlock(Block block) {
     		for(Message m : block.getMsgs()) {
     			msgs.remove(m);
     		}
     	}
+
     }
+
     public class BlockChecker implements Runnable {
+    	Thread t;
     	public BlockChecker() {
     	}
     	public void run() {
     		while(node.isOnline()) {
     			for(int i = incBlks.size()-1; i >= 0; i--) {
     				Block b = incBlks.get(i);
-    				TreeNode<Block> parent = this.findInLeaves(b.getPrevHash());
-    				if(!parent.equals(null) && this.checkHash(b)) {
+    				if(Utils.checkHash(b)) {
     					this.removefromMsgsInBlock(b);
-    					blockTree.addTreeNode(parent, b);
+    					blockStore.add(b);
     					node.distributeBlock(b);
     				}
     				incBlks.remove(b);
@@ -105,46 +94,33 @@ public class Blockchain implements Runnable {
     			try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
     		}
+    	}
+    	public void start() {
+    		t = new Thread(this, "blockChecker");
+    		t.start();
     	}
     	public void removefromMsgsInBlock(Block block) {
     		for(Message m : block.getMsgs()) {
     			msgs.remove(m);
     		}
     	}
-    	public boolean checkHash(Block b) {
-    		int hc = (b.toString()).hashCode();
-            String hash = String.format("%32s", Integer.toBinaryString(hc)).replace(" ", "0");
-
-            // Verified?
-            for (int i = 0; i < hash.length(); i++) {
-                if (hash.charAt(i) == '1') {
-                    break;
-                } else if (i == difficulty-1) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    	public TreeNode<Block> findInLeaves(String hash) {
-    		for(TreeNode<Block> blockNode : blockTree.getLeaves()) {
-    			if(blockNode.getData().getMyHash() == hash) {
-    				return blockNode;
-    			}
-    		}
-    		return null;
-        }
     }
     
     public void run() {
-    	Thread puzzleSolver = new Thread(new PuzzleSolver(), "puzzleSolver");
-    	Thread blockChecker = new Thread(new BlockChecker(), "blockChecker");
+    	puzzleSolver = new PuzzleSolver();
+    	blockChecker = new BlockChecker();
     	
-    	puzzleSolver.run();
-    	blockChecker.run();
+    	puzzleSolver.start();
+    	System.out.println("running puzzleSolver");
+    	blockChecker.start();
+    }
+    
+    public void start() {
+    	t= new Thread(this, "blockChain");
+    	t.start();
     }
     
     /**

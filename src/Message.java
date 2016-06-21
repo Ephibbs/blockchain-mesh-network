@@ -17,6 +17,7 @@ public abstract class Message implements Serializable {
 	public Node author = null;
 	public Node recipient = null;
 	public Object messageData = new Object();
+	public String hash;
 	
 	public Message(Object data, Node auth, Node rec) {
 		this.messageData = data;
@@ -53,5 +54,8 @@ public abstract class Message implements Serializable {
 	
 	public void printMessage() {
 		System.out.println("The message is: " + messageData.toString() + " from: " +this.author.getNodeID()+ " to: " + this.recipient.getNodeID());
+	}
+	public String getHash() {
+		return hash;
 	}
 }
