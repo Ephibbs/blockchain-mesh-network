@@ -1,5 +1,9 @@
 import java.util.ArrayList;
 
+/*
+ * Add a tree
+ */
+
 public class TreeNode<T> {
         private T data;
         private long depth;

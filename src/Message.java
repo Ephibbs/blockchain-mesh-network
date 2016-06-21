@@ -19,38 +19,33 @@ public abstract class Message implements Serializable {
 	public Object messageData = new Object();
 	public String hash;
 
-
 	// Constructors
 	public Message(Object data, Node auth, Node rec) {
 		this.messageData = data;
 		this.author = auth;
 		this.recipient = rec;
 	}
-
 	public Message(Object data, Node auth) {
 		this.messageData = data;
 		this.author = auth;
 	}
 
-
-	// Methods
+	// Accessors
 	public Object getMessageData() {
 		return messageData;
 	}
-
 	public Node getAuthor() {
 		return author;
 	}
-
 	public Node getRecipient() {
 		return recipient;
 	}
-	
-	public void printMessage() {
-		System.out.println("The message is: " + messageData.toString() + " from: " +this.author.getNodeID()+ " to: " + this.recipient.getNodeID());
-	}
-
 	public String getHash() {
 		return hash;
+	}
+
+	// Printers
+	public void printMessage() {
+		System.out.println("The message is: " + messageData.toString() + " from: " +this.author.getNodeID()+ " to: " + this.recipient.getNodeID());
 	}
 }

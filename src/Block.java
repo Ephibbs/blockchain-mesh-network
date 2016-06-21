@@ -3,19 +3,29 @@
  */
 import java.util.ArrayList;
 
+/*
+ *
+ */
+
 public class Block {
+
+    // Variables
     private String myHash = "";
     private String prevHash;
     private ArrayList<Message> msgs;
     private String nonce = "";
     private int difficulty;
     private int id;
+
+    // Constructors
     Block() {
     	
     }
     Block(String prevHash, ArrayList<Message> msgs){
     	this.msgs = msgs;
     }
+
+    // Methods
     void setMyHash(String myHash) {
         this.myHash = myHash;
     }
@@ -28,7 +38,6 @@ public class Block {
     void setPrevHash(String prevHash) {
         this.prevHash = prevHash;
     }
-
     void addMessage(Message msg) {
         msgs.add(msg);
     }
