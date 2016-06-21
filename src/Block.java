@@ -4,7 +4,8 @@
 import java.util.ArrayList;
 
 /*
- *
+ * The blocks that make up the blockchain
+ * Parameters: Previous hash string, list of messages
  */
 
 public class Block {
@@ -25,34 +26,41 @@ public class Block {
     	this.msgs = msgs;
     }
 
-    // Methods
-    void setMyHash(String myHash) {
-        this.myHash = myHash;
-    }
+    // Accessors
     String getMyHash() {
     	return myHash;
     }
     String getPrevHash() {
     	return prevHash;
     }
+    String getNonce() {
+        return nonce;
+    }
+    ArrayList<Message> getMsgs() {
+        return msgs;
+    }
+    int getDifficulty(){
+        return difficulty;
+    }
+    int getID() {
+        return id;
+    }
+
+    // Mutators
+    void setMyHash(String myHash) {
+        this.myHash = myHash;
+    }
     void setPrevHash(String prevHash) {
         this.prevHash = prevHash;
+    }
+    void setNonce(String nonce) {
+        this.nonce = nonce;
     }
     void addMessage(Message msg) {
         msgs.add(msg);
     }
-    void setNonce(String nonce) {
-    	this.nonce = nonce;
-    }
-    ArrayList<Message> getMsgs() {
-    	return msgs;
-    }
-    String getNonce() {
-    	return nonce;
-    }
-    int getDifficulty(){
-    	return difficulty;
-    }
+
+    // Utility
     public String toString() {
     	String out = "";
     	out += prevHash;
@@ -62,8 +70,5 @@ public class Block {
     	out += String.valueOf(this.difficulty);
     	out += this.nonce;
     	return out;
-    }
-    int getID() {
-    	return id;
     }
 }

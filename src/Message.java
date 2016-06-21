@@ -44,7 +44,7 @@ public abstract class Message implements Serializable {
 		return hash;
 	}
 
-	// Printers
+	// Utility
 	public void printMessage() {
 		System.out.println("The message is: " + messageData.toString() + " from: " +this.author.getNodeID()+ " to: " + this.recipient.getNodeID());
 	}
