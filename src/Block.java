@@ -61,7 +61,7 @@ public class Block {
     }
 
     // Utility
-    public String toString() {
+    public String toString() { // encode previous hash, messages, difficulty, and nonce to string
     	String out = "";
     	out += prevHash;
     	for (Message m : this.msgs) {
