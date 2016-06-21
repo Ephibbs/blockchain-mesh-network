@@ -1,36 +1,45 @@
 import java.util.ArrayList;
 
 /*
- * Add a tree
+ * Leaves of the Tree class, stores blocks
+ * Parameters: Data object (in this case it will be a block)
  */
 
 public class TreeNode<T> {
-        private T data;
-        private long depth;
-        private TreeNode<T> parent = null;
-        private ArrayList<TreeNode<T>> children = new ArrayList<TreeNode<T>>();;
-        public TreeNode(T data) {
-        	this.data = data;
-        }
-        public void addChild(TreeNode<T> c) {
-        	children.add(c);
-        }
-        public void addChild(T c) {
-        	children.add(new TreeNode<T>(c));
-        }
-        public long getDepth() {
-        	return depth;
-        }
-        public void setDepth(long depth) {
-        	this.depth = depth;
-        }
-        public T getData() {
-        	return data;
-        }
-        public ArrayList<TreeNode<T>> getChildren() {
-        	return children;
-        }
-        public TreeNode<T> getParent() {
-        	return parent;
-        }
+
+    // Variables
+    private T data;
+    private long depth;
+    private TreeNode<T> parent = null;
+    private ArrayList<TreeNode<T>> children = new ArrayList<TreeNode<T>>();
+
+    // Constructor
+    public TreeNode(T data) {
+        this.data = data;
     }
+
+    // Accessors
+    public T getData() {
+        return data;
+    }
+    public long getDepth() {
+        return depth;
+    }
+    public ArrayList<TreeNode<T>> getChildren() {
+        return children;
+    }
+    public TreeNode<T> getParent() {
+        return parent;
+    }
+
+    // Mutators
+    public void addChild(TreeNode<T> c) {
+        children.add(c);
+    }
+    public void addChild(T c) {
+        children.add(new TreeNode<T>(c));
+    }
+    public void setDepth(long depth) {
+        this.depth = depth;
+    }
+}
