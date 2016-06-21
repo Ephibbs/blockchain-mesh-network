@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fcfa82b1-1669-45d8-8553-7810013261f2" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Block.java" afterPath="$PROJECT_DIR$/src/Block.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Node.java" afterPath="$PROJECT_DIR$/src/Node.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/TextMessage.java" afterPath="$PROJECT_DIR$/src/TextMessage.java" />
     </list>
     <ignored path="blockchain-mesh-network.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,39 +26,42 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Node.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Node.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Node.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+            <state relative-caret-position="695">
+              <caret line="185" column="5" selection-start-line="185" selection-start-column="5" selection-end-line="185" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="method#Node#0;class#Node#0" expanded="false" />
+                <element signature="method#getPublicKey#0;class#Node#0" expanded="false" />
+                <element signature="method#addNodes#0;class#Node#0" expanded="false" />
+                <element signature="method#createMessage#0;class#Node#0" expanded="false" />
+                <element signature="method#createMessageWithSignature#0;class#Node#0" expanded="false" />
+                <element signature="method#distributeSignedMessage#0;class#Node#0" expanded="false" />
+                <element signature="method#addSignedMessage#0;class#Node#0" expanded="false" />
+                <element signature="method#distributePublicKey#0;class#Node#0" expanded="false" />
+                <element signature="method#addPublicKey#0;class#Node#0" expanded="false" />
+                <element signature="method#distributeMessage#0;class#Node#0" expanded="false" />
+                <element signature="method#addMessage#0;class#Node#0" expanded="false" />
+                <element signature="method#distributeBlock#0;class#Node#0" expanded="false" />
+                <element signature="method#run#0;class#Node#0" expanded="false" />
+                <element signature="method#printNodes#0;class#Node#0" expanded="false" />
+                <element signature="method#isOnline#0;class#Node#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Block.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Block.java">
+      <file leaf-file-name="Blockchain.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Blockchain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="539">
-              <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+            <state relative-caret-position="1224">
+              <caret line="99" column="9" selection-start-line="99" selection-start-column="9" selection-end-line="99" selection-end-column="9" />
               <folding>
-                <element signature="method#Block#0;class#Block#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Message.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Message.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="46" column="14" selection-start-line="46" selection-start-column="14" selection-end-line="46" selection-end-column="14" />
-              <folding>
-                <element signature="method#Message#0;class#Message#0" expanded="false" />
-                <element signature="method#Message#1;class#Message#0" expanded="false" />
-                <element signature="method#printMessage#0;class#Message#0" expanded="false" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#456#465#0" expanded="true" />
+                <element signature="e#518#525#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -65,12 +70,10 @@
       <file leaf-file-name="TreeNode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/TreeNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+            <state relative-caret-position="153">
+              <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
               <folding>
                 <marker date="1466538768958" expanded="false" signature="236:249" ph="&lt;~&gt;" />
-                <marker date="1466538768958" expanded="false" signature="285:297" ph=" { " />
-                <marker date="1466538768958" expanded="false" signature="314:324" ph=" }" />
                 <marker date="1466538768958" expanded="false" signature="368:380" ph=" { " />
                 <marker date="1466538768958" expanded="false" signature="396:406" ph=" }" />
                 <marker date="1466538768958" expanded="false" signature="440:452" ph=" { " />
@@ -88,8 +91,8 @@
       <file leaf-file-name="Tree.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Tree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+            <state relative-caret-position="51">
+              <caret line="3" column="2" selection-start-line="3" selection-start-column="2" selection-end-line="3" selection-end-column="2" />
               <folding />
             </state>
           </provider>
@@ -118,18 +121,8 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
+            <state relative-caret-position="-17">
               <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MainHandler.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/MainHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -155,14 +148,14 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/Node.java" />
         <option value="$PROJECT_DIR$/src/BlockChainTesting.java" />
         <option value="$PROJECT_DIR$/src/Blockchain.java" />
-        <option value="$PROJECT_DIR$/src/Tree.java" />
         <option value="$PROJECT_DIR$/src/TreeNode.java" />
-        <option value="$PROJECT_DIR$/src/TextMessage.java" />
         <option value="$PROJECT_DIR$/src/Message.java" />
         <option value="$PROJECT_DIR$/src/Block.java" />
+        <option value="$PROJECT_DIR$/src/Tree.java" />
+        <option value="$PROJECT_DIR$/src/TextMessage.java" />
+        <option value="$PROJECT_DIR$/src/Node.java" />
       </list>
     </option>
   </component>
@@ -586,15 +579,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Blockchain.java">
+    <entry file="file://$PROJECT_DIR$/src/MainHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="16" column="45" selection-start-line="16" selection-start-column="45" selection-end-line="16" selection-end-column="45" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#456#465#0" expanded="true" />
-            <element signature="e#518#525#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="34">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -616,63 +605,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
+        <state relative-caret-position="-17">
           <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/MainHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/TextMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="12" column="37" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Tree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+        <state relative-caret-position="51">
+          <caret line="3" column="2" selection-start-line="3" selection-start-column="2" selection-end-line="3" selection-end-column="2" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TreeNode.java">
+    <entry file="file://$PROJECT_DIR$/src/Block.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+        <state relative-caret-position="233">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding>
-            <marker date="1466538768958" expanded="false" signature="236:249" ph="&lt;~&gt;" />
-            <marker date="1466538768958" expanded="false" signature="285:297" ph=" { " />
-            <marker date="1466538768958" expanded="false" signature="314:324" ph=" }" />
-            <marker date="1466538768958" expanded="false" signature="368:380" ph=" { " />
-            <marker date="1466538768958" expanded="false" signature="396:406" ph=" }" />
-            <marker date="1466538768958" expanded="false" signature="440:452" ph=" { " />
-            <marker date="1466538768958" expanded="false" signature="485:495" ph=" }" />
-            <marker date="1466538768958" expanded="false" signature="526:538" ph=" { " />
-            <marker date="1466538768958" expanded="false" signature="551:561" ph=" }" />
-            <marker date="1466538768958" expanded="false" signature="602:614" ph=" { " />
-            <marker date="1466538768958" expanded="false" signature="633:643" ph=" }" />
-            <marker date="1466538768958" expanded="false" signature="670:682" ph=" { " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Node.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="method#Block#0;class#Block#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -689,12 +641,66 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Block.java">
+    <entry file="file://$PROJECT_DIR$/src/TextMessage.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="539">
-          <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+        <state relative-caret-position="119">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TreeNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
           <folding>
-            <element signature="method#Block#0;class#Block#0" expanded="false" />
+            <marker date="1466538768958" expanded="false" signature="236:249" ph="&lt;~&gt;" />
+            <marker date="1466538768958" expanded="false" signature="368:380" ph=" { " />
+            <marker date="1466538768958" expanded="false" signature="396:406" ph=" }" />
+            <marker date="1466538768958" expanded="false" signature="440:452" ph=" { " />
+            <marker date="1466538768958" expanded="false" signature="485:495" ph=" }" />
+            <marker date="1466538768958" expanded="false" signature="526:538" ph=" { " />
+            <marker date="1466538768958" expanded="false" signature="551:561" ph=" }" />
+            <marker date="1466538768958" expanded="false" signature="602:614" ph=" { " />
+            <marker date="1466538768958" expanded="false" signature="633:643" ph=" }" />
+            <marker date="1466538768958" expanded="false" signature="670:682" ph=" { " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Blockchain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1224">
+          <caret line="99" column="9" selection-start-line="99" selection-start-column="9" selection-end-line="99" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#456#465#0" expanded="true" />
+            <element signature="e#518#525#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Node.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="695">
+          <caret line="185" column="5" selection-start-line="185" selection-start-column="5" selection-end-line="185" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#Node#0;class#Node#0" expanded="false" />
+            <element signature="method#getPublicKey#0;class#Node#0" expanded="false" />
+            <element signature="method#addNodes#0;class#Node#0" expanded="false" />
+            <element signature="method#createMessage#0;class#Node#0" expanded="false" />
+            <element signature="method#createMessageWithSignature#0;class#Node#0" expanded="false" />
+            <element signature="method#distributeSignedMessage#0;class#Node#0" expanded="false" />
+            <element signature="method#addSignedMessage#0;class#Node#0" expanded="false" />
+            <element signature="method#distributePublicKey#0;class#Node#0" expanded="false" />
+            <element signature="method#addPublicKey#0;class#Node#0" expanded="false" />
+            <element signature="method#distributeMessage#0;class#Node#0" expanded="false" />
+            <element signature="method#addMessage#0;class#Node#0" expanded="false" />
+            <element signature="method#distributeBlock#0;class#Node#0" expanded="false" />
+            <element signature="method#run#0;class#Node#0" expanded="false" />
+            <element signature="method#printNodes#0;class#Node#0" expanded="false" />
+            <element signature="method#isOnline#0;class#Node#0" expanded="false" />
           </folding>
         </state>
       </provider>

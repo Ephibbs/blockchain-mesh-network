@@ -13,12 +13,19 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /*
+ * Class for the nodes in a mesh network
+ * Parameters: ID string
+ */
+
+/* TODO
  * When I am sending a message, I should try and verify the header of the message
  * but I am not sure if that would work or not because then someone could
  * possible alter the contents of it without having to alter the signature.
  */
+
 public class Node implements Serializable {
 
+	// Variables
 	public String nodeID = null;
 	public ArrayList<Message> localMSG = new ArrayList<Message>();
 	public ArrayList<Node> networkNodes = new ArrayList<Node>();
@@ -32,11 +39,10 @@ public class Node implements Serializable {
 	public byte[] byteArray = new byte[1024];
 	public Blockchain blockChain = null;
 
-	// These are the constructors for the node class
+	// Constructor
 	public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
 		
 		this.nodeID = id;
-
 		this.keyGen = KeyPairGenerator.getInstance("DSA", "SUN");
 		this.random = SecureRandom.getInstance("SHA1PRNG", "SUN");
 		this.dsa = Signature.getInstance("SHA1withDSA", "SUN");
@@ -47,42 +53,26 @@ public class Node implements Serializable {
 		//this.blockChain = new Blockchain(this);
 		// distributePublicKey()
 	}
-	
-	public void run() {
-		System.out.println(nodeID);
-		//blockChain.run();
-	}
 
-	// This allows other classes to get the name of the node
+	// Accessors
 	public String getNodeID() {
 		return nodeID;
 	}
+	public PublicKey getPublicKey() {
+		// TODO Auto-generated method stub
+		return this.pubKey;
+	}
 
-	// This is one mechanism so we are able to add friends to nodes
-	// this one is a group of friends at a time.
-	public void addNodes(ArrayList<Node> newNodes) {
+	// Mutators
+	public void addNodes(ArrayList<Node> newNodes) { // add a group of friend nodes
 		for (int i = 0; i < newNodes.size(); i++) {
 			networkNodes.add(newNodes.get(i));
 		}
 	}
-
-	// This is another mechanism so we are able to add friends to nodes
-	// this is one friend at a time
-	public void addFriend(Node node) {
+	public void addFriend(Node node) { // add a single friend node
 		networkNodes.add(node);
 	}
-
-	// This prints the nodes that each node is friends with
-	public void printNodes() {
-		for (int i = 0; i < networkNodes.size(); i++) {
-			System.out.println(networkNodes.get(i).getNodeID());
-		}
-	}
-
-	// This is the method for creating a message and adding a random recipient
-	// from a nodes friend list. The message is then distribute to this nodes
-	// friend
-	public void createMessage(Object data) {
+	public void createMessage(Object data) { // create message, adding random recipient from friend nodes, distribute message to friend node's friends
 
 		distributePublicKey(this.getPublicKey());
 		System.out.println("I distributed my public key");
@@ -93,16 +83,12 @@ public class Node implements Serializable {
 		Message text = new TextMessage(data, this, networkNodes.get(receiverNum));
 
 		// byteArray = text.getMessageData().toString().getBytes();
-		
+
 		this.blockChain.addMessage(text);
 
 		localMSG.add(text);
 		this.distributeMessage(text);
 	}
-
-	// This is the method for creating a message and adding a random recipient
-	// from a nodes friend list. The message is then distribute to this nodes
-	// friend
 	public void createMessageWithSignature(Object data) throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, NoSuchProviderException {
 
 		// distributePublicKey(this.getPublicKey());
@@ -124,14 +110,12 @@ public class Node implements Serializable {
 		localMSG.add(text);
 		this.distributeSignedMessage(realSig, byteArray, text);
 	}
-
 	public void distributeSignedMessage(byte[] realSig, byte[] byteArray2, Message text) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < networkNodes.size(); i++) {
 			networkNodes.get(i).addSignedMessage(realSig, byteArray2, text);
 		}
 	}
-
 	public void addSignedMessage(byte[] realSig, byte[] byteArray2, Message text) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException {
 		Signature sig = Signature.getInstance("SHA1withDSA", "SUN");
 		for (int i = 0; i < publicKeySet.size(); i++) {
@@ -155,14 +139,12 @@ public class Node implements Serializable {
 			}
 		}
 	}
-
 	public void distributePublicKey(PublicKey publicKey) {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < networkNodes.size(); i++) {
 			networkNodes.get(i).addPublicKey(publicKey);
 		}
 	}
-
 	public void addPublicKey(PublicKey publicKey) {
 		// TODO Auto-generated method stub
 		if (this.publicKeySet.contains(publicKey)) {
@@ -172,21 +154,12 @@ public class Node implements Serializable {
 			this.distributePublicKey(publicKey);
 		}
 	}
-
-	public PublicKey getPublicKey() {
-		// TODO Auto-generated method stub
-		return this.pubKey;
-	}
-
-	// THis is how the message is distributed to its friends
 	public void distributeMessage(Message text) {
 		for (int i = 0; i < networkNodes.size(); i++) {
 			networkNodes.get(i).addMessage(text);
 		}
 	}
-
-	// Adding a message to a nodes list of messages it has received
-	public void addMessage(Message text) {
+	public void addMessage(Message text) { // add message to message list
 		if (this.localMSG.contains(text)) {
 			// do nothing
 		} else {
@@ -195,15 +168,24 @@ public class Node implements Serializable {
 			this.distributeMessage(text);
 		}
 	}
-
-	public boolean isOnline() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-	
-	public void distributeBlock(Block b) {
+	public void distributeBlock(Block b) { // propogate block to friend nodes
 		for (int i = 0; i < networkNodes.size(); i++) {
 			networkNodes.get(i).blockChain.receiveBlock(b);
 		}
+	}
+
+	// Utility
+	public void run() {
+		System.out.println(nodeID);
+		//blockChain.run();
+	}
+	public void printNodes() { // print out friend nodes
+		for (int i = 0; i < networkNodes.size(); i++) {
+			System.out.println(networkNodes.get(i).getNodeID());
+		}
+	}
+	public boolean isOnline() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }

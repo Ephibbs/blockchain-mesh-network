@@ -1,7 +1,7 @@
 import java.io.Serializable;
 
 /*
- * A class for text messages, inherits structure from Message class
+ * Class for text messages, inherits structure from Message class
  * Parameters: Data object, author node, (optional) receiver node
  */
 
