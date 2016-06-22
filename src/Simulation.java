@@ -7,7 +7,7 @@ import java.util.Random;
 
 /*
  * The Simulation class simulates a mesh network and tests functionality
- * Executed via MainHandler
+ * Executed via SimulationHandler
  */
 
 public class Simulation {
