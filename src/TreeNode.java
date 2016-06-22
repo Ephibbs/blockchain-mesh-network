@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 /*
  * Leaves of the Tree class, stores blocks
- * Parameters: Data object (in this case it will be a block)
+ * Parameters: Data object or TreeNode object
  */
 
 public class TreeNode<T> {
