@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BlockStore {
+
+	// Variables
 	private TreeNode<Block> root = new TreeNode<Block>(new Block("1", new ArrayList<Message>()));
 	private Tree<Block> blockTree = new Tree<Block>(root);
 	private ArrayList<String> treeBlockIDs = new ArrayList<String>();
@@ -12,12 +14,19 @@ public class BlockStore {
 	private ArrayList<Tree<Block>> orphanTrees = new ArrayList<Tree<Block>>();
 	private ArrayList<String> messageIDs = new ArrayList<String>();
 	private HashMap<String, Message> allMessages = new HashMap<String, Message>();
-	
+
+	// Constructor
 	BlockStore() {
 		treeBlockIDs.add(root.getData().getMyHash());
 		blockMap.put(root.getData().getMyHash(), root);
 	}
-	
+
+	// Accessors
+	Block getLastBlock() {
+		return blockTree.getDeepestTreeNode().getData();
+	}
+
+	//
 	void add(Block b) {
 		//check that parent exists
 		TreeNode<Block> c = blockMap.get(b.getMyHash());
@@ -81,10 +90,7 @@ public class BlockStore {
 		}
 	}
 	
-	Block getLastBlock() {
-		return blockTree.getDeepestTreeNode().getData();
-	}
-	
+
 	ArrayList<Message> getOrphanMessages() {
 		ArrayList<Message> orphanMessages = new ArrayList<Message>();
 		ArrayList<String> orphanMessageIDs = new ArrayList<String>(messageIDs);

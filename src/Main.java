@@ -5,17 +5,22 @@ import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.Random;
 
+/*
+ * The Main class simulates a mesh network and tests functionality
+ * Executed via MainHandler
+ */
+
 public class Main {
-	// These nodes are available nodes in the global network.
-	public Node node1, node2, node3, node4, node5, node6, node7, node8,node9;
+
+	// Nodes, network, and blockchains
+	public Node node1, node2, node3, node4, node5, node6, node7, node8, node9;
 	public ArrayList<Node> networkNodes = new ArrayList<Node>();
-	public Blockchain chain1,chain2,chain3,chain4,chain5,chain6,chain7,chain8,chain9;
-	
-	/*
-	 * This function is to basically just give each node a name and add the
-	 * nodes to an arraylist to similar the network
-	 */
+	public Blockchain chain1, chain2, chain3, chain4, chain5, chain6, chain7, chain8, chain9;
+
+	// Set up the network
 	public Main() throws NoSuchAlgorithmException, NoSuchProviderException {
+
+		// Initialize each node with a name
 		node1 = new Node("Steve");
 		node2 = new Node("Damian");
 		node3 = new Node("Lawrence");
@@ -26,7 +31,7 @@ public class Main {
 		node8 = new Node("Dylan");
 		node9 = new Node("Colby");
 		
-		//adding the nodes to the "network"
+		// Add each node to the network
 		networkNodes.add(node1);
 		networkNodes.add(node2);
 		networkNodes.add(node3);
@@ -36,13 +41,10 @@ public class Main {
 		networkNodes.add(node7);
 		networkNodes.add(node8);
 		networkNodes.add(node9);
-		
-		//This is a method call to the generate communication lines method
-		generateCommunicationLines();
-		distributePublicKeys();
-		
-		runWithBlockChain();
-		
+
+		generateCommunicationLines(); // each node will randomly add friend nodes
+		distributePublicKeys(); // distribute public key throughout network
+		runWithBlockChain(); // create and send a message
 	}
 	private void distributePublicKeys() {
 		// TODO Auto-generated method stub
