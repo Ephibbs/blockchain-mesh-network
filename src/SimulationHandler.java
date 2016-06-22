@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class SimulationHandler {
 	public static void main(String args[]) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException {
-		Simulation sim = new Simulation();
+		Simulation sim = new Simulation(10, 1);
 		//sim.run();
 		sim.runWithBlockChain();
 	}
