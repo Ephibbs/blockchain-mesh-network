@@ -91,10 +91,8 @@ public class Node implements Serializable {
 		int receiverNum = rand.nextInt(networkNodes.size());
 
 		Message text = new TextMessage(data, this, networkNodes.get(receiverNum));
-
-		// byteArray = text.getMessageData().toString().getBytes();
 		
-		this.blockChain.addMessage(text);
+		this.blockChain.add(text);
 
 		localMSG.add(text);
 		this.distributeMessage(text);
@@ -190,7 +188,7 @@ public class Node implements Serializable {
 		if (this.localMSG.contains(text)) {
 			// do nothing
 		} else {
-			this.blockChain.addMessage(text);
+			this.blockChain.add(text);
 			this.localMSG.add(text);
 			this.distributeMessage(text);
 		}
@@ -203,7 +201,7 @@ public class Node implements Serializable {
 	
 	public void distributeBlock(Block b) {
 		for (int i = 0; i < networkNodes.size(); i++) {
-			networkNodes.get(i).blockChain.receiveBlock(b);
+			networkNodes.get(i).blockChain.add(b);
 		}
 	}
 }

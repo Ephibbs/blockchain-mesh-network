@@ -4,7 +4,13 @@ public class TreeNode<T> {
         private T data;
         private long depth;
         private TreeNode<T> parent = null;
-        private ArrayList<TreeNode<T>> children = new ArrayList<TreeNode<T>>();;
+        private ArrayList<TreeNode<T>> children = new ArrayList<TreeNode<T>>();
+        public TreeNode(TreeNode<T> tn) {
+        	this.parent = tn.getParent();
+        	this.depth = tn.getDepth();
+        	this.data = tn.getData();
+        	this.children = tn.getChildren();
+        }
         public TreeNode(T data) {
         	this.data = data;
         }
@@ -28,5 +34,8 @@ public class TreeNode<T> {
         }
         public TreeNode<T> getParent() {
         	return parent;
+        }
+        public void setParent(TreeNode<T> p) {
+        	this.parent = p;
         }
     }

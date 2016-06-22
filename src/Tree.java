@@ -8,11 +8,16 @@ public class Tree<T> {
         root.setDepth(0);
         leaves.add(root);
     }
-    public void addTreeNode(TreeNode p, T c) {
-    	TreeNode<T> cn = new TreeNode<T>(c);
+    public Tree(TreeNode<T> root) {
+        this.root = root;
+        root.setDepth(0);
+        leaves.add(root);
+    }
+    public void addTreeNode(TreeNode<T> p, TreeNode<T> cn) {
     	long cDepth = p.getDepth()+1;
     	cn.setDepth(cDepth);
     	p.addChild(cn);
+    	cn.setParent(p);
     	if (leaves.contains(p)) {
     		leaves.remove(p);
     	}

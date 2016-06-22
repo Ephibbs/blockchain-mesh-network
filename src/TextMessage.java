@@ -9,5 +9,8 @@ public class TextMessage extends Message implements Serializable {
 	public TextMessage(Object data, Node auth) {
 		super(data, auth);
 	}
-
+	
+	public TextMessage(Object data) {
+		super(data);
+	}
 }

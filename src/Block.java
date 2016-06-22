@@ -1,6 +1,7 @@
 /**
  * Created by evan on 6/15/16.
  */
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class Block {
@@ -9,17 +10,19 @@ public class Block {
     private ArrayList<Message> msgs;
     private String nonce = "";
     private int difficulty;
-    private int id;
     Block() {
     	
     }
     Block(String prevHash, ArrayList<Message> msgs){
+    	this.prevHash = prevHash;
     	this.msgs = msgs;
     }
-    void setMyHash(String myHash) {
-        this.myHash = myHash;
-    }
     String getMyHash() {
+		try {
+			myHash = Utils.sha256(this.toString());
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
     	return myHash;
     }
     String getPrevHash() {
@@ -48,13 +51,10 @@ public class Block {
     	String out = "";
     	out += prevHash;
     	for (Message m : this.msgs) {
-    		out += m.toString();
+    		out += m.getHash();
     	}
     	out += String.valueOf(this.difficulty);
     	out += this.nonce;
     	return out;
-    }
-    int getID() {
-    	return id;
     }
 }

@@ -1,7 +1,9 @@
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.Timestamp;
 import java.util.ArrayList;
+import java.util.Random;
 
 /*
  * This class is the main class for handling a message object. A message object
@@ -17,7 +19,7 @@ public abstract class Message implements Serializable {
 	public Node author = null;
 	public Node recipient = null;
 	public Object messageData = new Object();
-	public String hash;
+	public int id;
 	
 	public Message(Object data, Node auth, Node rec) {
 		this.messageData = data;
@@ -28,6 +30,9 @@ public abstract class Message implements Serializable {
 	public Message(Object data, Node auth) {
 		this.messageData = data;
 		this.author = auth;
+	}
+	public Message(Object data) {
+		this.messageData = data;
 	}
 	
 	/**
@@ -56,6 +61,12 @@ public abstract class Message implements Serializable {
 		System.out.println("The message is: " + messageData.toString() + " from: " +this.author.getNodeID()+ " to: " + this.recipient.getNodeID());
 	}
 	public String getHash() {
-		return hash;
+		try {
+			return Utils.sha256(messageData.toString() + Integer.toString(id));
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
 	}
 }

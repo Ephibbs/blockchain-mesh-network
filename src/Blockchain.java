@@ -15,7 +15,6 @@ import java.security.NoSuchAlgorithmException;
 
 public class Blockchain implements Runnable {
 	private BlockStore blockStore = new BlockStore();
-	private ArrayList<Message> msgs = new ArrayList<Message>();
 	private ArrayList<Block> incBlks = new ArrayList<Block>();
 	private Node node;
 	private int difficulty;
@@ -26,40 +25,39 @@ public class Blockchain implements Runnable {
     public Blockchain(Node node) {
     	System.out.println(node.nodeID);
     	this.node = node;
-    	this.difficulty = 2;
+    	this.difficulty = 4;
     }
     
     public class PuzzleSolver implements Runnable {
     	Thread t;
-    	public PuzzleSolver() {
-    	}
     	public void run() {
     		while(node.isOnline()) {
+    			ArrayList<Message> msgs = blockStore.getOrphanMessages();
     			if(!msgs.isEmpty()) {
-	    			Block b = new Block(blockStore.getLastBlock().getData().getMyHash(), msgs);
-	    			TreeNode<Block> head = blockStore.getLastBlock();
+	    			Block b = new Block(blockStore.getLastBlock().getMyHash(), msgs);
+	    			String head = blockStore.getLastBlock().getMyHash();
 	    			long nonce = -1;
-	    			boolean isVerified = Utils.checkHashWithNonce(b, nonce++, difficulty);
-	    			while(!isVerified && node.isOnline()) {
-	    				if(!head.equals(blockStore.getLastBlock())) {
+	    			b.setNonce(String.valueOf(++nonce));
+	    			boolean isSolved = Utils.checkHash(b, difficulty);
+	    			while(!isSolved && node.isOnline()) {
+	    				if(!head.equals(blockStore.getLastBlock().getMyHash())) {
 	    					break;
 	    				}
-	    				isVerified = Utils.checkHashWithNonce(b, nonce++, difficulty);
+	    				b.setNonce(String.valueOf(++nonce));
+	    				isSolved = Utils.checkHash(b, difficulty);
 	    			}
-	    			if(isVerified) {
-	    				System.out.print("verified block:");
-	    				System.out.println(b.getID());
-	    				System.out.println(nonce);
-		    			b.setNonce(String.valueOf(nonce));
-		    			this.removefromMsgsInBlock(b);
-		    			blockStore.addTreeNode(blockStore.getLastBlock(), b);
+	    			if(isSolved) {
+	    				System.out.println("solved");
+		    			blockStore.add(b);
 		    			node.distributeBlock(b);
 	    			}
 	    			try {
-	    				Thread.sleep(1000);
+	    				Thread.sleep(200);
 	    			} catch (InterruptedException e) {
 	    				e.printStackTrace();
 	    			}
+    			} else {
+    				//System.out.println("no messages");
     			}
     			
     		}
@@ -67,11 +65,6 @@ public class Blockchain implements Runnable {
     	public void start() {
     		t = new Thread(this, "puzzleSolver");
     		t.start();
-    	}
-    	public void removefromMsgsInBlock(Block block) {
-    		for(Message m : block.getMsgs()) {
-    			msgs.remove(m);
-    		}
     	}
 
     }
@@ -83,10 +76,11 @@ public class Blockchain implements Runnable {
     	public void run() {
     		while(node.isOnline()) {
     			for(int i = incBlks.size()-1; i >= 0; i--) {
+    				System.out.println("block has arrived");
     				Block b = incBlks.get(i);
-    				if(Utils.checkHash(b)) {
-    					this.removefromMsgsInBlock(b);
-    					blockStore.add(b);
+    				if(Utils.checkHash(b, difficulty)) {
+    					System.out.println("block checked");
+		    			blockStore.add(b);
     					node.distributeBlock(b);
     				}
     				incBlks.remove(b);
@@ -102,11 +96,6 @@ public class Blockchain implements Runnable {
     		t = new Thread(this, "blockChecker");
     		t.start();
     	}
-    	public void removefromMsgsInBlock(Block block) {
-    		for(Message m : block.getMsgs()) {
-    			msgs.remove(m);
-    		}
-    	}
     }
     
     public void run() {
@@ -116,6 +105,7 @@ public class Blockchain implements Runnable {
     	puzzleSolver.start();
     	System.out.println("running puzzleSolver");
     	blockChecker.start();
+    	System.out.println("running blockChecker");
     }
     
     public void start() {
@@ -128,8 +118,8 @@ public class Blockchain implements Runnable {
      * msg is added to msgs ArrayList
      * @param msg
      */
-    public void addMessage(Message msg) {
-    	msgs.add(msg);
+    public void add(Message msg) {
+    	blockStore.add(msg);
     	System.out.println("added message");
     }
     
@@ -137,7 +127,10 @@ public class Blockchain implements Runnable {
      * block is added to incomingBlocks ArrayList, awaiting verification and addition to the blockchain
      * @param b
      */
-    public void receiveBlock(Block b) {
+    public void add(Block b) {
     	incBlks.add(b);
+    }
+    public Block getLastTreeNode() {
+    	return blockStore.getLastBlock();
     }
 }
