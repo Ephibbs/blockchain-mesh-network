@@ -37,7 +37,7 @@ public class Node implements Serializable {
 	public PrivateKey privKey = null;
 	public PublicKey pubKey = null;
 	public byte[] byteArray = new byte[1024];
-	public Blockchain blockChain = null;
+	public Blockchain blockChain = new Blockchain(this);
 
 	// Constructor
 	public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -181,5 +181,8 @@ public class Node implements Serializable {
 	public boolean isOnline() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+	public void setBlockChainDifficulty(int difficulty) {
+		blockChain.setDifficulty(difficulty);
 	}
 }

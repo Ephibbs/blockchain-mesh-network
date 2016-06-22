@@ -1,5 +1,3 @@
-/BlockChainTesting.class
-/BlockChainTestingHandler.class
-/BlockStore.class
-/BlockStoreInterface.class
-/Utils.class
+/Ping.class
+/Simulation.class
+/SimulationHandler.class

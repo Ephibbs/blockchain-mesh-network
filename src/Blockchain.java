@@ -130,4 +130,7 @@ public class Blockchain implements Runnable {
     	t= new Thread(this, "blockChain");
     	t.start();
     }
+    public void setDifficulty(int difficulty) {
+    	this.difficulty = difficulty;
+    }
 }

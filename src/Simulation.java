@@ -16,10 +16,13 @@ public class Simulation {
 	//public Node node1, node2, node3, node4, node5, node6, node7, node8, node9;
 	public ArrayList<Node> networkNodes = new ArrayList<Node>();
 	public Blockchain chain1, chain2, chain3, chain4, chain5, chain6, chain7, chain8, chain9;
-
+	public int difficulty;
+	public int numberOfInitialNodes;
+	
 	// Set up the network
 		public Simulation(int numberOfInitialNodes, int difficulty) throws NoSuchAlgorithmException, NoSuchProviderException {
-
+			this.difficulty = difficulty;
+			this.numberOfInitialNodes = numberOfInitialNodes;
 			// Initialize each node with a name
 			generateInitialNodes(numberOfInitialNodes);
 			
@@ -51,40 +54,13 @@ public class Simulation {
 	
 	private void generateInitialNodes(int numberOfInitialNodes) throws NoSuchAlgorithmException, NoSuchProviderException {
 			// TODO Auto-generated method stub
+			Node n;
 			for(int i = 0; i < numberOfInitialNodes; i++){
-				networkNodes.add(new Node("" + i));
+				n = new Node("" + i);
+				n.setBlockChainDifficulty(difficulty);
+				networkNodes.add(n);
 			}
 		}
-
-	// Set up the network
-//	public Simulation() throws NoSuchAlgorithmException, NoSuchProviderException {
-//
-//		// Initialize each node with a name		
-//		node1 = new Node("Steve");
-//		node2 = new Node("Damian");
-//		node3 = new Node("Lawrence");
-//		node4 = new Node("Jeffrey");
-//		node5 = new Node("Evan");
-//		node6 = new Node("Natalie");
-//		node7 = new Node("Will");
-//		node8 = new Node("Dylan");
-//		node9 = new Node("Colby");
-//		
-//		// Add each node to the network
-//		networkNodes.add(node1);
-//		networkNodes.add(node2);
-//		networkNodes.add(node3);
-//		networkNodes.add(node4);
-//		networkNodes.add(node5);
-//		networkNodes.add(node6);
-//		networkNodes.add(node7);
-//		networkNodes.add(node8);
-//		networkNodes.add(node9);
-//
-//		generateCommunicationLines(); // each node will randomly add friend nodes
-//		distributePublicKeys(); // distribute public key throughout network
-//		runWithBlockChain(); // create and send a message
-//	}
 	private void distributePublicKeys() {
 		// TODO Auto-generated method stub
 		for(int i = 0; i < networkNodes.size(); i++) {
@@ -149,10 +125,6 @@ public class Simulation {
 				System.out.println("I have a message: " + this.networkNodes.get(j).getNodeID());
 			}
 		}
-		
-		//System.out.println("The message was sent from: " + node4.localMSG.get(0).getAuthor().getNodeID());
-		//System.out.println("The message was sent to: " + node4.localMSG.get(0).getRecipient().getNodeID());
-		//System.out.println("The message said: " + node4.localMSG.get(0).getMessageData().toString());
 	}
 }
 
