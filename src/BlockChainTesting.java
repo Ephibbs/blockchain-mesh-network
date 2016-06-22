@@ -57,6 +57,7 @@ public class BlockChainTesting {
 		Thread.sleep(8000);
 		
 		blockChain2.add(text2);
+		
 		Thread.sleep(8000);
 		
 		messages = new ArrayList<Message>();

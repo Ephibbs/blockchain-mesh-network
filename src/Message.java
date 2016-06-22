@@ -6,27 +6,27 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /*
- * This class is the main class for handling a message object. A message object
- * is defined as being constructed by the content of the message (file, text,
- * string, image,etc.) and the author of the message. This is a simple class
- * used solely for constructing a message.
+ * Abstract class used solely to provide structure for message objects
+ * Message objects can contain different content (file, text, image, etc.)
+ * Parameters: Data object, author node, (optional) receiver node
  */
 
 public abstract class Message implements Serializable {
 
+	// Variables
 //	public Node author = new Node(null);
 //	public Node recipient = new Node(null);
 	public Node author = null;
 	public Node recipient = null;
 	public Object messageData = new Object();
-	public int id;
-	
+	public int id=0;
+
+	// Constructors
 	public Message(Object data, Node auth, Node rec) {
 		this.messageData = data;
 		this.author = auth;
 		this.recipient = rec;
 	}
-	
 	public Message(Object data, Node auth) {
 		this.messageData = data;
 		this.author = auth;
@@ -38,27 +38,16 @@ public abstract class Message implements Serializable {
 	/**
 	 * @return the messageData
 	 */
+
+	// Accessors
 	public Object getMessageData() {
 		return messageData;
 	}
-
-	/**
-	 * @return the author of the message
-	 */
 	public Node getAuthor() {
 		return author;
 	}
-	
-	/**
-	 * 
-	 * @return the recipient of the message
-	 */
 	public Node getRecipient() {
 		return recipient;
-	}
-	
-	public void printMessage() {
-		System.out.println("The message is: " + messageData.toString() + " from: " +this.author.getNodeID()+ " to: " + this.recipient.getNodeID());
 	}
 	public String getHash() {
 		try {
@@ -68,5 +57,10 @@ public abstract class Message implements Serializable {
 			e.printStackTrace();
 		}
 		return "";
+	}
+
+	// Utility
+	public void printMessage() {
+		System.out.println("The message is: " + messageData.toString() + " from: " +this.author.getNodeID()+ " to: " + this.recipient.getNodeID());
 	}
 }
