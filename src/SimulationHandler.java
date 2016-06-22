@@ -5,13 +5,13 @@ import java.security.SignatureException;
 import java.util.ArrayList;
 
 /*
- * Handler for Main class, runs the simulation
+ * Handler for Simulation class, runs the simulation
  */
 
-public class MainHandler {
+public class SimulationHandler {
 	public static void main(String args[]) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException {
-		Main main = new Main();
-		//main.run();
-		main.runWithBlockChain();
+		Simulation sim = new Simulation();
+		//sim.run();
+		sim.runWithBlockChain();
 	}
 }

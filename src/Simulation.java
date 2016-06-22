@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /*
- * The Main class simulates a mesh network and tests functionality
+ * The Simulation class simulates a mesh network and tests functionality
  * Executed via MainHandler
  */
 
-public class Main {
+public class Simulation {
 
 	// Nodes, network, and blockchains
 	public Node node1, node2, node3, node4, node5, node6, node7, node8, node9;
@@ -18,7 +18,7 @@ public class Main {
 	public Blockchain chain1, chain2, chain3, chain4, chain5, chain6, chain7, chain8, chain9;
 
 	// Set up the network
-	public Main() throws NoSuchAlgorithmException, NoSuchProviderException {
+	public Simulation() throws NoSuchAlgorithmException, NoSuchProviderException {
 
 		// Initialize each node with a name
 		node1 = new Node("Steve");
