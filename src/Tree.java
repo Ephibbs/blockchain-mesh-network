@@ -4,7 +4,7 @@ import java.util.ArrayList;
  * Class to track the blockchain with each node being a block
  * Branches occur when multiple blocks are added at the same time
  * Dead branches form when an initial split has been resolved
- * Parameters: Root data object (in this case it will be a block)
+ * Parameters: Root data object or TreeNode object
  */
 
 public class Tree<T> {
@@ -13,7 +13,7 @@ public class Tree<T> {
     private TreeNode<T> root;
     private TreeNode<T> deepestNode;
 
-    // Constructor
+    // Constructors
     public Tree(T rootData) {
         root = new TreeNode<T>(rootData);
         root.setDepth(0);

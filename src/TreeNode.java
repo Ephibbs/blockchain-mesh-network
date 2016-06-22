@@ -7,13 +7,13 @@ import java.util.ArrayList;
 
 public class TreeNode<T> {
 	
-		//Variables
+		// Variables
         private T data;
         private long depth;
         private TreeNode<T> parent = null;
         private ArrayList<TreeNode<T>> children = new ArrayList<TreeNode<T>>();
         
-        //constructors
+        // Constructors
         public TreeNode(TreeNode<T> tn) {
         	this.parent = tn.getParent();
         	this.depth = tn.getDepth();
@@ -24,7 +24,7 @@ public class TreeNode<T> {
         	this.data = data;
         }
         
-        //accessors
+        // Accessors
         public long getDepth() {
         	return depth;
         }
@@ -38,7 +38,7 @@ public class TreeNode<T> {
         	return parent;
         }
         
-        //mutators
+        // Mutators
         public void addChild(TreeNode<T> c) {
         	children.add(c);
         }
