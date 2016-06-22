@@ -12,8 +12,14 @@ import java.lang.Thread;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/*
+ * Class to store blocks, each node has its own copy of the blockchain
+ * Parameters: Node node
+ */
 
 public class Blockchain implements Runnable {
+
+	// Variables
 	private BlockStore blockStore = new BlockStore();
 	private ArrayList<Block> incBlks = new ArrayList<Block>();
 	private Node node;
@@ -21,14 +27,30 @@ public class Blockchain implements Runnable {
 	private PuzzleSolver puzzleSolver;
 	private BlockChecker blockChecker;
 	private Thread t;
-	
+
+	// Constructor
     public Blockchain(Node node) {
     	System.out.println(node.nodeID);
     	this.node = node;
     	this.difficulty = 5;
     }
-    
-    public class PuzzleSolver implements Runnable {
+
+	// Accessors
+	public Block getLastTreeNode() {
+		return blockStore.getLastBlock();
+	}
+
+	// Mutators
+	public void add(Message msg) { // assume message is already verified, added to arraylist msgs
+		blockStore.add(msg);
+		System.out.println("added message");
+	}
+	public void add(Block b) { // block is added to incomingBlocks ArrayList, awaiting verification and addition to the blockchain
+		incBlks.add(b);
+	}
+
+	// Utility
+	public class PuzzleSolver implements Runnable { // try to solve puzzle
     	Thread t;
     	public void run() {
     		while(node.isOnline()) {
@@ -66,10 +88,8 @@ public class Blockchain implements Runnable {
     		t = new Thread(this, "puzzleSolver");
     		t.start();
     	}
-
     }
-
-    public class BlockChecker implements Runnable {
+    public class BlockChecker implements Runnable { // check incoming blockchain
     	Thread t;
     	public BlockChecker() {
     	}
@@ -97,8 +117,7 @@ public class Blockchain implements Runnable {
     		t.start();
     	}
     }
-    
-    public void run() {
+    public void run() { // actually executing the code
     	puzzleSolver = new PuzzleSolver();
     	blockChecker = new BlockChecker();
     	
@@ -107,30 +126,8 @@ public class Blockchain implements Runnable {
     	blockChecker.start();
     	System.out.println("running blockChecker");
     }
-    
-    public void start() {
+    public void start() { // run each task independently
     	t= new Thread(this, "blockChain");
     	t.start();
-    }
-    
-    /**
-     * msg is assumed to have been verified
-     * msg is added to msgs ArrayList
-     * @param msg
-     */
-    public void add(Message msg) {
-    	blockStore.add(msg);
-    	System.out.println("added message");
-    }
-    
-    /**
-     * block is added to incomingBlocks ArrayList, awaiting verification and addition to the blockchain
-     * @param b
-     */
-    public void add(Block b) {
-    	incBlks.add(b);
-    }
-    public Block getLastTreeNode() {
-    	return blockStore.getLastBlock();
     }
 }
