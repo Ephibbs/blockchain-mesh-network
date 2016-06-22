@@ -30,13 +30,15 @@ public class Tree<T> {
 
     // Mutators
     public void addTreeNode(TreeNode p, T c) {
-    	TreeNode<T> cn = new TreeNode<T>(c);
+    	TreeNode<T> cn = new TreeNode<T>(c); // create child node with data object
     	long cDepth = p.getDepth()+1;
     	cn.setDepth(cDepth);
-    	p.addChild(cn);
-    	if (leaves.contains(p)) {
+    	p.addChild(cn); // add child to parent
+
+        if (leaves.contains(p)) {
     		leaves.remove(p);
     	}
+
     	int i = 0;
     	while(leaves.size() > i && cn.getDepth() > leaves.get(i).getDepth()) {i++;}
     	leaves.add(i--, cn);
