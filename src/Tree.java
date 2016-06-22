@@ -35,6 +35,7 @@ public class Tree<T> {
     	cn.setDepth(cDepth);
     	p.addChild(cn); // add child to parent
 
+        // TODO clarify meaning
         if (leaves.contains(p)) {
     		leaves.remove(p);
     	}
