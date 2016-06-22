@@ -52,7 +52,7 @@ public class Simulation {
 	private void generateInitialNodes(int numberOfInitialNodes) throws NoSuchAlgorithmException, NoSuchProviderException {
 			// TODO Auto-generated method stub
 			for(int i = 0; i < numberOfInitialNodes; i++){
-				networkNodes.add(new Node("Node " + i));
+				networkNodes.add(new Node("Node" + i));
 			}
 		}
 
