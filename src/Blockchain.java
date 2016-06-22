@@ -100,8 +100,9 @@ public class Blockchain implements Runnable {
     				Block b = incBlks.get(i);
     				if(Utils.checkHash(b, difficulty)) {
     					System.out.println("block checked");
-		    			blockStore.add(b);
-    					node.distributeBlock(b);
+		    			if(blockStore.add(b)) {
+		    				node.distributeBlock(b);
+		    			}
     				}
     				incBlks.remove(b);
     			}

@@ -169,9 +169,9 @@ public class Node implements Serializable {
 	}
 
 	// Utility
-	public void run() {
+	public void start() {
 		System.out.println(nodeID);
-		//blockChain.run();
+		blockChain.start();
 	}
 	public void printNodes() {
 		for (int i = 0; i < networkNodes.size(); i++) { // print out friend nodes

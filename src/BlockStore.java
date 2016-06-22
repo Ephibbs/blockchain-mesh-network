@@ -27,7 +27,7 @@ public class BlockStore {
 	}
 
 	//
-	void add(Block b) {
+	boolean add(Block b) {
 		//check that parent exists
 		TreeNode<Block> c = blockMap.get(b.getMyHash());
 		//if not in tree
@@ -75,6 +75,7 @@ public class BlockStore {
 						}
 						s += "0";
 						System.out.println(s);
+						return true;
 					}
 				}
 			
@@ -88,6 +89,7 @@ public class BlockStore {
 				orphanTrees.add(new Tree<Block>(b));
 			}
 		}
+		return false;
 	}
 	
 

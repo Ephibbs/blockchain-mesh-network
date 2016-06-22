@@ -100,7 +100,7 @@ public class Simulation {
 	
 	public void runWithBlockChain() {
 		for(Node n : networkNodes) {
-			n.run();
+			n.start();
 		}
 		this.networkNodes.get(0).createMessage("help");
 	}
