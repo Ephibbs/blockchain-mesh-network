@@ -67,7 +67,6 @@ public class NetworkGUI extends Program {
 
 		add(this.canvas);
 	}
-
 	private void addListeners() {
 		this.diffString.addActionListener(this);
 		this.numNodes.addActionListener(this);
@@ -75,7 +74,6 @@ public class NetworkGUI extends Program {
 		this.randMessage.addActionListener(this);
 		this.messageText.addActionListener(this);
 	}
-
 	private void generateWestFrame() {
 		add(new JLabel("Enter the Hash Difficulty below"), WEST);
 		this.diffString = new JTextField(TEXT_FIELD_SIZE);
@@ -119,7 +117,6 @@ public class NetworkGUI extends Program {
 	 * interactors are used, so you will have to add code to respond to these
 	 * actions.
 	 */
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// Lookup button is clicked
@@ -150,6 +147,7 @@ public class NetworkGUI extends Program {
 			// System.out.println("Send
 			// Message");//addFriendFunctionality(enteredName);
 			try {
+				System.out.println("I should be getting here");
 				sendMessage(this.messageText.getText(), this.Send.getText(), this.Receive.getText());
 			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
 				// TODO Auto-generated catch block
@@ -172,12 +170,14 @@ public class NetworkGUI extends Program {
 			}
 		}
 	}
-
 	private void sendMessage(String message, String sender, String receiver) throws NoSuchAlgorithmException, NoSuchProviderException {
+		recolorNodes();
 		Node senderNode = null;
 		Node receiverNode = null;
 		for (int i = 0; i < networkNodes.size(); i++) {
 			for (int j = 0; j < networkNodes.size(); j++) {
+				String nodeNameSend = "Node" + networkNodes.get(i).nodeID;
+				String nodeNameRec = "Node" + networkNodes.get(j).nodeID;
 				if (networkNodes.get(i).nodeID.equals(sender) && networkNodes.get(j).nodeID.equals(receiver)) {
 					senderNode = networkNodes.get(i);
 					receiverNode = networkNodes.get(j);
@@ -185,13 +185,19 @@ public class NetworkGUI extends Program {
 							Color.RED, senderNode.getWidth());
 					senderNode.Draw(g);
 					receiverNode.setNodeValues(receiverNode.getXCoord(), receiverNode.getYCoord(), 
-							Color.RED, receiverNode.getWidth());
+							Color.YELLOW, receiverNode.getWidth());
 					receiverNode.Draw(g);
 				}
 			}
 		}
 	}
-
+	private void recolorNodes() {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < networkNodes.size(); i++) {
+			networkNodes.get(i).setColor(Color.BLUE);
+			networkNodes.get(i).Draw(g);
+		}
+	}
 	private void generateNodes() throws NoSuchAlgorithmException, NoSuchProviderException {
 		Node n;
 		this.g = this.canvas.getGraphics();
@@ -206,7 +212,6 @@ public class NetworkGUI extends Program {
 			n.Draw(g);
 		}
 	}
-
 	private void generateNodeNetwork() {
 		Node n;
 		Graphics g = this.canvas.getGraphics();
@@ -217,5 +222,4 @@ public class NetworkGUI extends Program {
 			g.fillOval(randomX, randomY, OFFSET, OFFSET);
 		}
 	}
-
 }

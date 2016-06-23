@@ -277,4 +277,7 @@ public class Node implements Serializable {
 	public int getWidth() {
 		return this.WIDTH;
 	}
+	public void setColor(Color myColor){
+		this.color = myColor;
+	}
 }
