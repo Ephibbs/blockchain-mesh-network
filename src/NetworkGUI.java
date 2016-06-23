@@ -213,7 +213,15 @@ public class NetworkGUI extends Program {
 			n.Draw(g);
 		}
 		generateCommunicationLines();
+		generateLineToFriends();
 		checkFriends();
+	}
+	private void generateLineToFriends() {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < this.networkNodes.size();i++){
+			this.networkNodes.get(i).drawLinesToFriends(this.g);
+		}
+		
 	}
 	private void checkFriends() {
 		// TODO Auto-generated method stub

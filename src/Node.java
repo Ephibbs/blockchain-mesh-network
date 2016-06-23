@@ -265,6 +265,14 @@ public class Node implements Serializable {
 		g.setColor(this.color);
 		g.fillOval(this.xCoordinate, this.yCoordinate, this.WIDTH, this.WIDTH);
 	}
+	public void drawLinesToFriends(Graphics g){
+		g.setColor(Color.BLACK);
+		for(int i = 0; i < this.networkNodes.size();i++) {
+			Node friend = networkNodes.get(i);
+			g.drawLine(this.xCoordinate+this.WIDTH/2, this.yCoordinate+this.WIDTH/2, 
+					friend.getXCoord()+this.WIDTH/2, friend.getYCoord()+this.WIDTH/2);
+		}
+	}
 	
 	public Color getColor(){
 		return this.color;
