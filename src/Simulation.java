@@ -18,6 +18,7 @@ public class Simulation {
 	public Blockchain chain1, chain2, chain3, chain4, chain5, chain6, chain7, chain8, chain9;
 	public int difficulty;
 	public int numberOfInitialNodes;
+	public NetworkGUI gui = new NetworkGUI();
 	
 	// Set up the network
 		public Simulation(int numberOfInitialNodes, int difficulty) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -25,33 +26,12 @@ public class Simulation {
 			this.numberOfInitialNodes = numberOfInitialNodes;
 			// Initialize each node with a name
 			generateInitialNodes(numberOfInitialNodes);
-			
-//			node1 = new Node("Steve");
-//			node2 = new Node("Damian");
-//			node3 = new Node("Lawrence");
-//			node4 = new Node("Jeffrey");
-//			node5 = new Node("Evan");
-//			node6 = new Node("Natalie");
-//			node7 = new Node("Will");
-//			node8 = new Node("Dylan");
-//			node9 = new Node("Colby");
-//			
-//			// Add each node to the network
-//			networkNodes.add(node1);
-//			networkNodes.add(node2);
-//			networkNodes.add(node3);
-//			networkNodes.add(node4);
-//			networkNodes.add(node5);
-//			networkNodes.add(node6);
-//			networkNodes.add(node7);
-//			networkNodes.add(node8);
-//			networkNodes.add(node9);
 
 			generateCommunicationLines(); // each node will randomly add friend nodes
 			distributePublicKeys(); // distribute public key throughout network
 			runWithBlockChain(); // create and send a message
 		}
-	
+
 	private void generateInitialNodes(int numberOfInitialNodes) throws NoSuchAlgorithmException, NoSuchProviderException {
 			// TODO Auto-generated method stub
 			Node n;

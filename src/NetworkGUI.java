@@ -187,6 +187,7 @@ public class NetworkGUI extends Program {
 					receiverNode.setNodeValues(receiverNode.getXCoord(), receiverNode.getYCoord(), 
 							Color.YELLOW, receiverNode.getWidth());
 					receiverNode.Draw(g);
+					senderNode.createMessage(new TextMessage(message, receiverNode));
 				}
 			}
 		}
@@ -211,6 +212,42 @@ public class NetworkGUI extends Program {
 			this.nodeIDCounter++;
 			n.Draw(g);
 		}
+		generateCommunicationLines();
+		checkFriends();
+	}
+	private void checkFriends() {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < networkNodes.size();i++){
+			for(int j = 0; j < networkNodes.get(i).getFriends().size();j++){
+				System.out.println("I am " + this.networkNodes.get(i).nodeID + " my friend is: " + 
+							this.networkNodes.get(i).getFriends().get(j).nodeID);
+			}
+		}
+	}
+	private void generateCommunicationLines() {
+		for (int i = 0; i < this.networkNodes.size(); i++) {
+			Node currentNode = this.networkNodes.get(i);
+			int xLoc = currentNode.getXCoord();
+			int yLoc = currentNode.getYCoord();
+			for (int j = 0; j < this.networkNodes.size(); j++) {
+				if(i!=j){
+					Node targetNode = this.networkNodes.get(j);
+					int targetXLoc = targetNode.getXCoord();
+					int targetYLoc = targetNode.getYCoord();
+					int euclidDistance = calculateDistance(xLoc,yLoc,targetXLoc,targetYLoc);
+					if(euclidDistance < this.communicationRadius){
+						currentNode.addFriend(targetNode);
+					}
+				} else {
+					// do nothing
+				}
+			}
+		}
+	}
+	private int calculateDistance(int xLoc, int yLoc, int targetXLoc, int targetYLoc) {
+		// TODO Auto-generated method stub
+		double distance = Math.sqrt(Math.pow((targetXLoc-xLoc), 2)+Math.pow((targetYLoc-yLoc), 2));
+		return (int) distance;
 	}
 	private void generateNodeNetwork() {
 		Node n;

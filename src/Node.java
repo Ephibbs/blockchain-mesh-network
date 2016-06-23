@@ -89,7 +89,8 @@ public class Node implements Serializable {
 
 		Random rand = new Random(); // create a message with a random friend
 									// node as the recipient
-		int receiverNum = rand.nextInt(networkNodes.size());
+		int nodesSize = networkNodes.size();
+		int receiverNum = rand.nextInt(nodesSize);
 		Message text = new TextMessage(data, this, networkNodes.get(receiverNum));
 
 		this.blockChain.add(text);
@@ -279,5 +280,8 @@ public class Node implements Serializable {
 	}
 	public void setColor(Color myColor){
 		this.color = myColor;
+	}
+	public ArrayList<Node> getFriends(){
+		return this.networkNodes;
 	}
 }
