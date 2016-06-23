@@ -2,15 +2,19 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/*
+ * BlockStore class to store the blocks, each blockchain has this
+ */
+
 public class BlockStore {
 
 	// Variables
 	private TreeNode<Block> root = new TreeNode<Block>(new Block("1", new ArrayList<Message>()));
 	private Tree<Block> blockTree = new Tree<Block>(root);
-	private ArrayList<String> treeBlockIDs = new ArrayList<String>();
+	private ArrayList<String> treeBlockIDs = new ArrayList<String>(); // stores the hashes of the blocks (their ID)
 	private ArrayList<String> orphanBlockIDs = new ArrayList<String>();
 	//private ArrayList<TreeNode<Block>> allBlocks = new ArrayList<Block>();
-	private HashMap<String, TreeNode<Block>> blockMap = new HashMap<String, TreeNode<Block>>();
+	private HashMap<String, TreeNode<Block>> blockMap = new HashMap<String, TreeNode<Block>>(); // input: hash, output: TreeNode<block> with that hash
 	private ArrayList<Tree<Block>> orphanTrees = new ArrayList<Tree<Block>>();
 	private ArrayList<String> messageIDs = new ArrayList<String>();
 	private HashMap<String, Message> allMessages = new HashMap<String, Message>();
@@ -25,20 +29,35 @@ public class BlockStore {
 	Block getLastBlock() {
 		return blockTree.getDeepestTreeNode().getData();
 	}
+	ArrayList<Message> getOrphanMessages() {
+		ArrayList<Message> orphanMessages = new ArrayList<Message>();
+		ArrayList<String> orphanMessageIDs = new ArrayList<String>(messageIDs);
+		TreeNode<Block> p = blockTree.getDeepestTreeNode();
+		while(p != null) {
+			for(Message m : p.getData().getMsgs()) {
+				orphanMessageIDs.remove(m.getHash());
+			}
+			p = p.getParent();
+		}
+		for(String s : orphanMessageIDs) {
+			orphanMessages.add(allMessages.get(s));
+		}
+		return orphanMessages;
+	}
 
-	//
+	// Mutators
 	boolean add(Block b) {
 		//check that parent exists
-		TreeNode<Block> c = blockMap.get(b.getMyHash());
+		TreeNode<Block> c = blockMap.get(b.getMyHash()); // check if block is unique
 		//if not in tree
-		if(c == null) {
-			if(treeBlockIDs.contains(b.getPrevHash())) {
+		if(c == null) { // is unique
+			if(treeBlockIDs.contains(b.getPrevHash())) { // if previous block is already in the tree
 				//check if block is in blockstore already
-				TreeNode<Block> p = blockMap.get(b.getPrevHash());
-					
+				TreeNode<Block> p = blockMap.get(b.getPrevHash()); // get previous block (parent block)
+
 				//verify all messages in the block have been received
 				boolean messagesVerified = true;
-				for(Message m : b.getMsgs()) {
+				for(Message m : b.getMsgs()) { // check if messageIDs list has the message
 					if(!messageIDs.contains(m.getHash())) {
 						messagesVerified = false;
 						break;
@@ -48,8 +67,8 @@ public class BlockStore {
 				//verify messages aren't in any previous block
 				if(messagesVerified) {
 					ArrayList<Message> blockMsgs = b.getMsgs();
-					TreeNode<Block> tempP = new TreeNode<Block>(p);
-					while(tempP.getDepth() != 0) {
+					TreeNode<Block> tempP = new TreeNode<Block>(p); // copy of parent block
+					while(tempP.getDepth() != 0) { // go through parent blocks
 						for(Message m : tempP.getData().getMsgs()) {
 							if(blockMsgs.contains(m.getHash())) {
 								messagesVerified = false;
@@ -66,7 +85,7 @@ public class BlockStore {
 						treeBlockIDs.add(b.getMyHash());
 						blockMap.put(b.getMyHash(), bn);
 						
-						tempP = new TreeNode<Block>(bn);
+						tempP = new TreeNode<Block>(bn); // show tree
 						String s = "";
 						while(tempP.getDepth() != 0) {
 							s += tempP.getData().getMyHash();
@@ -78,12 +97,12 @@ public class BlockStore {
 						return true;
 					}
 				}
-			
-			} else if(orphanBlockIDs.contains(b.getPrevHash())) {
+
+			} else if(orphanBlockIDs.contains(b.getPrevHash())) { // prev block not in tree, check orphan tree
 				System.out.println("into orphan chain");
 				//TreeNode<Block> p = blockMap.get(b.getPrevHash());
 				//blocks came out of order
-			} else {
+			} else { // prev block in neither tree, make a new tree
 				//create new tree in orphanTrees
 				System.out.println("into new orphan chain");
 				orphanTrees.add(new Tree<Block>(b));
@@ -91,24 +110,6 @@ public class BlockStore {
 		}
 		return false;
 	}
-	
-
-	ArrayList<Message> getOrphanMessages() {
-		ArrayList<Message> orphanMessages = new ArrayList<Message>();
-		ArrayList<String> orphanMessageIDs = new ArrayList<String>(messageIDs);
-		TreeNode<Block> p = blockTree.getDeepestTreeNode();
-		while(p != null) {
-			for(Message m : p.getData().getMsgs()) {
-				orphanMessageIDs.remove(m.getHash());
-			}
-			p = p.getParent();
-		}
-		for(String s : orphanMessageIDs) {
-			orphanMessages.add(allMessages.get(s));
-		}
-		return orphanMessages;
-	}
-	
 	void add(Message m) {
 		if(!messageIDs.contains(m.getHash())) {
 			messageIDs.add(m.getHash());
