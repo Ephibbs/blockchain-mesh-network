@@ -117,7 +117,7 @@ public class BlockStore {
 			allMessages.put(m.getHash(), m);
 		}
 	}
-	Block getBlock(String hash) {
-		return blockMap.get(hash).getData();
+	TreeNode<Block> getBlock(String hash) {
+		return blockMap.get(hash);
 	}
  }
