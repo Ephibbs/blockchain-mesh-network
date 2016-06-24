@@ -116,10 +116,7 @@ public class BlockStore {
 			allMessages.put(m.getHash(), m);
 		}
 	}
-	boolean didReceive(String hash) {
-		if(blockMap.containsKey(hash)) {
-			return true;
-		}
-		return false;
+	Block getBlock(String hash) {
+		return blockMap.get(hash).getData();
 	}
  }
