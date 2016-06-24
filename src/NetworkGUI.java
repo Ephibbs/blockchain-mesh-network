@@ -108,7 +108,7 @@ public class NetworkGUI extends Program {
 		add(new JLabel("Enter Receiver Below"), WEST);
 		add(this.Receive, WEST);
 		add(new JButton("Send Message"), WEST);
-		
+
 		// Remove a node
 		this.removeNode = new JTextField(TEXT_FIELD_SIZE);
 		add(this.removeNode, WEST);
@@ -125,9 +125,12 @@ public class NetworkGUI extends Program {
 
 		// to move the location of the nodes
 		add(new JButton("Reset Nodes"), WEST);
-		
+
 		// to move the location of the nodes
 		add(new JButton("Input New Lines"), WEST);
+
+		// to ping everybody
+		add(new JButton("Ping Every Node"), WEST);
 	}
 
 	/**
@@ -150,12 +153,12 @@ public class NetworkGUI extends Program {
 			System.out.println("Your numberOfNodes is: " + this.numberOfNodes);
 
 		}
-		
+
 		else if (e.getActionCommand().equals("Remove Node")
 				|| e.getSource() == this.commRadString && !this.commRadString.getText().equals("")) {
 			removeNode(this.removeNode.getText());
 		}
-		
+
 		// Change Picture is clicked or user clicked enter after entering
 		// picture name into the text field
 		else if (e.getActionCommand().equals("Comm radius")
@@ -182,12 +185,13 @@ public class NetworkGUI extends Program {
 		else if (e.getActionCommand().equals("Random Message")
 				|| e.getSource() == this.randMessage && !this.randMessage.getText().equals("")) {
 			System.out.println("You are a Random");// createGroupFunctionality();
-		}
-		else if (e.getActionCommand().equals("Reset Nodes")) {
-			//System.out.println("You are a Random");// createGroupFunctionality();
+		} else if (e.getActionCommand().equals("Reset Nodes")) {
+			// System.out.println("You are a Random");//
+			// createGroupFunctionality();
 			resetNodesCommunicationLines();
 		} else if (e.getActionCommand().equals("Input New Lines")) {
-			//System.out.println("You are a Random");// createGroupFunctionality();
+			// System.out.println("You are a Random");//
+			// createGroupFunctionality();
 			generateCommunicationLines();
 			generateLineToFriends();
 		}
@@ -203,18 +207,29 @@ public class NetworkGUI extends Program {
 			}
 		} else if (e.getActionCommand().equals("Move Nodes")) {
 			moveNodes();
+		} else if (e.getActionCommand().equals("Ping Every Node")) {
+			globalPingCreation();
 		}
+	}
+
+	private void globalPingCreation() {
+		// TODO Auto-generated method stub\
+		for (int i = 0; i < networkNodes.size(); i++) {
+			System.out.println("I created a pings");
+			this.networkNodes.get(i).createPing();
+		}
+
 	}
 
 	private void removeNode(String text) {
 		// TODO Auto-generated method stub
 		Node nodeToRemove = null;
-		for(int i = 0; i < networkNodes.size();i++){
-			if(networkNodes.get(i).getNodeID().equals(text)){
+		for (int i = 0; i < networkNodes.size(); i++) {
+			if (networkNodes.get(i).getNodeID().equals(text)) {
 				nodeToRemove = this.networkNodes.get(i);
 			}
 		}
-		
+
 		networkNodes.remove(nodeToRemove);
 		resetNodesCommunicationLines();
 		generateCommunicationLines();
@@ -226,7 +241,7 @@ public class NetworkGUI extends Program {
 		// TODO Auto-generated method stub
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
-		for(int i = 0; i < this.networkNodes.size();i++){
+		for (int i = 0; i < this.networkNodes.size(); i++) {
 			this.networkNodes.get(i).getFriends().clear();
 			this.networkNodes.get(i).Draw(g);
 		}
@@ -240,6 +255,7 @@ public class NetworkGUI extends Program {
 		}
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
+		resetNodesCommunicationLines();
 		generateCommunicationLines();
 		generateLineToFriends();
 		recolorNodes();
@@ -250,6 +266,7 @@ public class NetworkGUI extends Program {
 		recolorNodes();
 		Node senderNode = null;
 		Node receiverNode = null;
+		Message currentMessage = null;
 		for (int i = 0; i < networkNodes.size(); i++) {
 			for (int j = 0; j < networkNodes.size(); j++) {
 				String nodeNameSend = "Node" + networkNodes.get(i).nodeID;
@@ -263,9 +280,27 @@ public class NetworkGUI extends Program {
 					receiverNode.setNodeValues(receiverNode.getXCoord(), receiverNode.getYCoord(), Color.YELLOW,
 							receiverNode.getWidth());
 					receiverNode.Draw(g);
-					senderNode.createMessage(new TextMessage(message, receiverNode));
+					currentMessage = new TextMessage(message, receiverNode);
+					senderNode.createMessage(currentMessage);
 				}
 			}
+		}
+		for (int o = 0; o < this.networkNodes.size(); o++) {
+
+			//if (networkNodes.get(o).getMessages().contains(currentMessage)) {
+				Node currentNode = this.networkNodes.get(o);
+				for (int p = 0; p < currentNode.getMessages().size(); p++) {
+					System.out.println("I do check here");
+					System.out.println("Compare: " +currentNode.getMessages().get(p).getMessageData().toString() 
+							+ " with " + currentMessage.getMessageData().toString());
+					if(currentNode.getMessages().get(p).getMessageData().toString().equals(currentMessage.getMessageData().toString())){
+						this.networkNodes.get(o).setNodeValues(currentNode.getXCoord(), currentNode.getYCoord(),
+								Color.GREEN, currentNode.getWidth());
+						System.out.println("I should be green now");
+					}
+					
+				}
+			//}
 		}
 		// recolorNodes();
 	}

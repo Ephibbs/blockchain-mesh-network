@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.io.Serializable;
 import java.security.InvalidKeyException;
@@ -302,10 +303,10 @@ public class Node implements Serializable {
 		if(this.routeTable.containsKey(ping.getOriginator())) {
 			//do nothing
 		} else {
+			routeTable.put(ping.originator, ping.relayer);
 			ping.setRelayer(this);
 			distributePing(ping);
 		}
-		
 	}
 
 	public Color getColor() {
@@ -415,5 +416,10 @@ public class Node implements Serializable {
 				this.yCoordinate = this.yCoordinate - randomY;
 			}
 		}
+	}
+
+	public ArrayList<Message> getMessages() {
+		// TODO Auto-generated method stub
+		return this.localMSG;
 	}
 }
