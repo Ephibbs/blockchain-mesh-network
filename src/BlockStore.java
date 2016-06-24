@@ -116,4 +116,10 @@ public class BlockStore {
 			allMessages.put(m.getHash(), m);
 		}
 	}
-}
+	boolean didReceive(String hash) {
+		if(treeBlockIDs.contains(hash) || orphanBlockIDs.contains(hash)) {
+			return true;
+		}
+		return false;
+	}
+ }

@@ -46,6 +46,10 @@ public class Blockchain implements Runnable {
 		System.out.println("added message");
 	}
 	public void add(Block b) { // block is added to incomingBlocks ArrayList, awaiting verification and addition to the blockchain
+		if(!blockStore.didReceive(b.getPrevHash())) {
+			//TODO: implement requestBlock method in node class
+			//node.requestBlock(b.getPrevHash());
+		}
 		incBlks.add(b);
 	}
 
