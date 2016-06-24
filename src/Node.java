@@ -40,7 +40,7 @@ public class Node implements Serializable {
 	public PrivateKey privKey = null;
 	public PublicKey pubKey = null;
 	public byte[] byteArray = new byte[1024];
-	public Blockchain blockChain = new Blockchain(this);
+	public Blockchain blockChain
 	public Random rand = new Random();
 	
 	public Hashtable<Node,Node> routeTable = new Hashtable<Node,Node>();
@@ -49,12 +49,8 @@ public class Node implements Serializable {
 	public int yCoordinate = 0;
 	public Color color = Color.BLUE;
 	public int WIDTH = 0;
-//<<<<<<< HEAD
-	
 	private Ping ping;
-//=======
 	public ArrayList<String> blockRequestIDs = new ArrayList<String>();
-//>>>>>>> origin/master
 
 	// Constructor
 	public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -75,7 +71,7 @@ public class Node implements Serializable {
 		this.pair = keyGen.generateKeyPair();
 		this.privKey = pair.getPrivate();
 		this.pubKey = pair.getPublic();
-		// this.blockChain = new Blockchain(this);
+		this.blockChain = new Blockchain(this);
 		// distributePublicKey()
 	}
 
@@ -244,7 +240,7 @@ public class Node implements Serializable {
 
 	// Utility
 	public void start() {
-		//System.out.println(nodeID);
+		System.out.println(nodeID);
 		blockChain.start();
 	}
 

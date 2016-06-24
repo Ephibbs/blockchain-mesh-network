@@ -30,7 +30,6 @@ public class Blockchain implements Runnable {
 
 	// Constructor
     public Blockchain(Node node) {
-    	System.out.println(node.nodeID);
     	this.node = node;
     	this.difficulty = 5;
     }
@@ -123,6 +122,7 @@ public class Blockchain implements Runnable {
     		}
     	}
     	public void start() {
+        	System.out.println(node.getNodeID());
     		t = new Thread(this, "blockChecker");
     		t.start();
     	}

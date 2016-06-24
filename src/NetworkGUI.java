@@ -281,6 +281,7 @@ public class NetworkGUI extends Program {
 	}
 
 	private void generateNodes() throws NoSuchAlgorithmException, NoSuchProviderException {
+		System.out.println(nodeIDCounter);
 		Node n;
 		this.g = this.canvas.getGraphics();
 		g.setColor(Color.LIGHT_GRAY);
@@ -291,6 +292,7 @@ public class NetworkGUI extends Program {
 			n = new Node("Node" + nodeIDCounter);
 			n.setBlockChainDifficulty(this.difficulty);
 			n.setNodeValues(randomX, randomY, Color.BLUE, OFFSET);
+			n.start();
 			networkNodes.add(n);
 			this.nodeIDCounter++;
 			n.Draw(g);
