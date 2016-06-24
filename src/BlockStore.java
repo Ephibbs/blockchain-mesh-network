@@ -117,7 +117,7 @@ public class BlockStore {
 		}
 	}
 	boolean didReceive(String hash) {
-		if(treeBlockIDs.contains(hash) || orphanBlockIDs.contains(hash)) {
+		if(blockMap.containsKey(hash)) {
 			return true;
 		}
 		return false;
