@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Random;
 
-import Blockchain.BlockChecker;
-
 /*
  * Class for the nodes in a mesh network
  * Parameters: ID string
@@ -51,12 +49,12 @@ public class Node implements Serializable {
 	public int yCoordinate = 0;
 	public Color color = Color.BLUE;
 	public int WIDTH = 0;
-<<<<<<< HEAD
+//<<<<<<< HEAD
 	
 	private Ping ping;
-=======
+//=======
 	public ArrayList<String> blockRequestIDs = new ArrayList<String>();
->>>>>>> origin/master
+//>>>>>>> origin/master
 
 	// Constructor
 	public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
