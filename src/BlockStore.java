@@ -97,15 +97,16 @@ public class BlockStore {
 						return true;
 					}
 				}
-
-			} else if(orphanBlockIDs.contains(b.getPrevHash())) { // prev block not in tree, check orphan tree
-				System.out.println("into orphan chain");
-				//TreeNode<Block> p = blockMap.get(b.getPrevHash());
-				//blocks came out of order
-			} else { // prev block in neither tree, make a new tree
-				//create new tree in orphanTrees
-				System.out.println("into new orphan chain");
-				orphanTrees.add(new Tree<Block>(b));
+			} else { // is an orphan block
+				if (orphanBlockIDs.contains(b.getPrevHash())) { // if orphan has a parent in an orphan tree
+					System.out.println("into orphan chain");
+					//TreeNode<Block> p = blockMap.get(b.getPrevHash());
+					//blocks came out of order
+				} else { // if orphan has no parent
+					//create new tree in orphanTrees
+					System.out.println("into new orphan chain");
+					orphanTrees.add(new Tree<Block>(b));
+				}
 			}
 		}
 		return false;
@@ -116,10 +117,7 @@ public class BlockStore {
 			allMessages.put(m.getHash(), m);
 		}
 	}
-	boolean didReceive(String hash) {
-		if(blockMap.containsKey(hash)) {
-			return true;
-		}
-		return false;
+	Block getBlock(String hash) {
+		return blockMap.get(hash).getData();
 	}
  }

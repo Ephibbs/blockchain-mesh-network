@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Random;
 
+import Blockchain.BlockChecker;
+
 /*
  * Class for the nodes in a mesh network
  * Parameters: ID string
@@ -49,8 +51,12 @@ public class Node implements Serializable {
 	public int yCoordinate = 0;
 	public Color color = Color.BLUE;
 	public int WIDTH = 0;
+<<<<<<< HEAD
 	
 	private Ping ping;
+=======
+	public ArrayList<String> blockRequestIDs = new ArrayList<String>();
+>>>>>>> origin/master
 
 	// Constructor
 	public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -327,6 +333,43 @@ public class Node implements Serializable {
 	public ArrayList<Node> getFriends() {
 		return this.networkNodes;
 	}
+	public void makeBlockRequest(String hash, String nodeID) {
+		for (int i = 0; i < networkNodes.size(); i++) { // distribute blockrequest to
+														// friend nodes (they
+														// will propagate to
+														// their friends if they cannot resolve)
+			networkNodes.get(i).requestBlock(hash, nodeID);
+		}
+	}
+	public void requestBlock(String hash, String nodeID) {
+		if(!blockRequestIDs.contains(hash+nodeID)) {
+			Block b = blockChain.getBlock(hash);
+			if(b != null) {
+				broadcastBlock(b, nodeID);
+			} else {
+				makeBlockRequest(hash, nodeID);
+			}
+			blockRequestIDs.add(hash+nodeID);
+		}
+	}
+	public void broadcastBlock(Block b, String nodeID) {
+		for (int i = 0; i < networkNodes.size(); i++) { // distribute blockrequest to
+														// friend nodes (they
+														// will propagate to
+														// their friends if they cannot resolve)
+			networkNodes.get(i).receiveBlock(b, nodeID);
+		}
+	}
+	public void receiveBlock(Block b, String nodeID) {
+		if(blockRequestIDs.contains(b.getMyHash()+nodeID)) {
+			if(nodeID == this.nodeID) {
+				blockChain.add(b);
+			} else {
+				broadcastBlock(b, nodeID);
+			}
+			blockRequestIDs.remove(b.getMyHash()+nodeID);
+		}
+	}
 
 	public void moveNode(int maxSize, int offset, int movement, Graphics g) {
 		g.setColor(Color.LIGHT_GRAY);
@@ -374,6 +417,5 @@ public class Node implements Serializable {
 				this.yCoordinate = this.yCoordinate - randomY;
 			}
 		}
-
 	}
 }
