@@ -145,13 +145,10 @@ public class NetworkGUI extends Program {
 			this.difficulty = Integer.parseInt(this.diffString.getText());
 			System.out.println("Your difficulty is: " + this.difficulty);
 		}
-		// Change Status is clicked or user clicked enter after entering a
-		// status in the text field
 		else if (e.getActionCommand().equals("Number of Nodes")
 				|| e.getSource() == this.numNodes && !this.numNodes.getText().equals("")) {
 			this.numberOfNodes = Integer.parseInt(this.numNodes.getText());
 			System.out.println("Your numberOfNodes is: " + this.numberOfNodes);
-
 		}
 
 		else if (e.getActionCommand().equals("Remove Node")
@@ -159,45 +156,30 @@ public class NetworkGUI extends Program {
 			removeNode(this.removeNode.getText());
 		}
 
-		// Change Picture is clicked or user clicked enter after entering
-		// picture name into the text field
 		else if (e.getActionCommand().equals("Comm radius")
 				|| e.getSource() == this.commRadString && !this.commRadString.getText().equals("")) {
 			this.communicationRadius = Integer.parseInt(this.commRadString.getText());
 			System.out.println("Your communication radius is: " + this.communicationRadius);
 		}
-		// Add Friend is clicked or user clicked enter after entering a friends
-		// name into the text field
 		else if (e.getActionCommand().equals("Send Message")
 				|| e.getSource() == this.messageText && !this.messageText.getText().equals("")) {
-			// System.out.println("Send
-			// Message");//addFriendFunctionality(enteredName);
 			try {
 				System.out.println("I should be getting here");
 				sendMessage(this.messageText.getText(), this.Send.getText(), this.Receive.getText());
 			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
-		// Create a group is clicked or user clicked enter after entering a
-		// group name into the text field
 		else if (e.getActionCommand().equals("Random Message")
 				|| e.getSource() == this.randMessage && !this.randMessage.getText().equals("")) {
-			System.out.println("You are a Random");// createGroupFunctionality();
 		} else if (e.getActionCommand().equals("Reset Nodes")) {
-			// System.out.println("You are a Random");//
-			// createGroupFunctionality();
 			resetNodesCommunicationLines();
 		} else if (e.getActionCommand().equals("Input New Lines")) {
-			// System.out.println("You are a Random");//
-			// createGroupFunctionality();
 			generateCommunicationLines();
 			generateLineToFriends();
 		}
 
 		else if (e.getActionCommand().equals("Generate Nodes")) {
-			// generateNodeNetwork();
 			try {
 				generateNodes();
 			} catch (NoSuchAlgorithmException e1) {
@@ -213,7 +195,6 @@ public class NetworkGUI extends Program {
 	}
 
 	private void globalPingCreation() {
-		// TODO Auto-generated method stub\
 		for (int i = 0; i < networkNodes.size(); i++) {
 			System.out.println("I created a pings");
 			this.networkNodes.get(i).createPing();
@@ -222,14 +203,12 @@ public class NetworkGUI extends Program {
 	}
 
 	private void removeNode(String text) {
-		// TODO Auto-generated method stub
 		Node nodeToRemove = null;
 		for (int i = 0; i < networkNodes.size(); i++) {
 			if (networkNodes.get(i).getNodeID().equals(text)) {
 				nodeToRemove = this.networkNodes.get(i);
 			}
 		}
-
 		networkNodes.remove(nodeToRemove);
 		resetNodesCommunicationLines();
 		generateCommunicationLines();
@@ -238,7 +217,6 @@ public class NetworkGUI extends Program {
 	}
 
 	private void resetNodesCommunicationLines() {
-		// TODO Auto-generated method stub
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 		for (int i = 0; i < this.networkNodes.size(); i++) {
@@ -249,7 +227,6 @@ public class NetworkGUI extends Program {
 	}
 
 	private void moveNodes() {
-		// TODO Auto-generated method stub
 		for (int i = 0; i < this.networkNodes.size(); i++) {
 			this.networkNodes.get(i).moveNode(this.MAXSIZE, this.OFFSET, this.MAXMOVE, this.g);
 		}
@@ -286,23 +263,21 @@ public class NetworkGUI extends Program {
 			}
 		}
 		for (int o = 0; o < this.networkNodes.size(); o++) {
+			Node currentNode = this.networkNodes.get(o);
+			for (int p = 0; p < currentNode.getMessages().size(); p++) {
+				if (currentNode.getMessages().get(p).getMessageData().toString()
+						.equals(currentMessage.getMessageData().toString())) {
 
-			//if (networkNodes.get(o).getMessages().contains(currentMessage)) {
-				Node currentNode = this.networkNodes.get(o);
-				for (int p = 0; p < currentNode.getMessages().size(); p++) {
-					System.out.println("I do check here");
-					System.out.println("Compare: " +currentNode.getMessages().get(p).getMessageData().toString() 
-							+ " with " + currentMessage.getMessageData().toString());
-					if(currentNode.getMessages().get(p).getMessageData().toString().equals(currentMessage.getMessageData().toString())){
-						this.networkNodes.get(o).setNodeValues(currentNode.getXCoord(), currentNode.getYCoord(),
-								Color.GREEN, currentNode.getWidth());
+					if (!currentNode.equals(senderNode) && !currentNode.equals(receiverNode)) {
+						currentNode.setNodeValues(currentNode.getXCoord(), currentNode.getYCoord(), Color.GREEN,
+								currentNode.getWidth());
 						System.out.println("I should be green now");
+						currentNode.Draw(g);
 					}
-					
 				}
-			//}
+
+			}
 		}
-		// recolorNodes();
 	}
 
 	private void recolorNodes() {
@@ -337,7 +312,6 @@ public class NetworkGUI extends Program {
 	}
 
 	private void generateLineToFriends() {
-		// TODO Auto-generated method stub
 		for (int i = 0; i < this.networkNodes.size(); i++) {
 			this.networkNodes.get(i).drawLinesToFriends(this.g);
 		}
@@ -345,7 +319,6 @@ public class NetworkGUI extends Program {
 	}
 
 	private void checkFriends() {
-		// TODO Auto-generated method stub
 		for (int i = 0; i < networkNodes.size(); i++) {
 			for (int j = 0; j < networkNodes.get(i).getFriends().size(); j++) {
 				System.out.println("I am " + this.networkNodes.get(i).nodeID + " my friend is: "
