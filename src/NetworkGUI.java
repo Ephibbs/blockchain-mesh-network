@@ -26,6 +26,8 @@ public class NetworkGUI extends Program {
 
 	/** Number of characters for each of the text input fields */
 	public static final int TEXT_FIELD_SIZE = 15;
+	public static final int MAXMOVE = 50;
+	public static final int MAXSIZE = 800;
 
 	/* Private instance variables */
 	public JTextField diffString;
@@ -40,9 +42,8 @@ public class NetworkGUI extends Program {
 
 	public int nodeIDCounter = 0;
 	public int difficulty = 1;
-	public int numberOfNodes = 10;
+	public int numberOfNodes = 5;
 	public int communicationRadius = 10;
-	public int MAXSIZE = 800;
 	public int OFFSET = 15;
 
 	public Canvas canvas = new Canvas();
@@ -110,6 +111,10 @@ public class NetworkGUI extends Program {
 		this.randMessage = new JTextField(TEXT_FIELD_SIZE);
 		add(this.randMessage, WEST);
 		add(new JButton("Random Message"), WEST);
+		
+		// to move the location of the nodes
+		add(new JLabel("Move the Nodes"),WEST);
+		add(new JButton("Move Nodes"), WEST);
 	}
 
 	/**
@@ -136,7 +141,6 @@ public class NetworkGUI extends Program {
 		// picture name into the text field
 		else if (e.getActionCommand().equals("Comm radius")
 				|| e.getSource() == this.commRadString && !this.commRadString.getText().equals("")) {
-			System.out.println("Radius is as big as your mom");// extractButtonFunctionality();
 			this.communicationRadius = Integer.parseInt(this.commRadString.getText());
 			System.out.println("Your communication radius is: " + this.communicationRadius);
 		}
@@ -159,7 +163,9 @@ public class NetworkGUI extends Program {
 		else if (e.getActionCommand().equals("Random Message")
 				|| e.getSource() == this.randMessage && !this.randMessage.getText().equals("")) {
 			System.out.println("You are a Random");// createGroupFunctionality();
-		} else if (e.getActionCommand().equals("Generate Network Graphic")) {
+		} 
+		
+		else if (e.getActionCommand().equals("Generate Network Graphic")) {
 			// generateNodeNetwork();
 			try {
 				generateNodes();
@@ -169,6 +175,21 @@ public class NetworkGUI extends Program {
 				e1.printStackTrace();
 			}
 		}
+		else if (e.getActionCommand().equals("Move Nodes")) {
+			//System.out.println("You are a Random");// createGroupFunctionality();
+			moveNodes();
+		}
+	}
+	private void moveNodes() {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < this.networkNodes.size(); i++){
+			this.networkNodes.get(i).moveNode(this.MAXSIZE, this.OFFSET, this.MAXMOVE, this.g);
+		}
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
+		generateCommunicationLines();
+		generateLineToFriends();
+		recolorNodes();
 	}
 	private void sendMessage(String message, String sender, String receiver) throws NoSuchAlgorithmException, NoSuchProviderException {
 		recolorNodes();
@@ -191,9 +212,12 @@ public class NetworkGUI extends Program {
 				}
 			}
 		}
+		//recolorNodes();
 	}
 	private void recolorNodes() {
 		// TODO Auto-generated method stub
+		//g.setColor(Color.LIGHT_GRAY);
+		//g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 		for (int i = 0; i < networkNodes.size(); i++) {
 			networkNodes.get(i).setColor(Color.BLUE);
 			networkNodes.get(i).Draw(g);
@@ -202,6 +226,8 @@ public class NetworkGUI extends Program {
 	private void generateNodes() throws NoSuchAlgorithmException, NoSuchProviderException {
 		Node n;
 		this.g = this.canvas.getGraphics();
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 		for (int i = 0; i < this.numberOfNodes; i++) {
 			int randomX = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
 			int randomY = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
@@ -212,9 +238,10 @@ public class NetworkGUI extends Program {
 			this.nodeIDCounter++;
 			n.Draw(g);
 		}
+		this.recolorNodes();
 		generateCommunicationLines();
 		generateLineToFriends();
-		checkFriends();
+		//checkFriends();
 	}
 	private void generateLineToFriends() {
 		// TODO Auto-generated method stub
