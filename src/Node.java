@@ -12,6 +12,7 @@ import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 /*
@@ -41,11 +42,15 @@ public class Node implements Serializable {
 	public byte[] byteArray = new byte[1024];
 	public Blockchain blockChain = new Blockchain(this);
 	public Random rand = new Random();
+	
+	public Hashtable<Node,Node> routeTable = new Hashtable<Node,Node>();
 
 	public int xCoordinate = 0;
 	public int yCoordinate = 0;
 	public Color color = Color.BLUE;
 	public int WIDTH = 0;
+	
+	private Ping ping;
 
 	// Constructor
 	public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -86,7 +91,7 @@ public class Node implements Serializable {
 													// friend nodes (they will
 													// propagate it to their
 													// friends)
-		System.out.println("I distributed my public key");
+		//System.out.println("I distributed my public key");
 
 		Random rand = new Random(); // create a message with a random friend
 									// node as the recipient
@@ -106,7 +111,7 @@ public class Node implements Serializable {
 	public void createMessageWithSignature(Object data)
 			throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, NoSuchProviderException {
 
-		// distributePublicKey(this.getPublicKey());
+		distributePublicKey(this.getPublicKey());
 		System.out.println("I distributed my public key");
 
 		Random rand = new Random(); // create a message with a random friend
@@ -235,7 +240,7 @@ public class Node implements Serializable {
 
 	// Utility
 	public void start() {
-		System.out.println(nodeID);
+		//System.out.println(nodeID);
 		blockChain.start();
 	}
 
@@ -275,6 +280,28 @@ public class Node implements Serializable {
 			g.drawLine(this.xCoordinate + this.WIDTH / 2, this.yCoordinate + this.WIDTH / 2,
 					friend.getXCoord() + this.WIDTH / 2, friend.getYCoord() + this.WIDTH / 2);
 		}
+	}
+	
+	public void createPing(){
+		this.ping = new Ping(this);
+		distributePing(this.ping);
+	}
+	
+	public void distributePing(Ping receivedPing){
+		for(int i = 0; i < this.networkNodes.size();i++){
+			networkNodes.get(i).receivePing(receivedPing);
+		}
+	}
+
+	private void receivePing(Ping ping) {
+		// TODO Auto-generated method stub
+		if(this.routeTable.containsKey(ping.getOriginator())) {
+			//do nothing
+		} else {
+			ping.setRelayer(this);
+			distributePing(ping);
+		}
+		
 	}
 
 	public Color getColor() {
