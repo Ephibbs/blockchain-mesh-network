@@ -40,6 +40,7 @@ public class Node implements Serializable {
 	public PublicKey pubKey = null;
 	public byte[] byteArray = new byte[1024];
 	public Blockchain blockChain = new Blockchain(this);
+	public Random rand = new Random();
 
 	public int xCoordinate = 0;
 	public int yCoordinate = 0;
@@ -89,16 +90,17 @@ public class Node implements Serializable {
 
 		Random rand = new Random(); // create a message with a random friend
 									// node as the recipient
-		int nodesSize = networkNodes.size();
-		int receiverNum = rand.nextInt(nodesSize);
-		Message text = new TextMessage(data, this, networkNodes.get(receiverNum));
+		if (networkNodes.size() > 0) {
+			int nodesSize = networkNodes.size();
+			int receiverNum = rand.nextInt(nodesSize);
+			Message text = new TextMessage(data, this, networkNodes.get(receiverNum));
 
-		this.blockChain.add(text);
+			this.blockChain.add(text);
 
-		localMSG.add(text);
-		this.distributeMessage(text); // distribute message to friend nodes
-										// (they will propagate to their
-										// friends)
+			localMSG.add(text);
+			this.distributeMessage(text); // distribute message to friend nodes
+		} // (they will propagate to their
+			// friends)
 	}
 
 	public void createMessageWithSignature(Object data)
@@ -252,7 +254,7 @@ public class Node implements Serializable {
 	public void setBlockChainDifficulty(int difficulty) {
 		blockChain.setDifficulty(difficulty);
 	}
-	
+
 	public void setNodeValues(int xVal, int yVal, Color myColor, int width)
 			throws NoSuchAlgorithmException, NoSuchProviderException {
 		this.xCoordinate = xVal;
@@ -265,31 +267,86 @@ public class Node implements Serializable {
 		g.setColor(this.color);
 		g.fillOval(this.xCoordinate, this.yCoordinate, this.WIDTH, this.WIDTH);
 	}
-	public void drawLinesToFriends(Graphics g){
+
+	public void drawLinesToFriends(Graphics g) {
 		g.setColor(Color.BLACK);
-		for(int i = 0; i < this.networkNodes.size();i++) {
+		for (int i = 0; i < this.networkNodes.size(); i++) {
 			Node friend = networkNodes.get(i);
-			g.drawLine(this.xCoordinate+this.WIDTH/2, this.yCoordinate+this.WIDTH/2, 
-					friend.getXCoord()+this.WIDTH/2, friend.getYCoord()+this.WIDTH/2);
+			g.drawLine(this.xCoordinate + this.WIDTH / 2, this.yCoordinate + this.WIDTH / 2,
+					friend.getXCoord() + this.WIDTH / 2, friend.getYCoord() + this.WIDTH / 2);
 		}
 	}
-	
-	public Color getColor(){
+
+	public Color getColor() {
 		return this.color;
 	}
-	public int getXCoord(){
+
+	public int getXCoord() {
 		return this.xCoordinate;
 	}
-	public int getYCoord(){
+
+	public int getYCoord() {
 		return this.yCoordinate;
 	}
+
 	public int getWidth() {
 		return this.WIDTH;
 	}
-	public void setColor(Color myColor){
+
+	public void setColor(Color myColor) {
 		this.color = myColor;
 	}
-	public ArrayList<Node> getFriends(){
+
+	public ArrayList<Node> getFriends() {
 		return this.networkNodes;
+	}
+
+	public void moveNode(int maxSize, int offset, int movement, Graphics g) {
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillOval(this.xCoordinate, this.yCoordinate, this.WIDTH, this.WIDTH);
+
+		int randomX = rand.nextInt(movement);
+		int randomY = rand.nextInt(movement);
+		int direction = rand.nextInt(4);
+		int maxChecker = maxSize - offset;
+		if ((this.xCoordinate + randomX) > maxChecker) {
+			this.xCoordinate = this.xCoordinate - 40;
+			// System.out.println("I got here");
+			// this.xCoordinate = this.xCoordinate +
+			// (randomX-(maxChecker-this.xCoordinate));
+		}
+		if ((this.xCoordinate - randomX) < 20) {
+			this.xCoordinate = this.xCoordinate + 25;
+			// System.out.println("I got here");
+			// this.xCoordinate = this.xCoordinate - (randomX-(this.xCoordinate
+			// - offset));
+		}
+		if ((this.yCoordinate + randomY) > maxChecker) {
+			System.out.println("I got here");
+			this.yCoordinate = this.yCoordinate - 40;
+			// this.yCoordinate = this.yCoordinate +
+			// (randomY-(maxChecker-this.yCoordinate));
+		}
+		if ((this.yCoordinate + randomY) < 100) {
+			System.out.println("I got here");
+			this.yCoordinate = this.yCoordinate + 25;
+			// this.yCoordinate = this.yCoordinate - (randomY-(this.yCoordinate
+			// - offset));
+		} else {
+			if (direction == 0) {
+				this.xCoordinate = this.xCoordinate + randomX;
+				this.yCoordinate = this.yCoordinate + randomY;
+			} else if (direction == 1) {
+				this.xCoordinate = this.xCoordinate - randomX;
+				this.yCoordinate = this.yCoordinate + randomY;
+			} else if (direction == 2) {
+				this.xCoordinate = this.xCoordinate + randomX;
+				this.yCoordinate = this.yCoordinate - randomY;
+			} else {
+				this.xCoordinate = this.xCoordinate - randomX;
+				this.yCoordinate = this.yCoordinate - randomY;
+			}
+		}
+
 	}
 }
