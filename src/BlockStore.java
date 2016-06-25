@@ -15,7 +15,7 @@ public class BlockStore {
 	private ArrayList<String> orphanBlockIDs = new ArrayList<String>();
 	//private ArrayList<TreeNode<Block>> allBlocks = new ArrayList<Block>();
 	private HashMap<String, TreeNode<Block>> blockMap = new HashMap<String, TreeNode<Block>>(); // input: hash, output: TreeNode<block> with that hash
-	private ArrayList<Tree<Block>> orphanTrees = new ArrayList<Tree<Block>>();
+	private ArrayList<Tree<Block>> orphanTrees = new ArrayList<Tree<Block>>(); // list of all the orphan trees
 	private ArrayList<String> messageIDs = new ArrayList<String>();
 	private HashMap<String, Message> allMessages = new HashMap<String, Message>();
 
@@ -47,17 +47,14 @@ public class BlockStore {
 
 	// Mutators
 	boolean add(Block b) {
-		//check that parent exists
-		TreeNode<Block> c = blockMap.get(b.getMyHash()); // check if block is unique
-		//if not in tree
-		if(c == null) { // is unique
-			if(treeBlockIDs.contains(b.getPrevHash())) { // if previous block is already in the tree
-				//check if block is in blockstore already
+		TreeNode<Block> c = blockMap.get(b.getMyHash()); // check if block is in blocktree
+		if(c == null) { // if block is not in blocktree (is unique)
+			if(treeBlockIDs.contains(b.getPrevHash())) { // check if parent is in blocktree
 				TreeNode<Block> p = blockMap.get(b.getPrevHash()); // get previous block (parent block)
 
 				//verify all messages in the block have been received
 				boolean messagesVerified = true;
-				for(Message m : b.getMsgs()) { // check if messageIDs list has the message
+				for(Message m : b.getMsgs()) { // check if messageIDs list has all messages in block
 					if(!messageIDs.contains(m.getHash())) {
 						messagesVerified = false;
 						break;
@@ -97,14 +94,33 @@ public class BlockStore {
 						return true;
 					}
 				}
-			} else { // is an orphan block
-				if (orphanBlockIDs.contains(b.getPrevHash())) { // if orphan has a parent in an orphan tree
-					System.out.println("into orphan chain");
-					//TreeNode<Block> p = blockMap.get(b.getPrevHash());
-					//blocks came out of order
-				} else { // if orphan has no parent
-					//create new tree in orphanTrees
-					System.out.println("into new orphan chain");
+			} else if (!orphanBlockIDs.contains(b.getMyHash())) { // is a unique orphan block
+				orphanBlockIDs.add(b.getMyHash()); // add hash to list of orphans
+
+				if (orphanBlockIDs.contains(b.getPrevHash())) { // if orphan's parent exists, add orphan to parent's tree
+					System.out.println("into orphan tree");
+
+					// Find parent node and add block as its child
+					for (Tree<Block> t : orphanTrees) {
+						for (TreeNode<Block> tn : t.getRootTreeNode().getChildren()) {
+
+						}
+						if (t.getDeepestTreeNode().getData().getMyHash() == b.getPrevHash()) {
+							t.addTreeNode
+							t.getDeepestTreeNode().addChild(b);
+						}
+						break;
+					}
+
+					// Check if any orphan trees can be combined
+					for (Tree<Block> t : orphanTrees) {
+						if (t.getRootTreeNode().getData().getPrevHash() == b.getMyHash()) {
+							t.getRootTreeNode().setParent
+						}
+					}
+
+				} else { // if orphan has no parent, make a new tree
+					System.out.println("into new orphan tree");
 					orphanTrees.add(new Tree<Block>(b));
 				}
 			}
