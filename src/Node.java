@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.io.Serializable;
 import java.security.InvalidKeyException;
@@ -12,9 +13,8 @@ import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
-
-import Blockchain.BlockChecker;
 
 /*
  * Class for the nodes in a mesh network
@@ -44,11 +44,18 @@ public class Node implements Serializable {
 	public Blockchain blockChain = new Blockchain(this);
 	public Random rand = new Random();
 
+	public Hashtable<Node, Node> routeTable = new Hashtable<Node, Node>();
+
 	public int xCoordinate = 0;
 	public int yCoordinate = 0;
 	public Color color = Color.BLUE;
 	public int WIDTH = 0;
+	// <<<<<<< HEAD
+
+	private Ping ping;
+	// =======
 	public ArrayList<String> blockRequestIDs = new ArrayList<String>();
+	// >>>>>>> origin/master
 
 	// Constructor
 	public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -82,6 +89,20 @@ public class Node implements Serializable {
 		return this.pubKey;
 	}
 
+	public void createMessage(Message text) {
+
+		distributePublicKey(this.getPublicKey()); // distribute public key to
+													// friend nodes (they will
+													// propagate it to their
+													// friends)
+
+		this.blockChain.add(text);
+
+		localMSG.add(text);
+		this.distributeMessage(text); // distribute message to friend nodes
+
+	}
+
 	// Mutators
 	public void createMessage(Object data) {
 
@@ -89,7 +110,7 @@ public class Node implements Serializable {
 													// friend nodes (they will
 													// propagate it to their
 													// friends)
-		System.out.println("I distributed my public key");
+		// System.out.println("I distributed my public key");
 
 		Random rand = new Random(); // create a message with a random friend
 									// node as the recipient
@@ -109,7 +130,7 @@ public class Node implements Serializable {
 	public void createMessageWithSignature(Object data)
 			throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, NoSuchProviderException {
 
-		// distributePublicKey(this.getPublicKey());
+		distributePublicKey(this.getPublicKey());
 		System.out.println("I distributed my public key");
 
 		Random rand = new Random(); // create a message with a random friend
@@ -238,7 +259,7 @@ public class Node implements Serializable {
 
 	// Utility
 	public void start() {
-		System.out.println(nodeID);
+		// System.out.println(nodeID);
 		blockChain.start();
 	}
 
@@ -280,6 +301,28 @@ public class Node implements Serializable {
 		}
 	}
 
+	public void createPing() {
+		this.ping = new Ping(this);
+		distributePing(this.ping);
+	}
+
+	public void distributePing(Ping receivedPing) {
+		for (int i = 0; i < this.networkNodes.size(); i++) {
+			networkNodes.get(i).receivePing(receivedPing);
+		}
+	}
+
+	private void receivePing(Ping ping) {
+		// TODO Auto-generated method stub
+		if (this.routeTable.containsKey(ping.getOriginator())) {
+			// do nothing
+		} else {
+			routeTable.put(ping.originator, ping.relayer);
+			ping.setRelayer(this);
+			distributePing(ping);
+		}
+	}
+
 	public Color getColor() {
 		return this.color;
 	}
@@ -303,41 +346,49 @@ public class Node implements Serializable {
 	public ArrayList<Node> getFriends() {
 		return this.networkNodes;
 	}
+
 	public void makeBlockRequest(String hash, String nodeID) {
-		for (int i = 0; i < networkNodes.size(); i++) { // distribute blockrequest to
+		for (int i = 0; i < networkNodes.size(); i++) { // distribute
+														// blockrequest to
 														// friend nodes (they
 														// will propagate to
-														// their friends if they cannot resolve)
+														// their friends if they
+														// cannot resolve)
 			networkNodes.get(i).requestBlock(hash, nodeID);
 		}
 	}
+
 	public void requestBlock(String hash, String nodeID) {
-		if(!blockRequestIDs.contains(hash+nodeID)) {
+		if (!blockRequestIDs.contains(hash + nodeID)) {
 			Block b = blockChain.getBlock(hash);
-			if(b != null) {
+			if (b != null) {
 				broadcastBlock(b, nodeID);
 			} else {
 				makeBlockRequest(hash, nodeID);
 			}
-			blockRequestIDs.add(hash+nodeID);
+			blockRequestIDs.add(hash + nodeID);
 		}
 	}
+
 	public void broadcastBlock(Block b, String nodeID) {
-		for (int i = 0; i < networkNodes.size(); i++) { // distribute blockrequest to
+		for (int i = 0; i < networkNodes.size(); i++) { // distribute
+														// blockrequest to
 														// friend nodes (they
 														// will propagate to
-														// their friends if they cannot resolve)
+														// their friends if they
+														// cannot resolve)
 			networkNodes.get(i).receiveBlock(b, nodeID);
 		}
 	}
+
 	public void receiveBlock(Block b, String nodeID) {
-		if(blockRequestIDs.contains(b.getMyHash()+nodeID)) {
-			if(nodeID == this.nodeID) {
+		if (blockRequestIDs.contains(b.getMyHash() + nodeID)) {
+			if (nodeID == this.nodeID) {
 				blockChain.add(b);
 			} else {
 				broadcastBlock(b, nodeID);
 			}
-			blockRequestIDs.remove(b.getMyHash()+nodeID);
+			blockRequestIDs.remove(b.getMyHash() + nodeID);
 		}
 	}
 
@@ -387,5 +438,10 @@ public class Node implements Serializable {
 				this.yCoordinate = this.yCoordinate - randomY;
 			}
 		}
+	}
+
+	public ArrayList<Message> getMessages() {
+		// TODO Auto-generated method stub
+		return this.localMSG;
 	}
 }

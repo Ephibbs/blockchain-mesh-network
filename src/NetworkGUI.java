@@ -37,6 +37,7 @@ public class NetworkGUI extends Program {
 	public JTextField Receive;
 	public JTextField messageText;
 	public JTextField randMessage;
+	public JTextField removeNode;
 
 	public ArrayList<Node> networkNodes = new ArrayList<Node>();
 
@@ -68,6 +69,7 @@ public class NetworkGUI extends Program {
 
 		add(this.canvas);
 	}
+
 	private void addListeners() {
 		this.diffString.addActionListener(this);
 		this.numNodes.addActionListener(this);
@@ -75,6 +77,7 @@ public class NetworkGUI extends Program {
 		this.randMessage.addActionListener(this);
 		this.messageText.addActionListener(this);
 	}
+
 	private void generateWestFrame() {
 		add(new JLabel("Enter the Hash Difficulty below"), WEST);
 		this.diffString = new JTextField(TEXT_FIELD_SIZE);
@@ -92,7 +95,7 @@ public class NetworkGUI extends Program {
 		add(this.commRadString, WEST);
 		add(new JButton("Comm radius"), WEST);
 
-		add(new JButton("Generate Network Graphic"), WEST);
+		add(new JButton("Generate Nodes"), WEST);
 
 		// Joining a group
 		add(new JLabel("Enter Message Below"), WEST); // space holder
@@ -106,15 +109,28 @@ public class NetworkGUI extends Program {
 		add(this.Receive, WEST);
 		add(new JButton("Send Message"), WEST);
 
+		// Remove a node
+		this.removeNode = new JTextField(TEXT_FIELD_SIZE);
+		add(this.removeNode, WEST);
+		add(new JButton("Remove Node"), WEST);
+
 		// Creating a new Group
 		add(new JLabel("Random Message Below"), WEST); // space holder
 		this.randMessage = new JTextField(TEXT_FIELD_SIZE);
 		add(this.randMessage, WEST);
 		add(new JButton("Random Message"), WEST);
-		
+
 		// to move the location of the nodes
-		add(new JLabel("Move the Nodes"),WEST);
 		add(new JButton("Move Nodes"), WEST);
+
+		// to move the location of the nodes
+		add(new JButton("Reset Nodes"), WEST);
+
+		// to move the location of the nodes
+		add(new JButton("Input New Lines"), WEST);
+
+		// to ping everybody
+		add(new JButton("Ping Every Node"), WEST);
 	}
 
 	/**
@@ -129,44 +145,41 @@ public class NetworkGUI extends Program {
 			this.difficulty = Integer.parseInt(this.diffString.getText());
 			System.out.println("Your difficulty is: " + this.difficulty);
 		}
-		// Change Status is clicked or user clicked enter after entering a
-		// status in the text field
 		else if (e.getActionCommand().equals("Number of Nodes")
 				|| e.getSource() == this.numNodes && !this.numNodes.getText().equals("")) {
 			this.numberOfNodes = Integer.parseInt(this.numNodes.getText());
 			System.out.println("Your numberOfNodes is: " + this.numberOfNodes);
-
 		}
-		// Change Picture is clicked or user clicked enter after entering
-		// picture name into the text field
+
+		else if (e.getActionCommand().equals("Remove Node")
+				|| e.getSource() == this.commRadString && !this.commRadString.getText().equals("")) {
+			removeNode(this.removeNode.getText());
+		}
+
 		else if (e.getActionCommand().equals("Comm radius")
 				|| e.getSource() == this.commRadString && !this.commRadString.getText().equals("")) {
 			this.communicationRadius = Integer.parseInt(this.commRadString.getText());
 			System.out.println("Your communication radius is: " + this.communicationRadius);
 		}
-		// Add Friend is clicked or user clicked enter after entering a friends
-		// name into the text field
 		else if (e.getActionCommand().equals("Send Message")
 				|| e.getSource() == this.messageText && !this.messageText.getText().equals("")) {
-			// System.out.println("Send
-			// Message");//addFriendFunctionality(enteredName);
 			try {
 				System.out.println("I should be getting here");
 				sendMessage(this.messageText.getText(), this.Send.getText(), this.Receive.getText());
 			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
-		// Create a group is clicked or user clicked enter after entering a
-		// group name into the text field
 		else if (e.getActionCommand().equals("Random Message")
 				|| e.getSource() == this.randMessage && !this.randMessage.getText().equals("")) {
-			System.out.println("You are a Random");// createGroupFunctionality();
-		} 
-		
-		else if (e.getActionCommand().equals("Generate Network Graphic")) {
-			// generateNodeNetwork();
+		} else if (e.getActionCommand().equals("Reset Nodes")) {
+			resetNodesCommunicationLines();
+		} else if (e.getActionCommand().equals("Input New Lines")) {
+			generateCommunicationLines();
+			generateLineToFriends();
+		}
+
+		else if (e.getActionCommand().equals("Generate Nodes")) {
 			try {
 				generateNodes();
 			} catch (NoSuchAlgorithmException e1) {
@@ -174,27 +187,63 @@ public class NetworkGUI extends Program {
 			} catch (NoSuchProviderException e1) {
 				e1.printStackTrace();
 			}
-		}
-		else if (e.getActionCommand().equals("Move Nodes")) {
-			//System.out.println("You are a Random");// createGroupFunctionality();
+		} else if (e.getActionCommand().equals("Move Nodes")) {
 			moveNodes();
+		} else if (e.getActionCommand().equals("Ping Every Node")) {
+			globalPingCreation();
 		}
 	}
-	private void moveNodes() {
-		// TODO Auto-generated method stub
-		for(int i = 0; i < this.networkNodes.size(); i++){
-			this.networkNodes.get(i).moveNode(this.MAXSIZE, this.OFFSET, this.MAXMOVE, this.g);
+
+	private void globalPingCreation() {
+		for (int i = 0; i < networkNodes.size(); i++) {
+			System.out.println("I created a pings");
+			this.networkNodes.get(i).createPing();
 		}
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
+
+	}
+
+	private void removeNode(String text) {
+		Node nodeToRemove = null;
+		for (int i = 0; i < networkNodes.size(); i++) {
+			if (networkNodes.get(i).getNodeID().equals(text)) {
+				nodeToRemove = this.networkNodes.get(i);
+			}
+		}
+		networkNodes.remove(nodeToRemove);
+		resetNodesCommunicationLines();
 		generateCommunicationLines();
 		generateLineToFriends();
 		recolorNodes();
 	}
-	private void sendMessage(String message, String sender, String receiver) throws NoSuchAlgorithmException, NoSuchProviderException {
+
+	private void resetNodesCommunicationLines() {
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
+		for (int i = 0; i < this.networkNodes.size(); i++) {
+			this.networkNodes.get(i).getFriends().clear();
+			this.networkNodes.get(i).Draw(g);
+		}
+		recolorNodes();
+	}
+
+	private void moveNodes() {
+		for (int i = 0; i < this.networkNodes.size(); i++) {
+			this.networkNodes.get(i).moveNode(this.MAXSIZE, this.OFFSET, this.MAXMOVE, this.g);
+		}
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
+		resetNodesCommunicationLines();
+		generateCommunicationLines();
+		generateLineToFriends();
+		recolorNodes();
+	}
+
+	private void sendMessage(String message, String sender, String receiver)
+			throws NoSuchAlgorithmException, NoSuchProviderException {
 		recolorNodes();
 		Node senderNode = null;
 		Node receiverNode = null;
+		Message currentMessage = null;
 		for (int i = 0; i < networkNodes.size(); i++) {
 			for (int j = 0; j < networkNodes.size(); j++) {
 				String nodeNameSend = "Node" + networkNodes.get(i).nodeID;
@@ -202,27 +251,45 @@ public class NetworkGUI extends Program {
 				if (networkNodes.get(i).nodeID.equals(sender) && networkNodes.get(j).nodeID.equals(receiver)) {
 					senderNode = networkNodes.get(i);
 					receiverNode = networkNodes.get(j);
-					senderNode.setNodeValues(senderNode.getXCoord(), senderNode.getYCoord(), 
-							Color.RED, senderNode.getWidth());
+					senderNode.setNodeValues(senderNode.getXCoord(), senderNode.getYCoord(), Color.RED,
+							senderNode.getWidth());
 					senderNode.Draw(g);
-					receiverNode.setNodeValues(receiverNode.getXCoord(), receiverNode.getYCoord(), 
-							Color.YELLOW, receiverNode.getWidth());
+					receiverNode.setNodeValues(receiverNode.getXCoord(), receiverNode.getYCoord(), Color.YELLOW,
+							receiverNode.getWidth());
 					receiverNode.Draw(g);
-					senderNode.createMessage(new TextMessage(message, receiverNode));
+					currentMessage = new TextMessage(message, receiverNode);
+					senderNode.createMessage(currentMessage);
 				}
 			}
 		}
-		//recolorNodes();
+		for (int o = 0; o < this.networkNodes.size(); o++) {
+			Node currentNode = this.networkNodes.get(o);
+			for (int p = 0; p < currentNode.getMessages().size(); p++) {
+				if (currentNode.getMessages().get(p).getMessageData().toString()
+						.equals(currentMessage.getMessageData().toString())) {
+
+					if (!currentNode.equals(senderNode) && !currentNode.equals(receiverNode)) {
+						currentNode.setNodeValues(currentNode.getXCoord(), currentNode.getYCoord(), Color.GREEN,
+								currentNode.getWidth());
+						System.out.println("I should be green now");
+						currentNode.Draw(g);
+					}
+				}
+
+			}
+		}
 	}
+
 	private void recolorNodes() {
 		// TODO Auto-generated method stub
-		//g.setColor(Color.LIGHT_GRAY);
-		//g.fillRect(0, 0, MAXSIZE, MAXSIZE);
+		// g.setColor(Color.LIGHT_GRAY);
+		// g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 		for (int i = 0; i < networkNodes.size(); i++) {
 			networkNodes.get(i).setColor(Color.BLUE);
 			networkNodes.get(i).Draw(g);
 		}
 	}
+
 	private void generateNodes() throws NoSuchAlgorithmException, NoSuchProviderException {
 		Node n;
 		this.g = this.canvas.getGraphics();
@@ -241,36 +308,37 @@ public class NetworkGUI extends Program {
 		this.recolorNodes();
 		generateCommunicationLines();
 		generateLineToFriends();
-		//checkFriends();
+		// checkFriends();
 	}
+
 	private void generateLineToFriends() {
-		// TODO Auto-generated method stub
-		for(int i = 0; i < this.networkNodes.size();i++){
+		for (int i = 0; i < this.networkNodes.size(); i++) {
 			this.networkNodes.get(i).drawLinesToFriends(this.g);
 		}
-		
+
 	}
+
 	private void checkFriends() {
-		// TODO Auto-generated method stub
-		for(int i = 0; i < networkNodes.size();i++){
-			for(int j = 0; j < networkNodes.get(i).getFriends().size();j++){
-				System.out.println("I am " + this.networkNodes.get(i).nodeID + " my friend is: " + 
-							this.networkNodes.get(i).getFriends().get(j).nodeID);
+		for (int i = 0; i < networkNodes.size(); i++) {
+			for (int j = 0; j < networkNodes.get(i).getFriends().size(); j++) {
+				System.out.println("I am " + this.networkNodes.get(i).nodeID + " my friend is: "
+						+ this.networkNodes.get(i).getFriends().get(j).nodeID);
 			}
 		}
 	}
+
 	private void generateCommunicationLines() {
 		for (int i = 0; i < this.networkNodes.size(); i++) {
 			Node currentNode = this.networkNodes.get(i);
 			int xLoc = currentNode.getXCoord();
 			int yLoc = currentNode.getYCoord();
 			for (int j = 0; j < this.networkNodes.size(); j++) {
-				if(i!=j){
+				if (i != j) {
 					Node targetNode = this.networkNodes.get(j);
 					int targetXLoc = targetNode.getXCoord();
 					int targetYLoc = targetNode.getYCoord();
-					int euclidDistance = calculateDistance(xLoc,yLoc,targetXLoc,targetYLoc);
-					if(euclidDistance < this.communicationRadius){
+					int euclidDistance = calculateDistance(xLoc, yLoc, targetXLoc, targetYLoc);
+					if (euclidDistance < this.communicationRadius) {
 						currentNode.addFriend(targetNode);
 					}
 				} else {
@@ -279,11 +347,13 @@ public class NetworkGUI extends Program {
 			}
 		}
 	}
+
 	private int calculateDistance(int xLoc, int yLoc, int targetXLoc, int targetYLoc) {
 		// TODO Auto-generated method stub
-		double distance = Math.sqrt(Math.pow((targetXLoc-xLoc), 2)+Math.pow((targetYLoc-yLoc), 2));
+		double distance = Math.sqrt(Math.pow((targetXLoc - xLoc), 2) + Math.pow((targetYLoc - yLoc), 2));
 		return (int) distance;
 	}
+
 	private void generateNodeNetwork() {
 		Node n;
 		Graphics g = this.canvas.getGraphics();

@@ -9,7 +9,7 @@ public class Ping {
 		relayer = initialCreator;
 	}
 	
-	public void relayPing(Node relayNode) {
+	public void setRelayer(Node relayNode) {
 		this.relayer = relayNode;
 	}
 	
