@@ -31,6 +31,7 @@ public class Tree<T> {
     }
     public TreeNode<T> getRootTreeNode() {
         return root;
+        
     }
 
     // Mutators
