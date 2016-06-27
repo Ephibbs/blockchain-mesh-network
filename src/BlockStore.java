@@ -81,7 +81,14 @@ public class BlockStore {
 						blockTree.addTreeNode(p, bn);
 						treeBlockIDs.add(b.getMyHash());
 						blockMap.put(b.getMyHash(), bn);
-						
+
+						// Check if any orphan trees can be added ot the blocktree
+						for (Tree<Block> t : orphanTrees) {
+							if (bn.getData().getMyHash() == t.getRootTreeNode().getData().getPrevHash()) {
+								// TODO call add() method to add new node to blocktree 
+							}
+						}
+
 						tempP = new TreeNode<Block>(bn); // show tree
 						String s = "";
 						while(tempP.getDepth() != 0) {
@@ -96,29 +103,28 @@ public class BlockStore {
 				}
 			} else if (!orphanBlockIDs.contains(b.getMyHash())) { // is a unique orphan block
 				orphanBlockIDs.add(b.getMyHash()); // add hash to list of orphans
+				TreeNode<Block> bNode = new TreeNode<Block>(b);
 
 				if (orphanBlockIDs.contains(b.getPrevHash())) { // if orphan's parent exists, add orphan to parent's tree
 					System.out.println("into orphan tree");
 
 					// Find parent node and add block as its child
+					TreeNode<Block> pNode;
 					for (Tree<Block> t : orphanTrees) {
-						for (TreeNode<Block> tn : t.getRootTreeNode().getChildren()) {
-
-						}
-						if (t.getDeepestTreeNode().getData().getMyHash() == b.getPrevHash()) {
-							t.addTreeNode
-							t.getDeepestTreeNode().addChild(b);
-						}
-						break;
-					}
-
-					// Check if any orphan trees can be combined
-					for (Tree<Block> t : orphanTrees) {
-						if (t.getRootTreeNode().getData().getPrevHash() == b.getMyHash()) {
-							t.getRootTreeNode().setParent
+						// TODO iterate through all nodes, find parent and add b as child
+						if (false) {// replace with condition that is true when parent is found
+							t.addTreeNode(pNode, bNode));
+							break;
 						}
 					}
 
+					// Look for orphan tree roots that can join the added treenode
+					for (Tree<Block> t : orphanTrees) {
+						if (t.getRootTreeNode().getData().getPrevHash() == b.getMyHash()) { // if orphan and parent matches
+							t.addTreeNode(bNode, t.getRootTreeNode());
+//							orphanTrees.remove(t); remove tree
+						}
+					}
 				} else { // if orphan has no parent, make a new tree
 					System.out.println("into new orphan tree");
 					orphanTrees.add(new Tree<Block>(b));
@@ -133,7 +139,7 @@ public class BlockStore {
 			allMessages.put(m.getHash(), m);
 		}
 	}
-	TreeNode<Block> getBlock(String hash) {
-		return blockMap.get(hash);
+	Block getBlock(String hash) {
+		return blockMap.get(hash).getData();
 	}
  }
