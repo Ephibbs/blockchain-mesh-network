@@ -268,7 +268,6 @@ public class Node implements Serializable {
 	}
 
 	public boolean isOnline() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 

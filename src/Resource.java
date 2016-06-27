@@ -3,24 +3,72 @@ import javax.tools.DocumentationTool.Location;
 public class Resource {
 	
 	public String type;
-	public Location location = null;
 	public double XLocation = 0.0;
 	public double YLocation = 0.0;
-	
-	public Resource(int amt, String type, int x, int y){
+	public int amount;
+	public String category;
+	public Location ownerLocation = null;
+	public String ownerName = null;
+
+	public Resource(int amt, String type, int x, int y, String cat, String ownerN){
 		this.amount = amt;
 		this.type = type;
 		this.XLocation = x;
 		this.YLocation = y;
+		this.category = cat;
+		this.ownerName = ownerN;
 	}
 	
-	public Resource(int amt, String type, Location l){
+	public Resource(int amt, String type, Location l, String cat, String ownerN){
 		this.amount = amt;
 		this.type = type;
-		this.location = l;
+		this.ownerLocation = l;
+		this.category = cat;
+		this.ownerName = ownerN;
 	}
 	
-	public int amount;
+	/**
+	 * @return the ownerLocation
+	 */
+	public Location getOwnerLocation() {
+		return ownerLocation;
+	}
+
+	/**
+	 * @param ownerLocation the ownerLocation to set
+	 */
+	public void setOwnerLocation(Location ownerLocation) {
+		this.ownerLocation = ownerLocation;
+	}
+
+	/**
+	 * @return the ownerName
+	 */
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	/**
+	 * @param ownerName the ownerName to set
+	 */
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
+	
+	/**
+	 * @return the category
+	 */
+	public String getCategory() {
+		return category;
+	}
+
+	/**
+	 * @param category the category to set
+	 */
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	
 	/**
 	 * @return the amount
 	 */
@@ -47,20 +95,6 @@ public class Resource {
 	 */
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	/**
-	 * @return the location
-	 */
-	public Location getLocation() {
-		return location;
-	}
-
-	/**
-	 * @param location the location to set
-	 */
-	public void setLocation(Location location) {
-		this.location = location;
 	}
 
 	/**
