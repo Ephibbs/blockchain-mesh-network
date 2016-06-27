@@ -18,6 +18,7 @@ public class BlockStore {
 	private ArrayList<Tree<Block>> orphanTrees = new ArrayList<Tree<Block>>(); // list of all the orphan trees
 	private ArrayList<String> messageIDs = new ArrayList<String>();
 	private HashMap<String, Message> allMessages = new HashMap<String, Message>();
+	private String blockFlag = null;
 
 	// Constructor
 	BlockStore() {
@@ -82,6 +83,10 @@ public class BlockStore {
 						treeBlockIDs.add(b.getMyHash());
 						blockMap.put(b.getMyHash(), bn);
 
+						if (blockFlag == null) { // flag to know when you've exited the recursive call
+							blockFlag = b.getMyHash();
+						}
+
 						// Check if any orphan trees can be added to the blocktree
 						for (String orphanID : orphanBlockIDs) {
 							TreeNode<Block> orphanBlock = blockMap.get(orphanID);
@@ -93,6 +98,12 @@ public class BlockStore {
 									}
 								}
 							}
+						}
+
+						// Remove orphan tree when out
+						if (b.getMyHash() == blockFlag) {
+							blockFlag = null;
+							orphanTrees.remove(blockMap.get(b.getMyHash()).getMyTree());
 						}
 
 						tempP = new TreeNode<Block>(bn); // show tree

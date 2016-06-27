@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fcfa82b1-1669-45d8-8553-7810013261f2" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BlockStore.java" afterPath="$PROJECT_DIR$/src/BlockStore.java" />
     </list>
     <ignored path="blockchain-mesh-network.iws" />
@@ -54,13 +53,13 @@
       <file leaf-file-name="BlockStore.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/BlockStore.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="85" column="64" selection-start-line="85" selection-start-column="64" selection-end-line="85" selection-end-column="64" />
+            <state relative-caret-position="658">
+              <caret line="102" column="54" selection-start-line="102" selection-start-column="54" selection-end-line="102" selection-end-column="54" />
               <folding>
                 <element signature="e#423#431#0" expanded="true" />
                 <element signature="e#688#713#0" expanded="true" />
                 <element signature="method#BlockStore#0;class#BlockStore#0" expanded="false" />
-                <element signature="e#4180#4187#0" expanded="true" />
+                <element signature="e#4521#4528#0" expanded="true" />
                 <element signature="method#add#1;class#BlockStore#0" expanded="false" />
               </folding>
             </state>
@@ -568,7 +567,7 @@
             <element signature="e#423#431#0" expanded="true" />
             <element signature="e#688#713#0" expanded="true" />
             <element signature="method#BlockStore#0;class#BlockStore#0" expanded="false" />
-            <element signature="e#4180#4187#0" expanded="true" />
+            <element signature="e#4521#4528#0" expanded="true" />
             <element signature="method#add#1;class#BlockStore#0" expanded="false" />
           </folding>
         </state>
@@ -667,7 +666,7 @@
             <element signature="e#423#431#0" expanded="true" />
             <element signature="e#688#713#0" expanded="true" />
             <element signature="method#BlockStore#0;class#BlockStore#0" expanded="false" />
-            <element signature="e#4180#4187#0" expanded="true" />
+            <element signature="e#4521#4528#0" expanded="true" />
             <element signature="method#add#1;class#BlockStore#0" expanded="false" />
           </folding>
         </state>
@@ -766,7 +765,7 @@
             <element signature="e#423#431#0" expanded="true" />
             <element signature="e#688#713#0" expanded="true" />
             <element signature="method#BlockStore#0;class#BlockStore#0" expanded="false" />
-            <element signature="e#4180#4187#0" expanded="true" />
+            <element signature="e#4521#4528#0" expanded="true" />
             <element signature="method#add#1;class#BlockStore#0" expanded="false" />
           </folding>
         </state>
@@ -1041,13 +1040,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/BlockStore.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="85" column="64" selection-start-line="85" selection-start-column="64" selection-end-line="85" selection-end-column="64" />
+        <state relative-caret-position="658">
+          <caret line="102" column="54" selection-start-line="102" selection-start-column="54" selection-end-line="102" selection-end-column="54" />
           <folding>
             <element signature="e#423#431#0" expanded="true" />
             <element signature="e#688#713#0" expanded="true" />
             <element signature="method#BlockStore#0;class#BlockStore#0" expanded="false" />
-            <element signature="e#4180#4187#0" expanded="true" />
+            <element signature="e#4521#4528#0" expanded="true" />
             <element signature="method#add#1;class#BlockStore#0" expanded="false" />
           </folding>
         </state>
