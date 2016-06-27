@@ -256,6 +256,7 @@ public class Node implements Serializable {
 	// Utility
 	public void start() {
 		System.out.println(nodeID);
+		System.out.println("after");
 		blockChain.start();
 	}
 

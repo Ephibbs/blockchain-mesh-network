@@ -292,6 +292,7 @@ public class NetworkGUI extends Program {
 			int randomX = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
 			int randomY = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
 			n = new Node("Node" + nodeIDCounter);
+			System.out.println("Or before");
 			n.setBlockChainDifficulty(this.difficulty);
 			n.setNodeValues(randomX, randomY, Color.BLUE, OFFSET);
 			n.start();

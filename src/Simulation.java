@@ -105,6 +105,8 @@ public class Simulation {
 				System.out.println("I have a message: " + this.networkNodes.get(j).getNodeID());
 			}
 		}
+		
+		System.out.println(this.networkNodes.get(0).blockChain.getLastTreeNode().getMyHash());
 	}
 }
 
