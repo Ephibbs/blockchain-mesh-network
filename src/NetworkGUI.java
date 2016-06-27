@@ -34,9 +34,10 @@ public class NetworkGUI extends Program {
 	public ArrayList<Node> networkNodes = new ArrayList<Node>();
 
 	public int nodeIDCounter = 0;
-	public int difficulty = 1;
-	public int numberOfNodes = 10;
-	public int communicationRadius = 200;
+
+	public int difficulty = 5;
+	public int numberOfNodes = 100;
+	public int communicationRadius = 100;
 	public int OFFSET = 15;
 
 	public Canvas canvas = new Canvas();
@@ -51,7 +52,6 @@ public class NetworkGUI extends Program {
 	@Override
 	public void init() {
 		this.setSize(new Dimension(1100, 850));
-		System.out.println("asdfasdf");
 		// fields on the West Side of the screen
 		generateWestFrame();
 
@@ -60,16 +60,6 @@ public class NetworkGUI extends Program {
 		addListeners();
 
 		add(this.canvas);
-
-		try {
-			generateNodes();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	private void addListeners() {
