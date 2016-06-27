@@ -29,6 +29,9 @@ public class Tree<T> {
     public TreeNode<T> getDeepestTreeNode() {
         return deepestNode;
     }
+    public TreeNode<T> getRootTreeNode() {
+        return root;
+    }
 
     // Mutators
     public void addTreeNode(TreeNode<T> p, TreeNode<T> cn) {
