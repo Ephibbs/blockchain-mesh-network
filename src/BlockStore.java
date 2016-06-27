@@ -83,11 +83,14 @@ public class BlockStore {
 						blockMap.put(b.getMyHash(), bn);
 
 						// Check if any orphan trees can be added to the blocktree
-						for (Tree<Block> t : orphanTrees) {
-							if (b.getMyHash() == t.getRootTreeNode().getData().getPrevHash()) {
-								// Get root node, sever branches to make independent trees for each
-								// Attempt to add root node using local add() method
-									// If fails, discard the node
+						for (String orphanID : orphanBlockIDs) {
+							if (treeBlockIDs.contains(orphanID)) { // if orphan can be put under a tree
+								orphanBlockIDs.remove(orphanID);
+								if (!add(blockMap.get(orphanID).getData())) { // if add failed
+									for (TreeNode<Block> cn : blockMap.get(orphanID).getChildren()) {
+										orphanTrees.add(new Tree<Block>(cn)); // create new tree node for each child
+									}
+								}
 							}
 						}
 
