@@ -35,8 +35,8 @@ public class NetworkGUI extends Program {
 
 	public int nodeIDCounter = 0;
 	public int difficulty = 1;
-	public int numberOfNodes = 100;
-	public int communicationRadius = 100;
+	public int numberOfNodes = 10;
+	public int communicationRadius = 200;
 	public int OFFSET = 15;
 
 	public Canvas canvas = new Canvas();
@@ -60,7 +60,7 @@ public class NetworkGUI extends Program {
 		addListeners();
 
 		add(this.canvas);
-		
+
 		try {
 			generateNodes();
 		} catch (NoSuchAlgorithmException e) {
@@ -76,7 +76,7 @@ public class NetworkGUI extends Program {
 		this.diffString.addActionListener(this);
 		this.numNodes.addActionListener(this);
 		this.commRadString.addActionListener(this);
-		//this.randMessage.addActionListener(this);
+		// this.randMessage.addActionListener(this);
 		this.messageText.addActionListener(this);
 	}
 
@@ -115,12 +115,10 @@ public class NetworkGUI extends Program {
 		this.removeNode = new JTextField(TEXT_FIELD_SIZE);
 		add(this.removeNode, WEST);
 		add(new JButton("Remove Node"), WEST);
-//
-//		// Creating a new Group
-//		add(new JLabel("Random Message Below"), WEST); // space holder
-//		this.randMessage = new JTextField(TEXT_FIELD_SIZE);
-//		add(this.randMessage, WEST);
-//		add(new JButton("Random Message"), WEST);
+		//
+		// // Creating a new Group
+		add(new JLabel("Random Message Below"), WEST); // space holder;
+		add(new JButton("Random Message"), WEST);
 
 		// to move the location of the nodes
 		add(new JButton("Move Nodes"), WEST);
@@ -146,8 +144,7 @@ public class NetworkGUI extends Program {
 		if (e.getActionCommand().equals("Difficulty") && !this.diffString.getText().equals("")) {
 			this.difficulty = Integer.parseInt(this.diffString.getText());
 			System.out.println("Your difficulty is: " + this.difficulty);
-		}
-		else if (e.getActionCommand().equals("Number of Nodes")
+		} else if (e.getActionCommand().equals("Number of Nodes")
 				|| e.getSource() == this.numNodes && !this.numNodes.getText().equals("")) {
 			this.numberOfNodes = Integer.parseInt(this.numNodes.getText());
 			System.out.println("Your numberOfNodes is: " + this.numberOfNodes);
@@ -162,8 +159,15 @@ public class NetworkGUI extends Program {
 				|| e.getSource() == this.commRadString && !this.commRadString.getText().equals("")) {
 			this.communicationRadius = Integer.parseInt(this.commRadString.getText());
 			System.out.println("Your communication radius is: " + this.communicationRadius);
-		}
-		else if (e.getActionCommand().equals("Send Message")
+		} else if (e.getActionCommand().equals("Random Message")
+				|| e.getSource() == this.commRadString && !this.commRadString.getText().equals("")) {
+			try {
+				generateRandomMessages();
+			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} else if (e.getActionCommand().equals("Send Message")
 				|| e.getSource() == this.messageText && !this.messageText.getText().equals("")) {
 			try {
 				System.out.println("I should be getting here");
@@ -171,8 +175,7 @@ public class NetworkGUI extends Program {
 			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
 				e1.printStackTrace();
 			}
-		}
-		else if (e.getActionCommand().equals("Random Message")
+		} else if (e.getActionCommand().equals("Random Message")
 				|| e.getSource() == this.randMessage && !this.randMessage.getText().equals("")) {
 		} else if (e.getActionCommand().equals("Reset Nodes")) {
 			resetNodesCommunicationLines();
@@ -197,12 +200,32 @@ public class NetworkGUI extends Program {
 		}
 	}
 
+	private void generateRandomMessages() throws NoSuchAlgorithmException, NoSuchProviderException {
+		// TODO Auto-generated method stub
+		ArrayList<String> messageContext = new ArrayList<String>();
+		messageContext.add("a");
+		messageContext.add("b");
+		messageContext.add("c");
+		messageContext.add("d");
+		messageContext.add("e");
+		messageContext.add("f");
+		messageContext.add("g");
+		messageContext.add("h");
+		messageContext.add("i");
+		messageContext.add("j");
+		for (int i = 0; i < messageContext.size(); i++) {
+			int random1 = rand.nextInt(this.networkNodes.size() - 1);
+			int random2 = rand.nextInt(this.networkNodes.size() - 1);
+			this.sendMessage(messageContext.get(i), this.networkNodes.get(random1).nodeID,
+					this.networkNodes.get(random2).nodeID);
+		}
+	}
+
 	private void globalPingCreation() {
 		for (int i = 0; i < networkNodes.size(); i++) {
 			System.out.println("I created a pings");
 			this.networkNodes.get(i).createPing();
 		}
-
 	}
 
 	private void removeNode(String text) {
@@ -239,7 +262,7 @@ public class NetworkGUI extends Program {
 		resetNodesCommunicationLines();
 		generateCommunicationLines();
 		generateLineToFriends();
-		//recolorNodes();
+		// recolorNodes();
 	}
 
 	private void sendMessage(String message, String sender, String receiver)
