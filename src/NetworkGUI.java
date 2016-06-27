@@ -35,8 +35,8 @@ public class NetworkGUI extends Program {
 
 	public int nodeIDCounter = 0;
 	public int difficulty = 1;
-	public int numberOfNodes = 5;
-	public int communicationRadius = 10;
+	public int numberOfNodes = 100;
+	public int communicationRadius = 100;
 	public int OFFSET = 15;
 
 	public Canvas canvas = new Canvas();
@@ -60,6 +60,16 @@ public class NetworkGUI extends Program {
 		addListeners();
 
 		add(this.canvas);
+		
+		try {
+			generateNodes();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void addListeners() {
@@ -229,7 +239,7 @@ public class NetworkGUI extends Program {
 		resetNodesCommunicationLines();
 		generateCommunicationLines();
 		generateLineToFriends();
-		recolorNodes();
+		//recolorNodes();
 	}
 
 	private void sendMessage(String message, String sender, String receiver)
