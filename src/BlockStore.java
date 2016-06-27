@@ -82,10 +82,12 @@ public class BlockStore {
 						treeBlockIDs.add(b.getMyHash());
 						blockMap.put(b.getMyHash(), bn);
 
-						// Check if any orphan trees can be added ot the blocktree
+						// Check if any orphan trees can be added to the blocktree
 						for (Tree<Block> t : orphanTrees) {
-							if (bn.getData().getMyHash() == t.getRootTreeNode().getData().getPrevHash()) {
-								// TODO call add() method to add new node to blocktree 
+							if (b.getMyHash() == t.getRootTreeNode().getData().getPrevHash()) {
+								// Get root node, sever branches to make independent trees for each
+								// Attempt to add root node using local add() method
+									// If fails, discard the node
 							}
 						}
 
@@ -103,26 +105,21 @@ public class BlockStore {
 				}
 			} else if (!orphanBlockIDs.contains(b.getMyHash())) { // is a unique orphan block
 				orphanBlockIDs.add(b.getMyHash()); // add hash to list of orphans
-				TreeNode<Block> bNode = new TreeNode<Block>(b);
+				TreeNode<Block> bn = new TreeNode<Block>(b); // save block in blockmap
+				blockMap.put(b.getMyHash(), bn);
 
 				if (orphanBlockIDs.contains(b.getPrevHash())) { // if orphan's parent exists, add orphan to parent's tree
 					System.out.println("into orphan tree");
 
 					// Find parent node and add block as its child
-					TreeNode<Block> pNode;
-					for (Tree<Block> t : orphanTrees) {
-						// TODO iterate through all nodes, find parent and add b as child
-						if (false) {// replace with condition that is true when parent is found
-							t.addTreeNode(pNode, bNode);
-							break;
-						}
-					}
+					Tree<Block> pTree = blockMap.get(b.getPrevHash()).getMyTree();
+					pTree.addTreeNode(blockMap.get(b.getPrevHash()), bn);
 
-					// Look for orphan tree roots that can join the added treenode
+					// Check if any orphan trees can be added under the newly added block
 					for (Tree<Block> t : orphanTrees) {
-						if (t.getRootTreeNode().getData().getPrevHash() == b.getMyHash()) { // if orphan and parent matches
-							t.addTreeNode(bNode, t.getRootTreeNode());
-//							orphanTrees.remove(t); remove tree
+						if (b.getMyHash() == t.getRootTreeNode().getData().getPrevHash()) { // if there is a match
+							t.addTreeNode(bn, t.getRootTreeNode()); // set orphan tree root as child to new blck
+							orphanTrees.remove(t); // remove added orphan tree
 						}
 					}
 				} else { // if orphan has no parent, make a new tree

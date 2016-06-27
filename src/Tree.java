@@ -18,11 +18,13 @@ public class Tree<T> {
         root = new TreeNode<T>(rootData);
         root.setDepth(0);
         deepestNode = root;
+        root.setMyTree(this); // reference to this tree
     }
     public Tree(TreeNode<T> root) {
         this.root = root;
         root.setDepth(0);
         deepestNode = root;
+        root.setMyTree(this); // reference to this tree
     }
     
     // Accessors
@@ -36,6 +38,7 @@ public class Tree<T> {
 
     // Mutators
     public void addTreeNode(TreeNode<T> p, TreeNode<T> cn) {
+        cn.setMyTree(p.getMyTree()); // child and parent share same tree
     	long cDepth = p.getDepth()+1;
     	cn.setDepth(cDepth);
     	p.addChild(cn);
@@ -43,5 +46,12 @@ public class Tree<T> {
     	if(cDepth > deepestNode.getDepth()) {
     		deepestNode = cn;
     	}
+
+        // Recursively update the rest of the tree
+        if (!cn.getChildren().isEmpty()) {
+            for (TreeNode<T> c : cn.getChildren()) {
+                addTreeNode(cn, c);
+            }
+        }
     }
 }

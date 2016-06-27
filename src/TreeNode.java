@@ -12,6 +12,7 @@ public class TreeNode<T> {
     private long depth;
     private TreeNode<T> parent = null;
     private ArrayList<TreeNode<T>> children = new ArrayList<TreeNode<T>>();
+    private Tree<T> myTree = null; // reference of tree that this node belongs to
 
     // Constructors
     public TreeNode(TreeNode<T> tn) {
@@ -25,6 +26,9 @@ public class TreeNode<T> {
     }
 
     // Accessors
+    public Tree<T> getMyTree() {
+        return myTree;
+    }
     public long getDepth() {
         return depth;
     }
@@ -39,6 +43,9 @@ public class TreeNode<T> {
     }
 
     // Mutators -- don't call these, let the Tree class do it for you
+    public void setMyTree(Tree<T> t) {
+        this.myTree = t;
+    }
     public void addChild(TreeNode<T> c) {
         children.add(c);
     }
