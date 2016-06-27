@@ -74,7 +74,7 @@ public class NetworkGUI extends Program {
 		this.diffString.addActionListener(this);
 		this.numNodes.addActionListener(this);
 		this.commRadString.addActionListener(this);
-		this.randMessage.addActionListener(this);
+		//this.randMessage.addActionListener(this);
 		this.messageText.addActionListener(this);
 	}
 
@@ -113,12 +113,12 @@ public class NetworkGUI extends Program {
 		this.removeNode = new JTextField(TEXT_FIELD_SIZE);
 		add(this.removeNode, WEST);
 		add(new JButton("Remove Node"), WEST);
-
-		// Creating a new Group
-		add(new JLabel("Random Message Below"), WEST); // space holder
-		this.randMessage = new JTextField(TEXT_FIELD_SIZE);
-		add(this.randMessage, WEST);
-		add(new JButton("Random Message"), WEST);
+//
+//		// Creating a new Group
+//		add(new JLabel("Random Message Below"), WEST); // space holder
+//		this.randMessage = new JTextField(TEXT_FIELD_SIZE);
+//		add(this.randMessage, WEST);
+//		add(new JButton("Random Message"), WEST);
 
 		// to move the location of the nodes
 		add(new JButton("Move Nodes"), WEST);
@@ -181,6 +181,7 @@ public class NetworkGUI extends Program {
 
 		else if (e.getActionCommand().equals("Generate Nodes")) {
 			try {
+				System.out.println("I called this");
 				generateNodes();
 			} catch (NoSuchAlgorithmException e1) {
 				e1.printStackTrace();
@@ -204,6 +205,7 @@ public class NetworkGUI extends Program {
 
 	private void removeNode(String text) {
 		Node nodeToRemove = null;
+		System.out.println("I am to remove: " + text);
 		for (int i = 0; i < networkNodes.size(); i++) {
 			if (networkNodes.get(i).getNodeID().equals(text)) {
 				nodeToRemove = this.networkNodes.get(i);
@@ -281,9 +283,6 @@ public class NetworkGUI extends Program {
 	}
 
 	private void recolorNodes() {
-		// TODO Auto-generated method stub
-		// g.setColor(Color.LIGHT_GRAY);
-		// g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 		for (int i = 0; i < networkNodes.size(); i++) {
 			networkNodes.get(i).setColor(Color.BLUE);
 			networkNodes.get(i).Draw(g);
@@ -295,6 +294,7 @@ public class NetworkGUI extends Program {
 		this.g = this.canvas.getGraphics();
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
+		System.out.println("I should generate some nodes");
 		for (int i = 0; i < this.numberOfNodes; i++) {
 			int randomX = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
 			int randomY = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
