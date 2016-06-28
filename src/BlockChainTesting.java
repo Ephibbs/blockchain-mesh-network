@@ -8,7 +8,7 @@ import java.util.Random;
 import java.lang.Thread;
 
 public class BlockChainTesting {
-	SimulationNode node1, node2;
+	Node node1, node2;
 	public Blockchain blockChain1, blockChain2;
 	Thread thread;
 	public HashMap<String, TreeNode<Block>> blockMap = new HashMap<String, TreeNode<Block>>();
@@ -20,8 +20,8 @@ public class BlockChainTesting {
 	 * nodes to an arraylist to similar the network
 	 */
 	public BlockChainTesting() throws NoSuchAlgorithmException, NoSuchProviderException, InterruptedException {
-		node1 = new SimulationNode("A");
-		node2 = new SimulationNode("B");
+		node1 = new Node("A");
+		node2 = new Node("B");
 		System.out.println("after A");
 	}
 	
