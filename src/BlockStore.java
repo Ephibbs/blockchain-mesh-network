@@ -48,8 +48,9 @@ public class BlockStore {
 
 	// Mutators
 	boolean add(Block b) {
-		TreeNode<Block> c = blockMap.get(b.getMyHash()); // check if block is in blocktree
-		if(c == null) { // if block is not in blocktree (is unique)
+
+		// Check if block is unique
+		if(blockMap.get(b.getMyHash()) == null) {
 			if(treeBlockIDs.contains(b.getPrevHash())) { // check if parent is in blocktree
 				TreeNode<Block> p = blockMap.get(b.getPrevHash()); // get previous block (parent block)
 
@@ -125,7 +126,7 @@ public class BlockStore {
 						return true;
 					}
 				}
-			} else if (!orphanBlockIDs.contains(b.getMyHash())) { // is a unique orphan block
+			} else { // is an orphan block
 				orphanBlockIDs.add(b.getMyHash()); // add hash to list of orphans
 				TreeNode<Block> bn = new TreeNode<Block>(b); // save block in blockmap
 				blockMap.put(b.getMyHash(), bn);
@@ -146,7 +147,7 @@ public class BlockStore {
 					}
 				} else { // if orphan has no parent, make a new tree
 					System.out.println("into new orphan tree");
-					orphanTrees.add(new Tree<Block>(b));
+					orphanTrees.add(new Tree<Block>(bn));
 				}
 			}
 		}
