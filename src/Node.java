@@ -26,7 +26,7 @@ public class Node {
     public PublicKey pubKey = null;
     public byte[] byteArray = new byte[1024];
     public Blockchain blockChain;
-    public Hashtable<SimulationNode, SimulationNode> routeTable = new Hashtable<SimulationNode, SimulationNode>();
+    public Hashtable<Node, Node> routeTable = new Hashtable<Node, Node>();
     public Random rand = new Random();
     private Ping ping;
     public ArrayList<String> blockRequestIDs = new ArrayList<String>();
@@ -61,7 +61,7 @@ public class Node {
     public PublicKey getPublicKey() {
         return this.pubKey;
     }
-    public ArrayList<SimulationNode> getFriends() {
+    public ArrayList<Node> getFriends() {
         return this.networkNodes;
     }
     public ArrayList<Message> getMessages() {
@@ -136,13 +136,13 @@ public class Node {
         // their
         // friends)
     }
-    public void addNodes(ArrayList<SimulationNode> newNodes) { // add a group of friend
+    public void addNodes(ArrayList<Node> newNodes) { // add a group of friend
         // nodes
         for (int i = 0; i < newNodes.size(); i++) {
             networkNodes.add(newNodes.get(i));
         }
     }
-    public void addFriend(SimulationNode node) { // add a single friend node
+    public void addFriend(Node node) { // add a single friend node
         networkNodes.add(node);
     }
     public void addMessage(Message text) {

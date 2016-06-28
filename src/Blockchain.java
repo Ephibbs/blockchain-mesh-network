@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
 
 /*
  * Class to store blocks, each node has its own copy of the blockchain
- * Parameters: SimulationNode node
+ * Parameters: Node node
  */
 
 public class Blockchain implements Runnable {
