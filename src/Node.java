@@ -7,6 +7,10 @@ import java.io.Serializable;
 /*
  * Abstract class to be inherited by Simulation & Network Nodes
  */
-public abstract class Node {
-
+public class Node {
+	private String nodeID;
+	
+	public String getNodeID() {
+		return nodeID;
+	}
 }

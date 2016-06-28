@@ -7,5 +7,5 @@
  */
 
 public class NetworkNode extends Node {
-
+	
 }

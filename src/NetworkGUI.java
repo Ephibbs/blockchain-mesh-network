@@ -35,7 +35,7 @@ public class NetworkGUI extends Program {
 
 	public int nodeIDCounter = 0;
 
-	public int difficulty = 5;
+	public int difficulty = 2;
 	public int numberOfNodes = 100;
 	public int communicationRadius = 100;
 	public int OFFSET = 15;

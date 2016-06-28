@@ -54,7 +54,11 @@ public class Blockchain implements Runnable {
 		return blockStore.getBlock(hash) != null;
 	}
 	Block getBlock(String hash) {
-		return blockStore.getBlock(hash).getData();
+		TreeNode<Block> tnB = blockStore.getBlock(hash);
+		if(tnB == null) {
+			return null;
+		}
+		return tnB.getData();
 	}
 
 	// Utility

@@ -44,7 +44,7 @@ public class SimulationNode extends Node {
 	public Blockchain blockChain;
 	public Random rand = new Random();
 
-	public Hashtable<SimulationNode, SimulationNode> routeTable = new Hashtable<SimulationNode, SimulationNode>();
+	public Hashtable<Node, Node> routeTable = new Hashtable<Node, Node>();
 
 	public int xCoordinate = 0;
 	public int yCoordinate = 0;
