@@ -51,7 +51,7 @@ public class Blockchain implements Runnable {
 		incBlks.add(b);
 	}
 	public boolean hasBlock(String hash) {
-		return blockStore.getBlock(hash) == null;
+		return blockStore.getBlock(hash) != null;
 	}
 	Block getBlock(String hash) {
 		return blockStore.getBlock(hash).getData();
