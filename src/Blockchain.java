@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
 
 /*
  * Class to store blocks, each node has its own copy of the blockchain
- * Parameters: Node node
+ * Parameters: SimulationNode node
  */
 
 public class Blockchain implements Runnable {
@@ -22,14 +22,14 @@ public class Blockchain implements Runnable {
 	// Variables
 	private BlockStore blockStore = new BlockStore();
 	private ArrayList<Block> incBlks = new ArrayList<Block>();
-	private Node node;
+	private SimulationNode node;
 	private int difficulty;
 	private PuzzleSolver puzzleSolver;
 	private BlockChecker blockChecker;
 	private Thread t;
 
 	// Constructor
-    public Blockchain(Node node) {
+    public Blockchain(SimulationNode node) {
     	this.node = node;
     	this.difficulty = 5;
     }

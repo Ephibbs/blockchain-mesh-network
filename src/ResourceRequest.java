@@ -1,7 +1,7 @@
 
 public class ResourceRequest extends Message{
 
-	public ResourceRequest(Object data, Node auth) {
+	public ResourceRequest(Object data, SimulationNode auth) {
 		super(data, auth);
 	}
 

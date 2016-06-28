@@ -13,8 +13,8 @@ import java.util.Random;
 public class Simulation {
 
 	// Nodes, network, and blockchains
-	//public Node node1, node2, node3, node4, node5, node6, node7, node8, node9;
-	public ArrayList<Node> networkNodes = new ArrayList<Node>();
+	//public SimulationNode node1, node2, node3, node4, node5, node6, node7, node8, node9;
+	public ArrayList<SimulationNode> networkNodes = new ArrayList<SimulationNode>();
 	public Blockchain chain1, chain2, chain3, chain4, chain5, chain6, chain7, chain8, chain9;
 	public int difficulty;
 	public int numberOfInitialNodes;
@@ -34,9 +34,9 @@ public class Simulation {
 
 	private void generateInitialNodes(int numberOfInitialNodes) throws NoSuchAlgorithmException, NoSuchProviderException {
 			// TODO Auto-generated method stub
-			Node n;
+			SimulationNode n;
 			for(int i = 0; i < numberOfInitialNodes; i++){
-				n = new Node("" + i);
+				n = new SimulationNode("" + i);
 				n.setBlockChainDifficulty(difficulty);
 				networkNodes.add(n);
 			}
@@ -64,8 +64,8 @@ public class Simulation {
 		
 		//this first forloop is only to make sure that each node gets friends to talk to
 		for(int i = 0; i < n.intValue();i++){
-			Node nodeToGiveFriends = networkNodes.get(i);
-			ArrayList<Node> possibleFriends = (ArrayList<Node>) networkNodes.clone();
+			SimulationNode nodeToGiveFriends = networkNodes.get(i);
+			ArrayList<SimulationNode> possibleFriends = (ArrayList<SimulationNode>) networkNodes.clone();
 			possibleFriends.remove(i);
 			
 			// This next for loop is the one that actually gives nodes their friends
@@ -79,7 +79,7 @@ public class Simulation {
 	}
 	
 	public void runWithBlockChain() {
-		for(Node n : networkNodes) {
+		for(SimulationNode n : networkNodes) {
 			n.start();
 		}
 		this.networkNodes.get(0).createMessage("help");

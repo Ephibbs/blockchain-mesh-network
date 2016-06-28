@@ -8,10 +8,10 @@ import java.io.Serializable;
 public class TextMessage extends Message implements Serializable {
 
 	// Constructors
-	public TextMessage(Object data, Node auth, Node rec) {
+	public TextMessage(Object data, SimulationNode auth, SimulationNode rec) {
 		super(data, auth, rec);
 	}
-	public TextMessage(Object data, Node auth) {
+	public TextMessage(Object data, SimulationNode auth) {
 		super(data, auth);
 	}
 }

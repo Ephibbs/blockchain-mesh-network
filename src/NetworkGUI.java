@@ -31,7 +31,7 @@ public class NetworkGUI extends Program {
 	public JTextField randMessage;
 	public JTextField removeNode;
 
-	public ArrayList<Node> networkNodes = new ArrayList<Node>();
+	public ArrayList<SimulationNode> networkNodes = new ArrayList<SimulationNode>();
 
 	public int nodeIDCounter = 0;
 
@@ -104,7 +104,7 @@ public class NetworkGUI extends Program {
 		// Remove a node
 		this.removeNode = new JTextField(TEXT_FIELD_SIZE);
 		add(this.removeNode, WEST);
-		add(new JButton("Remove Node"), WEST);
+		add(new JButton("Remove SimulationNode"), WEST);
 		//
 		// // Creating a new Group
 		add(new JLabel("Random Message Below"), WEST); // space holder;
@@ -120,7 +120,7 @@ public class NetworkGUI extends Program {
 		add(new JButton("Input New Lines"), WEST);
 
 		// to ping everybody
-		add(new JButton("Ping Every Node"), WEST);
+		add(new JButton("Ping Every SimulationNode"), WEST);
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class NetworkGUI extends Program {
 			System.out.println("Your numberOfNodes is: " + this.numberOfNodes);
 		}
 
-		else if (e.getActionCommand().equals("Remove Node")
+		else if (e.getActionCommand().equals("Remove SimulationNode")
 				|| e.getSource() == this.commRadString && !this.commRadString.getText().equals("")) {
 			removeNode(this.removeNode.getText());
 		}
@@ -185,7 +185,7 @@ public class NetworkGUI extends Program {
 			}
 		} else if (e.getActionCommand().equals("Move Nodes")) {
 			moveNodes();
-		} else if (e.getActionCommand().equals("Ping Every Node")) {
+		} else if (e.getActionCommand().equals("Ping Every SimulationNode")) {
 			globalPingCreation();
 		}
 	}
@@ -219,7 +219,7 @@ public class NetworkGUI extends Program {
 	}
 
 	private void removeNode(String text) {
-		Node nodeToRemove = null;
+		SimulationNode nodeToRemove = null;
 		System.out.println("I am to remove: " + text);
 		for (int i = 0; i < networkNodes.size(); i++) {
 			if (networkNodes.get(i).getNodeID().equals(text)) {
@@ -258,13 +258,13 @@ public class NetworkGUI extends Program {
 	private void sendMessage(String message, String sender, String receiver)
 			throws NoSuchAlgorithmException, NoSuchProviderException {
 		recolorNodes();
-		Node senderNode = null;
-		Node receiverNode = null;
+		SimulationNode senderNode = null;
+		SimulationNode receiverNode = null;
 		Message currentMessage = null;
 		for (int i = 0; i < networkNodes.size(); i++) {
 			for (int j = 0; j < networkNodes.size(); j++) {
-				String nodeNameSend = "Node" + networkNodes.get(i).nodeID;
-				String nodeNameRec = "Node" + networkNodes.get(j).nodeID;
+				String nodeNameSend = "SimulationNode" + networkNodes.get(i).nodeID;
+				String nodeNameRec = "SimulationNode" + networkNodes.get(j).nodeID;
 				if (networkNodes.get(i).nodeID.equals(sender) && networkNodes.get(j).nodeID.equals(receiver)) {
 					senderNode = networkNodes.get(i);
 					receiverNode = networkNodes.get(j);
@@ -280,7 +280,7 @@ public class NetworkGUI extends Program {
 			}
 		}
 		for (int o = 0; o < this.networkNodes.size(); o++) {
-			Node currentNode = this.networkNodes.get(o);
+			SimulationNode currentNode = this.networkNodes.get(o);
 			for (int p = 0; p < currentNode.getMessages().size(); p++) {
 				if (currentNode.getMessages().get(p).getMessageData().toString()
 						.equals(currentMessage.getMessageData().toString())) {
@@ -306,7 +306,7 @@ public class NetworkGUI extends Program {
 
 	private void generateNodes() throws NoSuchAlgorithmException, NoSuchProviderException {
 		System.out.println("hey printed");
-		Node n;
+		SimulationNode n;
 		this.g = this.canvas.getGraphics();
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
@@ -314,7 +314,7 @@ public class NetworkGUI extends Program {
 		for (int i = 0; i < this.numberOfNodes; i++) {
 			int randomX = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
 			int randomY = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
-			n = new Node("Node" + nodeIDCounter);
+			n = new SimulationNode("SimulationNode" + nodeIDCounter);
 			System.out.println("Or before");
 			n.setBlockChainDifficulty(this.difficulty);
 			n.setNodeValues(randomX, randomY, Color.BLUE, OFFSET);
@@ -347,12 +347,12 @@ public class NetworkGUI extends Program {
 
 	private void generateCommunicationLines() {
 		for (int i = 0; i < this.networkNodes.size(); i++) {
-			Node currentNode = this.networkNodes.get(i);
+			SimulationNode currentNode = this.networkNodes.get(i);
 			int xLoc = currentNode.getXCoord();
 			int yLoc = currentNode.getYCoord();
 			for (int j = 0; j < this.networkNodes.size(); j++) {
 				if (i != j) {
-					Node targetNode = this.networkNodes.get(j);
+					SimulationNode targetNode = this.networkNodes.get(j);
 					int targetXLoc = targetNode.getXCoord();
 					int targetYLoc = targetNode.getYCoord();
 					int euclidDistance = calculateDistance(xLoc, yLoc, targetXLoc, targetYLoc);
@@ -373,7 +373,7 @@ public class NetworkGUI extends Program {
 	}
 
 	private void generateNodeNetwork() {
-		Node n;
+		SimulationNode n;
 		Graphics g = this.canvas.getGraphics();
 		for (int i = 0; i < this.numberOfNodes; i++) {
 			int randomX = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
