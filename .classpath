@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="/FacePamphlet/acm.jar"/>
 	<classpathentry kind="lib" path="JarFolder/acm.jar"/>
+	<classpathentry kind="lib" path="C:/Users/585429/Desktop/blochchain-cp/JarFolder/bluecove-2.1.1-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
