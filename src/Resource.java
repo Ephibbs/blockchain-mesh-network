@@ -10,7 +10,7 @@ public class Resource {
 	public Location ownerLocation = null;
 	public String ownerName = null;
 
-	public Resource(int amt, String type, int x, int y, String cat, String ownerN){
+	public Resource(int amt, String type, double x, double y, String cat, String ownerN){
 		this.amount = amt;
 		this.type = type;
 		this.XLocation = x;

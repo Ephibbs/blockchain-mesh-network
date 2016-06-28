@@ -121,7 +121,7 @@ public class SimulationNode extends Node {
 	public void drawLinesToFriends(Graphics g) {
 		g.setColor(Color.BLACK);
 		for (int i = 0; i < this.networkNodes.size(); i++) {
-			SimulationNode friend = networkNodes.get(i);
+			SimulationNode friend = (SimulationNode) networkNodes.get(i);
 			g.drawLine(this.xCoordinate + this.WIDTH / 2, this.yCoordinate + this.WIDTH / 2,
 					friend.getXCoord() + this.WIDTH / 2, friend.getYCoord() + this.WIDTH / 2);
 		}
