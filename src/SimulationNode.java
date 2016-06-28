@@ -17,7 +17,7 @@ import java.util.Hashtable;
 import java.util.Random;
 
 /*
- * Class for the nodes in a mesh network
+ * Subclass of Node, simulation specific
  * Parameters: ID string
  */
 

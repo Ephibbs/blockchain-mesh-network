@@ -5,7 +5,7 @@ import java.io.Serializable;
  */
 
 /*
- * Abstract class to be inherited by Simulation & Network Nodes
+ * Abstract class to provide structure for the nodes in a network
  */
 public abstract class Node {
 
