@@ -28,7 +28,7 @@ public class BluetoothServer {
 
             System.out.println("Connection from " + remoteAddress);
 
-            String remoteName = "???";
+            String remoteName = "NetworkNode";
             try {
                 remoteName = remoteDevice.getFriendlyName(false);
             }

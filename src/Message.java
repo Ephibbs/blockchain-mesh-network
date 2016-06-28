@@ -14,20 +14,20 @@ import java.util.Random;
 public abstract class Message implements Serializable {
 
 	// Variables
-//	public SimulationNode author = new SimulationNode(null);
-//	public SimulationNode recipient = new SimulationNode(null);
-	public SimulationNode author = null;
-	public SimulationNode recipient = null;
+//	public Node author = new Node(null);
+//	public Node recipient = new Node(null);
+	public Node author = null;
+	public Node recipient = null;
 	public Object messageData = new Object();
 	public int id=0;
 
 	// Constructors
-	public Message(Object data, SimulationNode auth, SimulationNode rec) {
+	public Message(Object data, Node auth, Node rec) {
 		this.messageData = data;
 		this.author = auth;
 		this.recipient = rec;
 	}
-	public Message(Object data, SimulationNode auth) {
+	public Message(Object data, Node auth) {
 		this.messageData = data;
 		this.author = auth;
 	}
@@ -43,10 +43,10 @@ public abstract class Message implements Serializable {
 	public Object getMessageData() {
 		return messageData;
 	}
-	public SimulationNode getAuthor() {
+	public Node getAuthor() {
 		return author;
 	}
-	public SimulationNode getRecipient() {
+	public Node getRecipient() {
 		return recipient;
 	}
 	public String getHash() {

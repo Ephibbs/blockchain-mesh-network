@@ -7,6 +7,6 @@ import java.io.Serializable;
 /*
  * Abstract class to be inherited by Simulation & Network Nodes
  */
-public abstract class Node implements Serializable {
+public abstract class Node {
 
 }
