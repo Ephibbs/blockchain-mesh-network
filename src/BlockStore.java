@@ -18,7 +18,7 @@ public class BlockStore {
 	private ArrayList<Tree<Block>> orphanTrees = new ArrayList<Tree<Block>>(); // list of all the orphan trees
 	private ArrayList<String> messageIDs = new ArrayList<String>();
 	private HashMap<String, Message> allMessages = new HashMap<String, Message>();
-	private String blockFlag = null;
+	private ArrayList<TreeNode<Block>> rootNodesToAdd = new ArrayList<TreeNode<Block>>(); // store nodes to add to blocktree
 
 	// Constructor
 	BlockStore() {
@@ -83,30 +83,8 @@ public class BlockStore {
 						treeBlockIDs.add(b.getMyHash());
 						blockMap.put(b.getMyHash(), bn);
 
-						if (blockFlag == null) { // flag to know when you've exited the recursive call
-							blockFlag = b.getMyHash();
-						}
-
-						// Check if any orphan trees can be added to the blocktree
-						for (String orphanID : orphanBlockIDs) {
-							TreeNode<Block> orphanBlock = blockMap.get(orphanID);
-							if (treeBlockIDs.contains(orphanBlock.getData().getPrevHash())) { // if orphan can be put under a tree
-								orphanBlockIDs.remove(orphanID);
-								if (!add(orphanBlock.getData())) { // if add failed
-									for (TreeNode<Block> cn : orphanBlock.getChildren()) {
-										orphanTrees.add(new Tree<Block>(cn)); // create new tree node for each child
-									}
-								}
-							}
-						}
-
-						// Remove orphan tree when out
-						if (b.getMyHash() == blockFlag) {
-							blockFlag = null;
-							orphanTrees.remove(blockMap.get(b.getMyHash()).getMyTree());
-						}
-
-						tempP = new TreeNode<Block>(bn); // show tree
+						// Display changes
+						tempP = new TreeNode<Block>(bn);
 						String s = "";
 						while(tempP.getDepth() != 0) {
 							s += tempP.getData().getMyHash();
@@ -115,6 +93,35 @@ public class BlockStore {
 						}
 						s += "0";
 						System.out.println(s);
+
+						// Check for matching orphan trees
+						if (rootNodesToAdd.isEmpty()) {
+							for (Tree<Block> t : orphanTrees) { // find matching roots
+								if (treeBlockIDs.contains(t.getRootTreeNode().getData().getPrevHash())) {
+									rootNodesToAdd.add(t.getRootTreeNode());
+								}
+							}
+							for (TreeNode<Block> tn : rootNodesToAdd) { // add root nodes first
+								orphanBlockIDs.remove(tn.getData().getMyHash());
+								orphanTrees.remove(tn.getMyTree());
+								if (!add(tn.getData())) { // if add failed ,make each child a new tree
+									for (TreeNode<Block> nodeToTree : tn.getChildren()) {
+										orphanTrees.add(new Tree<Block>(nodeToTree));
+									}
+								}
+							}
+							rootNodesToAdd.clear(); // reset root nodes
+						} else { // add contents of orphan tree
+							for (TreeNode<Block> cn : bn.getChildren()) {
+								orphanBlockIDs.remove(cn.getData().getMyHash());
+								if (!add(cn.getData())) { // if add failed, make each child a new tree
+									for (TreeNode<Block> nodeToTree : cn.getChildren()) {
+										orphanTrees.add(new Tree<Block>(nodeToTree));
+									}
+								}
+							}
+						}
+
 						return true;
 					}
 				}
