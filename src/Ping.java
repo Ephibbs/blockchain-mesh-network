@@ -5,12 +5,12 @@ public class Ping {
 	public Node relayer= null;
 	public int count = 0;
 	
-	public Ping(Node initialCreator) {
-		originator = initialCreator;
-		relayer = initialCreator;
+	public Ping(Node node) {
+		originator = node;
+		relayer = node;
 	}
-	public void setRelayer(Node relayNode) {
-		this.relayer = relayNode;
+	public void setRelayer(Node node) {
+		this.relayer = node;
 	}
 	public Node getOriginator(){
 		return this.originator;
