@@ -1,21 +1,21 @@
 
 public class Ping {
 	
-	public SimulationNode originator = null;
-	public SimulationNode relayer= null;
+	public Node originator = null;
+	public Node relayer= null;
 	public int count = 0;
 	
-	public Ping(SimulationNode initialCreator) {
-		originator = initialCreator;
-		relayer = initialCreator;
+	public Ping(Node node) {
+		originator = node;
+		relayer = node;
 	}
-	public void setRelayer(SimulationNode relayNode) {
-		this.relayer = relayNode;
+	public void setRelayer(Node node) {
+		this.relayer = node;
 	}
-	public SimulationNode getOriginator(){
+	public Node getOriginator(){
 		return this.originator;
 	}
-	public SimulationNode getRelayer() {
+	public Node getRelayer() {
 		return this.relayer;
 	}
 	public void addCount(){
