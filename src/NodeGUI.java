@@ -237,7 +237,6 @@ public class NodeGUI extends Program {
 	}
 
 	private void generateResourceRequest() throws NoSuchAlgorithmException, NoSuchProviderException {
-		// TODO Auto-generated method stub
 		SimulationNode nodeRequesting = null;
 		for(int i = 0; i < this.networkNodes.size();i++){
 			if (this.networkNodes.get(i).getNodeID().toString().equals(this.resourceRequester.getText())) {
