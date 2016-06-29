@@ -37,6 +37,7 @@ public class NodeGUI extends Program {
 	public JTextField resourceAmount;
 	public JTextField resourceType;
 	public JTextField resourceCategory;
+	public JTextField acceptNumber;
 
 	public ArrayList<SimulationNode> networkNodes = new ArrayList<SimulationNode>();
 
@@ -75,11 +76,7 @@ public class NodeGUI extends Program {
 	}
 
 	private void addListeners() {
-		// this.diffString.addActionListener(this);
-		// this.numNodes.addActionListener(this);
-		// this.commRadString.addActionListener(this);
-		// this.randMessage.addActionListener(this);
-		this.messageText.addActionListener(this);
+		// this.messageText.addActionListener(this);
 		this.setMyNode.addActionListener(this);
 		this.resourceType.addActionListener(this);
 		this.resourceAmount.addActionListener(this);
@@ -88,36 +85,19 @@ public class NodeGUI extends Program {
 
 	private void generateWestFrame() {
 		add(new JButton("Begin Simulation"), WEST);
-
-		// //add(new JLabel("Enter the Hash Difficulty below"), WEST);
-		// this.diffString = new JTextField(TEXT_FIELD_SIZE);
-		// add(this.diffString, WEST);
-		// add(new JButton("Difficulty"), WEST);
-		//
-		// //add(new JLabel("Number of Nodes in Network Below"), WEST); // space
-		// // holder
-		// this.numNodes = new JTextField(TEXT_FIELD_SIZE);
-		// add(this.numNodes, WEST);
-		// add(new JButton("Number of Nodes"), WEST);
-		//
-		// add(new JLabel("Communication Radius Below"), WEST); // space holder
-		// this.commRadString = new JTextField(TEXT_FIELD_SIZE);
-		// add(this.commRadString, WEST);
-		// add(new JButton("Comm radius"), WEST);
-
 		add(new JButton("Generate Nodes"), WEST);
 
-		// Joining a group
-		add(new JLabel("Enter Message Below"), WEST); // space holder
-		this.messageText = new JTextField(TEXT_FIELD_SIZE);
-		add(this.messageText, WEST);
-		this.Send = new JTextField(TEXT_FIELD_SIZE);
-		this.Receive = new JTextField(TEXT_FIELD_SIZE);
-		add(new JLabel("Enter Sender Below"), WEST);
-		add(this.Send, WEST);
-		add(new JLabel("Enter Receiver Below"), WEST);
-		add(this.Receive, WEST);
-		add(new JButton("Send Message"), WEST);
+		// // Joining a group
+		// add(new JLabel("Enter Message Below"), WEST); // space holder
+		// this.messageText = new JTextField(TEXT_FIELD_SIZE);
+		// add(this.messageText, WEST);
+		// this.Send = new JTextField(TEXT_FIELD_SIZE);
+		// this.Receive = new JTextField(TEXT_FIELD_SIZE);
+		// add(new JLabel("Enter Sender Below"), WEST);
+		// add(this.Send, WEST);
+		// add(new JLabel("Enter Receiver Below"), WEST);
+		// add(this.Receive, WEST);
+		// add(new JButton("Send Message"), WEST);
 
 		add(new JLabel("Enter resource Requester"), WEST); // space holder
 		this.resourceRequester = new JTextField(TEXT_FIELD_SIZE);
@@ -133,23 +113,28 @@ public class NodeGUI extends Program {
 		add(this.resourceCategory, WEST);
 		add(new JButton("Request Resources"), WEST);
 
+		add(new JLabel("Accept Number"), WEST);
+		this.acceptNumber = new JTextField(TEXT_FIELD_SIZE);
+		add(this.acceptNumber, WEST);
+		add(new JButton("Accept Request"), WEST);
+
 		// Remove a node
 		this.removeNode = new JTextField(TEXT_FIELD_SIZE);
 		add(this.removeNode, WEST);
 		add(new JButton("Remove Node"), WEST);
 		//
-		// // Creating a new Group
-		add(new JLabel("Random Message Below"), WEST); // space holder;
-		add(new JButton("Random Message"), WEST);
+		// // // Creating a new Group
+		// add(new JLabel("Random Message Below"), WEST); // space holder;
+		// add(new JButton("Random Message"), WEST);
 
 		// to move the location of the nodes
 		add(new JButton("Move Nodes"), WEST);
 
-		// to move the location of the nodes
-		add(new JButton("Reset Nodes"), WEST);
-
-		// to move the location of the nodes
-		add(new JButton("Input New Lines"), WEST);
+		// // to move the location of the nodes
+		// add(new JButton("Reset Nodes"), WEST);
+		//
+		// // to move the location of the nodes
+		// add(new JButton("Input New Lines"), WEST);
 
 		// // to ping everybody
 		// add(new JButton("Ping Every Node"), WEST);
@@ -157,6 +142,12 @@ public class NodeGUI extends Program {
 		this.setMyNode = new JTextField(TEXT_FIELD_SIZE);
 		add(this.setMyNode, WEST);
 		add(new JButton("Set My Node"), WEST);
+
+		add(new JButton("Input New Lines"), WEST);
+
+		add(new JButton("Check Accepted"), WEST);
+		
+		add(new JButton("Global View"), WEST);
 	}
 
 	/**
@@ -169,11 +160,11 @@ public class NodeGUI extends Program {
 		// Lookup button is clicked
 		if (e.getActionCommand().equals("Difficulty") && !this.diffString.getText().equals("")) {
 			this.difficulty = Integer.parseInt(this.diffString.getText());
-			System.out.println("Your difficulty is: " + this.difficulty);
+			//System.out.println("Your difficulty is: " + this.difficulty);
 		} else if (e.getActionCommand().equals("Number of Nodes")
 				|| e.getSource() == this.numNodes && !this.numNodes.getText().equals("")) {
 			this.numberOfNodes = Integer.parseInt(this.numNodes.getText());
-			System.out.println("Your numberOfNodes is: " + this.numberOfNodes);
+			//System.out.println("Your numberOfNodes is: " + this.numberOfNodes);
 		}
 
 		else if (e.getActionCommand().equals("Remove Node")
@@ -184,7 +175,7 @@ public class NodeGUI extends Program {
 		else if (e.getActionCommand().equals("Comm radius")
 				|| e.getSource() == this.commRadString && !this.commRadString.getText().equals("")) {
 			this.communicationRadius = Integer.parseInt(this.commRadString.getText());
-			System.out.println("Your communication radius is: " + this.communicationRadius);
+			//System.out.println("Your communication radius is: " + this.communicationRadius);
 		} else if (e.getActionCommand().equals("Random Message")
 				|| e.getSource() == this.commRadString && !this.commRadString.getText().equals("")) {
 			try {
@@ -196,7 +187,7 @@ public class NodeGUI extends Program {
 		} else if (e.getActionCommand().equals("Send Message")
 				|| e.getSource() == this.messageText && !this.messageText.getText().equals("")) {
 			try {
-				System.out.println("I should be getting here");
+				//System.out.println("I should be getting here");
 				sendMessage(this.messageText.getText(), this.Send.getText(), this.Receive.getText());
 			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
 				e1.printStackTrace();
@@ -212,7 +203,7 @@ public class NodeGUI extends Program {
 			beginSimulation();
 		} else if (e.getActionCommand().equals("Generate Nodes")) {
 			try {
-				System.out.println("Hello I am here");
+				//System.out.println("Hello I am here");
 				generateNodes();
 			} catch (NoSuchAlgorithmException e1) {
 				e1.printStackTrace();
@@ -229,25 +220,84 @@ public class NodeGUI extends Program {
 			try {
 				generateResourceRequest();
 			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+		} else if (e.getActionCommand().equals("Accept Request")) {
+			acceptResourceRequest();
 
+		} else if (e.getActionCommand().equals("Check Accepted")) {
+			checkAcceptedMessages();
+		} else if (e.getActionCommand().equals("Global View")) {
+			globalView();
+		}
+	}
+
+	private void globalView() {
+		drawMessages();
+	}
+
+	private void checkAcceptedMessages() {
+		generateAcceptedMessageBoard();
+		g.setColor(Color.WHITE);
+		if (((SimulationNode) this.myNode).getAcceptedMessages() != null) {
+			for (int i = 0; i < ((SimulationNode) this.myNode).getAcceptedMessages().size(); i++) {
+				String messageNumber = ""
+						+ ((Resource) this.myNode.getMessages().get(i).getMessageData()).getMessageNumber();
+				String resourceRequested = ((Resource) this.myNode.getMessages().get(i).getMessageData()).type;
+				String resourceAmount = "" + ((Resource) this.myNode.getMessages().get(i).getMessageData()).getAmount();
+				String originator = ((Resource) this.myNode.getMessages().get(i).getMessageData()).getOwnerName();
+				g.drawString(messageNumber, MAXSIZE + 5, 40 + i * 20);
+				g.drawString(resourceRequested, MAXSIZE + 5 + MAXSIZE / 4, 40 + i * 20);
+				g.drawString(resourceAmount, MAXSIZE + 5 + 2 * MAXSIZE / 4, 40 + i * 20);
+				g.drawString(originator, MAXSIZE + 5 + 3 * MAXSIZE / 4, 40 + i * 20);
+			}
+		}
+	}
+
+	private void generateAcceptedMessageBoard() {
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
+
+		g.setColor(Color.WHITE);
+		g.drawRect(0 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(2 * MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(3 * MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
+
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.setColor(Color.WHITE);
+		g.drawString("Message Number", MAXSIZE + 5, 20);
+		g.drawString("Resource Requested", MAXSIZE + 5 + MAXSIZE / 4, 20);
+		g.drawString("Amount Requested", MAXSIZE + 5 + 2 * MAXSIZE / 4, 20);
+		g.drawString("Destination", MAXSIZE + 5 + 3 * MAXSIZE / 4, 20);
+		g.drawLine(MAXSIZE, 25, 2 * MAXSIZE, 25);
+	}
+
+	private void acceptResourceRequest() {
+		int messageNum = Integer.parseInt(this.acceptNumber.getText());
+		for (int i = 0; i < this.myNode.getMessages().size(); i++) {
+			Message currentMessage = this.myNode.getMessages().get(i);
+			System.out.println("current message number: " + ((Resource) currentMessage.getMessageData()).getMessageNumber());
+			System.out.println("number to compare with: " + messageNum);
+			if (((Resource) currentMessage.getMessageData()).getMessageNumber() == messageNum) {
+				((SimulationNode) this.myNode).addAcceptedMessage(currentMessage);
+				System.out.println("I added an accepted Message");
+				System.out.println("outside: " + ((Resource) currentMessage.getMessageData()).getMessageNumber());
+			}
 		}
 	}
 
 	private void generateResourceRequest() throws NoSuchAlgorithmException, NoSuchProviderException {
-		// TODO Auto-generated method stub
 		SimulationNode nodeRequesting = null;
-		for(int i = 0; i < this.networkNodes.size();i++){
+		for (int i = 0; i < this.networkNodes.size(); i++) {
 			if (this.networkNodes.get(i).getNodeID().toString().equals(this.resourceRequester.getText())) {
 				nodeRequesting = this.networkNodes.get(i);
 			}
 		}
-		Resource newRequest = new Resource(Integer.parseInt(this.resourceAmount.getText()),this.resourceType.getText(),
+		Resource newRequest = new Resource(Integer.parseInt(this.resourceAmount.getText()), this.resourceType.getText(),
 				(double) nodeRequesting.getXCoord(), (double) nodeRequesting.getYCoord(),
-				this.resourceCategory.getText(), nodeRequesting.getNodeID());
-		
+				this.resourceCategory.getText(), nodeRequesting.getNodeID(), this.messageNumber);
+
 		recolorNodes();
 		Message currentMessage = null;
 		nodeRequesting.setNodeValues(nodeRequesting.getXCoord(), nodeRequesting.getYCoord(), Color.RED,
@@ -255,7 +305,7 @@ public class NodeGUI extends Program {
 		nodeRequesting.Draw(g);
 		currentMessage = new ResourceRequest(newRequest, null);
 		nodeRequesting.createMessage(currentMessage);
-		
+
 		for (int o = 0; o < this.networkNodes.size(); o++) {
 			SimulationNode currentNode = this.networkNodes.get(o);
 			for (int p = 0; p < currentNode.getMessages().size(); p++) {
@@ -279,7 +329,8 @@ public class NodeGUI extends Program {
 		generateMessageBoard();
 		g.setColor(Color.WHITE);
 		for (int i = 0; i < this.myNode.getMessages().size(); i++) {
-			String messageNumber = "" + this.messageNumber;
+			String messageNumber = ""
+					+ ((Resource) this.myNode.getMessages().get(i).getMessageData()).getMessageNumber();
 			String resourceRequested = ((Resource) this.myNode.getMessages().get(i).getMessageData()).type;
 			String resourceAmount = "" + ((Resource) this.myNode.getMessages().get(i).getMessageData()).getAmount();
 			String originator = ((Resource) this.myNode.getMessages().get(i).getMessageData()).getOwnerName();
@@ -352,7 +403,7 @@ public class NodeGUI extends Program {
 
 	private void globalPingCreation() {
 		for (int i = 0; i < networkNodes.size(); i++) {
-			System.out.println("I created a pings");
+			//System.out.println("I created a pings");
 			this.networkNodes.get(i).createPing();
 		}
 	}
@@ -428,7 +479,7 @@ public class NodeGUI extends Program {
 					if (!currentNode.equals(senderNode) && !currentNode.equals(receiverNode)) {
 						currentNode.setNodeValues(currentNode.getXCoord(), currentNode.getYCoord(), Color.GREEN,
 								currentNode.getWidth());
-						System.out.println("I should be green now");
+						//System.out.println("I should be green now");
 						currentNode.Draw(g);
 					}
 				}
@@ -445,17 +496,17 @@ public class NodeGUI extends Program {
 	}
 
 	private void generateNodes() throws NoSuchAlgorithmException, NoSuchProviderException {
-		System.out.println("hey printed");
+		//System.out.println("hey printed");
 		SimulationNode n;
 		this.g = this.canvas.getGraphics();
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
-		System.out.println("I should generate some nodes");
+		//System.out.println("I should generate some nodes");
 		for (int i = 0; i < this.numberOfNodes; i++) {
 			int randomX = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
 			int randomY = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
 			n = new SimulationNode("Node" + nodeIDCounter);
-			System.out.println("Or before");
+			//System.out.println("Or before");
 			n.setBlockChainDifficulty(this.difficulty);
 			n.setNodeValues(randomX, randomY, Color.BLUE, OFFSET);
 			n.start();
@@ -466,7 +517,6 @@ public class NodeGUI extends Program {
 		this.recolorNodes();
 		generateCommunicationLines();
 		generateLineToFriends();
-		// checkFriends();
 	}
 
 	private void generateLineToFriends() {
@@ -507,7 +557,6 @@ public class NodeGUI extends Program {
 	}
 
 	private int calculateDistance(int xLoc, int yLoc, int targetXLoc, int targetYLoc) {
-		// TODO Auto-generated method stub
 		double distance = Math.sqrt(Math.pow((targetXLoc - xLoc), 2) + Math.pow((targetYLoc - yLoc), 2));
 		return (int) distance;
 	}

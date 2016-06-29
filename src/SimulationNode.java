@@ -34,7 +34,7 @@ public class SimulationNode extends Node {
 	public int yCoordinate = 0;
 	public Color color = Color.BLUE;
 	public int WIDTH = 0;
-//	public ArrayList<SimulationNode> networkNodes = new ArrayList<SimulationNode>();
+	public ArrayList<Message> acceptedMessages = new ArrayList<Message>();
 
 	// Constructor
 	public SimulationNode(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -54,8 +54,7 @@ public class SimulationNode extends Node {
 	public int getWidth() {
 		return this.WIDTH;
 	}
-
-	// Mutators
+	
 	public void setNodeValues(int xVal, int yVal, Color myColor, int width)
 			throws NoSuchAlgorithmException, NoSuchProviderException {
 		this.xCoordinate = xVal;
@@ -87,13 +86,13 @@ public class SimulationNode extends Node {
 			// - offset));
 		}
 		if ((this.yCoordinate + randomY) > maxChecker) {
-			System.out.println("I got here");
+			//System.out.println("I got here");
 			this.yCoordinate = this.yCoordinate - 40;
 			// this.yCoordinate = this.yCoordinate +
 			// (randomY-(maxChecker-this.yCoordinate));
 		}
 		if ((this.yCoordinate + randomY) < 100) {
-			System.out.println("I got here");
+			//System.out.println("I got here");
 			this.yCoordinate = this.yCoordinate + 25;
 			// this.yCoordinate = this.yCoordinate - (randomY-(this.yCoordinate
 			// - offset));
@@ -115,9 +114,17 @@ public class SimulationNode extends Node {
 	}
 	
 	@Override
-	public void addFriend(Node node) { // add a single friend node
+	public void addFriend(Node node) {
         super.addFriend(node);
     }
+	
+	public void addAcceptedMessage(Message msg){
+		this.acceptedMessages.add(msg);
+		System.out.println("inside: " + ((Resource) msg.getMessageData()).getMessageNumber());
+	}
+	public ArrayList<Message> getAcceptedMessages(){
+		return this.acceptedMessages;
+	}
 
 	// Utility
 	public void Draw(Graphics g) {
