@@ -34,7 +34,7 @@ public class SimulationNode extends Node {
 	public int yCoordinate = 0;
 	public Color color = Color.BLUE;
 	public int WIDTH = 0;
-	public ArrayList<SimulationNode> networkNodes = new ArrayList<SimulationNode>();
+//	public ArrayList<SimulationNode> networkNodes = new ArrayList<SimulationNode>();
 
 	// Constructor
 	public SimulationNode(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -113,6 +113,11 @@ public class SimulationNode extends Node {
 			}
 		}
 	}
+	
+	@Override
+	public void addFriend(Node node) { // add a single friend node
+        super.addFriend(node);
+    }
 
 	// Utility
 	public void Draw(Graphics g) {
