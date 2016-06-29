@@ -78,7 +78,7 @@ public class BlockStore {
 					
 					if(messagesVerified) {
 						//add block to blocktree
-						System.out.println("block added to tree");
+						//System.out.println("block added to tree");
 						TreeNode<Block> bn = new TreeNode<Block>(b);
 						blockTree.addTreeNode(p, bn);
 						treeBlockIDs.add(b.getMyHash());
@@ -93,7 +93,7 @@ public class BlockStore {
 							tempP = tempP.getParent();
 						}
 						s += "0";
-						System.out.println(s);
+						//System.out.println(s);
 
 						// Check for matching orphan trees
 						if (rootNodesToAdd.isEmpty()) {
@@ -132,7 +132,7 @@ public class BlockStore {
 				blockMap.put(b.getMyHash(), bn);
 
 				if (orphanBlockIDs.contains(b.getPrevHash())) { // if orphan's parent exists, add orphan to parent's tree
-					System.out.println("into orphan tree");
+					//System.out.println("into orphan tree");
 
 					// Find parent node and add block as its child
 					Tree<Block> pTree = blockMap.get(b.getPrevHash()).getMyTree();
@@ -146,7 +146,7 @@ public class BlockStore {
 						}
 					}
 				} else { // if orphan has no parent, make a new tree
-					System.out.println("into new orphan tree");
+					//System.out.println("into new orphan tree");
 					orphanTrees.add(new Tree<Block>(bn));
 				}
 			}

@@ -9,22 +9,25 @@ public class Resource {
 	public String category;
 	public Location ownerLocation = null;
 	public String ownerName = null;
+	public int messageNumber = 0;
 
-	public Resource(int amt, String type, double x, double y, String cat, String ownerN){
+	public Resource(int amt, String type, double x, double y, String cat, String ownerN, int msg){
 		this.amount = amt;
 		this.type = type;
 		this.XLocation = x;
 		this.YLocation = y;
 		this.category = cat;
 		this.ownerName = ownerN;
+		this.messageNumber = msg;
 	}
 	
-	public Resource(int amt, String type, Location l, String cat, String ownerN){
+	public Resource(int amt, String type, Location l, String cat, String ownerN, int msg){
 		this.amount = amt;
 		this.type = type;
 		this.ownerLocation = l;
 		this.category = cat;
 		this.ownerName = ownerN;
+		this.messageNumber = msg;
 	}
 	
 	/**
@@ -123,5 +126,9 @@ public class Resource {
 	 */
 	public void setYLocation(double yLocation) {
 		YLocation = yLocation;
+	}
+	
+	public int getMessageNumber(){
+		return this.messageNumber;
 	}
 }

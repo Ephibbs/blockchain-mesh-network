@@ -110,7 +110,7 @@ public class Node {
             throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, NoSuchProviderException {
 
         distributePublicKey(this.getPublicKey());
-        System.out.println("I distributed my public key");
+        //System.out.println("I distributed my public key");
 
         Random rand = new Random(); // create a message with a random friend
         // node as the recipient
@@ -173,7 +173,7 @@ public class Node {
                 if (!this.localMSG.contains(text)) {
                     localMSG.add(text);
                     this.distributeSignedMessage(realSig, byteArray2, text);
-                    System.out.println("I sent the message out");
+                    //System.out.println("I sent the message out");
                     return;
                 }
             } else {
@@ -235,8 +235,8 @@ public class Node {
 
     // Utility
     public void start() {
-        System.out.println(nodeID);
-        System.out.println("after");
+        //System.out.println(nodeID);
+        //System.out.println("after");
         blockChain.start();
     }
     public void printNodes() {
