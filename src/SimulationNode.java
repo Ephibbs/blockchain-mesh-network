@@ -45,16 +45,19 @@ public class SimulationNode extends Node {
 	public Color getColor() {
 		return this.color;
 	}
+
 	public int getXCoord() {
 		return this.xCoordinate;
 	}
+
 	public int getYCoord() {
 		return this.yCoordinate;
 	}
+
 	public int getWidth() {
 		return this.WIDTH;
 	}
-	
+
 	public void setNodeValues(int xVal, int yVal, Color myColor, int width)
 			throws NoSuchAlgorithmException, NoSuchProviderException {
 		this.xCoordinate = xVal;
@@ -62,9 +65,11 @@ public class SimulationNode extends Node {
 		this.color = myColor;
 		this.WIDTH = width;
 	}
+
 	public void setColor(Color myColor) {
 		this.color = myColor;
 	}
+
 	public void moveNode(int maxSize, int offset, int movement, Graphics g) {
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillOval(this.xCoordinate, this.yCoordinate, this.WIDTH, this.WIDTH);
@@ -86,13 +91,13 @@ public class SimulationNode extends Node {
 			// - offset));
 		}
 		if ((this.yCoordinate + randomY) > maxChecker) {
-			//System.out.println("I got here");
+			// System.out.println("I got here");
 			this.yCoordinate = this.yCoordinate - 40;
 			// this.yCoordinate = this.yCoordinate +
 			// (randomY-(maxChecker-this.yCoordinate));
 		}
 		if ((this.yCoordinate + randomY) < 100) {
-			//System.out.println("I got here");
+			// System.out.println("I got here");
 			this.yCoordinate = this.yCoordinate + 25;
 			// this.yCoordinate = this.yCoordinate - (randomY-(this.yCoordinate
 			// - offset));
@@ -112,18 +117,35 @@ public class SimulationNode extends Node {
 			}
 		}
 	}
-	
+
 	@Override
 	public void addFriend(Node node) {
-        super.addFriend(node);
-    }
-	
-	public void addAcceptedMessage(Message msg){
-		this.acceptedMessages.add(msg);
-		System.out.println("inside: " + ((Resource) msg.getMessageData()).getMessageNumber());
+		super.addFriend(node);
 	}
-	public ArrayList<Message> getAcceptedMessages(){
+
+	public void addAcceptedMessage(Message msg) {
+		this.acceptedMessages.add(msg);
+		// System.out.println("inside: " + ((Resource)
+		// msg.getMessageData()).getMessageNumber());
+	}
+
+	public ArrayList<Message> getAcceptedMessages() {
 		return this.acceptedMessages;
+	}
+
+	public void removeMessage(Message text) {
+		if (this.localMSG.contains(text)) {
+			this.localMSG.remove(text);
+			for (int i = 0; i < networkNodes.size(); i++) { // distribute
+															// message to
+				// friend nodes (they
+				// will propagate to
+				// their friends)
+				((SimulationNode) networkNodes.get(i)).removeMessage(text);
+			}
+		} else {
+			// do nothing
+		}
 	}
 
 	// Utility
@@ -131,6 +153,7 @@ public class SimulationNode extends Node {
 		g.setColor(this.color);
 		g.fillOval(this.xCoordinate, this.yCoordinate, this.WIDTH, this.WIDTH);
 	}
+
 	public void drawLinesToFriends(Graphics g) {
 		g.setColor(Color.BLACK);
 		for (int i = 0; i < this.networkNodes.size(); i++) {

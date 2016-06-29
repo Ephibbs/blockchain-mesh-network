@@ -163,22 +163,15 @@ public class Node {
             sig.initVerify(publicKeySet.get(i));
             sig.update(byteArray2);
             boolean verifies = sig.verify(realSig);
-            // System.out.println("signature verifies: " + verifies);
-            // System.out.println("the public key I verified with was: " +
-            // publicKeySet.get(i).toString());
-            // System.out.println("I am node: " + this.getNodeID());
 
             if (verifies == true) { // if verified and unique, add to localMSG
                 // and distribute friend nodes
                 if (!this.localMSG.contains(text)) {
                     localMSG.add(text);
                     this.distributeSignedMessage(realSig, byteArray2, text);
-                    //System.out.println("I sent the message out");
                     return;
                 }
             } else {
-                // System.out.println("I broke the program");
-                // return;
             }
         }
     }
@@ -235,8 +228,6 @@ public class Node {
 
     // Utility
     public void start() {
-        //System.out.println(nodeID);
-        //System.out.println("after");
         blockChain.start();
     }
     public void printNodes() {
@@ -267,7 +258,6 @@ public class Node {
         }
     }
     public void distributePublicKey(PublicKey publicKey) {
-        // TODO Auto-generated method stub
         for (int i = 0; i < networkNodes.size(); i++) { // add public key to all
             // friend nodes (they
             // will propagate to

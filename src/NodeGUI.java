@@ -143,7 +143,7 @@ public class NodeGUI extends Program {
 		add(this.setMyNode, WEST);
 		add(new JButton("Set My Node"), WEST);
 
-		add(new JButton("Input New Lines"), WEST);
+//		add(new JButton("Input New Lines"), WEST);
 
 		add(new JButton("Check Accepted"), WEST);
 		
@@ -215,7 +215,12 @@ public class NodeGUI extends Program {
 		} else if (e.getActionCommand().equals("Ping Every Node")) {
 			globalPingCreation();
 		} else if (e.getActionCommand().equals("Set My Node")) {
-			setMyNode();
+			try {
+				setMyNode();
+			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		} else if (e.getActionCommand().equals("Request Resources")) {
 			try {
 				generateResourceRequest();
@@ -226,7 +231,7 @@ public class NodeGUI extends Program {
 			acceptResourceRequest();
 
 		} else if (e.getActionCommand().equals("Check Accepted")) {
-			checkAcceptedMessages();
+			generateAcceptedMessages();
 		} else if (e.getActionCommand().equals("Global View")) {
 			globalView();
 		}
@@ -236,20 +241,23 @@ public class NodeGUI extends Program {
 		drawMessages();
 	}
 
-	private void checkAcceptedMessages() {
+	private void generateAcceptedMessages() {
 		generateAcceptedMessageBoard();
 		g.setColor(Color.WHITE);
 		if (((SimulationNode) this.myNode).getAcceptedMessages() != null) {
 			for (int i = 0; i < ((SimulationNode) this.myNode).getAcceptedMessages().size(); i++) {
-				String messageNumber = ""
-						+ ((Resource) this.myNode.getMessages().get(i).getMessageData()).getMessageNumber();
-				String resourceRequested = ((Resource) this.myNode.getMessages().get(i).getMessageData()).type;
-				String resourceAmount = "" + ((Resource) this.myNode.getMessages().get(i).getMessageData()).getAmount();
-				String originator = ((Resource) this.myNode.getMessages().get(i).getMessageData()).getOwnerName();
+				String messageNumber = "" + ((Resource) (((SimulationNode) this.myNode)
+						.getAcceptedMessages().get(0)).getMessageData()).messageNumber;
+				String resourceRequested = ((Resource) (((SimulationNode) this.myNode)
+						.getAcceptedMessages().get(0)).getMessageData()).type;
+				String resourceAmount = "" + ((Resource) (((SimulationNode) this.myNode)
+						.getAcceptedMessages().get(0)).getMessageData()).getAmount();
+				String destination = ((Resource) (((SimulationNode) this.myNode)
+						.getAcceptedMessages().get(0)).getMessageData()).getOwnerName();
 				g.drawString(messageNumber, MAXSIZE + 5, 40 + i * 20);
 				g.drawString(resourceRequested, MAXSIZE + 5 + MAXSIZE / 4, 40 + i * 20);
 				g.drawString(resourceAmount, MAXSIZE + 5 + 2 * MAXSIZE / 4, 40 + i * 20);
-				g.drawString(originator, MAXSIZE + 5 + 3 * MAXSIZE / 4, 40 + i * 20);
+				g.drawString(destination, MAXSIZE + 5 + 3 * MAXSIZE / 4, 40 + i * 20);
 			}
 		}
 	}
@@ -277,12 +285,10 @@ public class NodeGUI extends Program {
 		int messageNum = Integer.parseInt(this.acceptNumber.getText());
 		for (int i = 0; i < this.myNode.getMessages().size(); i++) {
 			Message currentMessage = this.myNode.getMessages().get(i);
-			System.out.println("current message number: " + ((Resource) currentMessage.getMessageData()).getMessageNumber());
-			System.out.println("number to compare with: " + messageNum);
 			if (((Resource) currentMessage.getMessageData()).getMessageNumber() == messageNum) {
 				((SimulationNode) this.myNode).addAcceptedMessage(currentMessage);
-				System.out.println("I added an accepted Message");
-				System.out.println("outside: " + ((Resource) currentMessage.getMessageData()).getMessageNumber());
+				((SimulationNode) this.myNode).removeMessage(currentMessage);
+				globalView();
 			}
 		}
 	}
@@ -341,11 +347,16 @@ public class NodeGUI extends Program {
 		}
 	}
 
-	private void setMyNode() {
+	private void setMyNode() throws NoSuchAlgorithmException, NoSuchProviderException {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < this.networkNodes.size(); i++) {
 			if (this.networkNodes.get(i).getNodeID().toString().equals(this.setMyNode.getText())) {
 				this.myNode = this.networkNodes.get(i);
+				((SimulationNode) this.myNode).setNodeValues(((SimulationNode) this.myNode).getXCoord(), 
+						((SimulationNode) this.myNode).getYCoord(), Color.CYAN,
+						((SimulationNode) this.myNode).getWidth());
+				((SimulationNode) this.myNode).Draw(g);
+				globalView();
 			}
 		}
 	}
