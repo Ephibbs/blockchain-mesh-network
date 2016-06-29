@@ -1,3 +1,4 @@
+import java.awt.TrayIcon.MessageType;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
@@ -16,6 +17,8 @@ public abstract class Message implements Serializable {
 	// Variables
 //	public Node author = new Node(null);
 //	public Node recipient = new Node(null);
+	
+	public String messageType;
 	public Node author = null;
 	public Node recipient = null;
 	public Object messageData = new Object();
