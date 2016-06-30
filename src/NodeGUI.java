@@ -95,17 +95,18 @@ public class NodeGUI extends Program {
 		add(new JLabel("Message Number"), WEST);
 		this.acceptNumber = new JTextField(TEXT_FIELD_SIZE);
 		add(this.acceptNumber, WEST);
-		add(new JButton("Generate Bid"), WEST);
-
-		add(new JLabel("Bid Number"), WEST);
-		this.bidNumber = new JTextField(TEXT_FIELD_SIZE);
-		add(this.bidNumber, WEST);
 		add(new JLabel("ETA"), WEST);
 		this.eta = new JTextField(TEXT_FIELD_SIZE);
 		add(this.eta, WEST);
 		add(new JLabel("Amount"), WEST);
 		this.amount = new JTextField(TEXT_FIELD_SIZE);
 		add(this.amount, WEST);
+		add(new JButton("Generate Bid"), WEST);
+
+		add(new JLabel("Bid Number"), WEST);
+		this.bidNumber = new JTextField(TEXT_FIELD_SIZE);
+		add(this.bidNumber, WEST);
+		
 		add(new JButton("Accept Bid"), WEST);
 
 		this.removeNode = new JTextField(TEXT_FIELD_SIZE);
@@ -182,18 +183,18 @@ public class NodeGUI extends Program {
 		g.setColor(Color.WHITE);
 		if (((SimulationNode) this.myNode).getBids() != null) {
 			for (int i = 0; i < ((SimulationNode) this.myNode).getBids().size(); i++) {
-				String messageNumber = ""
-						+ ((Resource) (((SimulationNode) this.myNode).getBids().get(i)).getMessageData()).messageNumber;
-				String resourceRequested = ((Resource) (((SimulationNode) this.myNode).getBids().get(i))
-						.getMessageData()).type;
-				String resourceAmount = ""
-						+ ((Resource) (((SimulationNode) this.myNode).getBids().get(i)).getMessageData()).getAmount();
-				String destination = ((Resource) (((SimulationNode) this.myNode).getBids().get(i)).getMessageData())
-						.getOwnerName();
-				g.drawString(messageNumber, MAXSIZE + 5, 40 + i * 20);
-				g.drawString(resourceRequested, MAXSIZE + 5 + MAXSIZE / 4, 40 + i * 20);
+				String bidNumber = "" + ((Bid) (((SimulationNode) this.myNode).getBids()
+						.get(i)).getMessageData()).getBidNumber();
+				String eta = "" + ((Bid) (((SimulationNode) this.myNode).getBids().get(i))
+						.getMessageData()).getETA();
+				String resourceAmount = "" + ((Bid) (((SimulationNode) this.myNode).getBids()
+						.get(i)).getMessageData()).getAmount();
+				String bidder = ((Bid) (((SimulationNode) this.myNode).getBids().get(i))
+						.getMessageData()).getBidder().getNodeID();
+				g.drawString(bidNumber, MAXSIZE + 5, 40 + i * 20);
+				g.drawString(eta, MAXSIZE + 5 + MAXSIZE / 4, 40 + i * 20);
 				g.drawString(resourceAmount, MAXSIZE + 5 + 2 * MAXSIZE / 4, 40 + i * 20);
-				g.drawString(destination, MAXSIZE + 5 + 3 * MAXSIZE / 4, 40 + i * 20);
+				g.drawString(bidder, MAXSIZE + 5 + 3 * MAXSIZE / 4, 40 + i * 20);
 			}
 		}
 	}
@@ -202,14 +203,13 @@ public class NodeGUI extends Program {
 		int messageNum = Integer.parseInt(this.bidNumber.getText());
 		for (int i = 0; i < ((SimulationNode) this.myNode).getBids().size(); i++) {
 			Message currentMessage = ((SimulationNode) this.myNode).getBids().get(i);
-			if (((Resource) currentMessage.getMessageData()).getMessageNumber() == messageNum) {
+			if (((Bid) currentMessage.getMessageData()).getBidNumber() == messageNum) {
 				((SimulationNode) this.myNode).removeBid(currentMessage);
-				String bidder = ((Resource) currentMessage.getMessageData()).getOwnerName();
+				String bidder = ((Bid) currentMessage.getMessageData()).getBidder().getNodeID();
 				for (int j = 0; j < this.networkNodes.size(); j++) {
 					if (this.networkNodes.get(j).getNodeID().equals(bidder)) {
 						SimulationNode requestingNode = this.networkNodes.get(j);
-						System.out.println("requestingNode ID: " + requestingNode.getNodeID());
-						((Resource) currentMessage.getMessageData()).setOwnerName(this.myNode.getNodeID());
+						//System.out.println("requestingNode ID: " + requestingNode.getNodeID());
 						requestingNode.addAcceptedMessage(currentMessage);
 					}
 				}
@@ -293,15 +293,12 @@ public class NodeGUI extends Program {
 					if (this.networkNodes.get(j).getNodeID().equals(ownerName)) {
 						// need to change the message to trying to send a bid
 						SimulationNode requestingNode = this.networkNodes.get(j);
-						// System.out.println("requestingNode ID: " +
-						// requestingNode.getNodeID());
-						// ((Resource)
-						// currentMessage.getMessageData()).setOwnerName(this.myNode.getNodeID());
 						Resource oldResource = ((Resource) currentMessage.getMessageData());
 						Bid newBid = new Bid(this.myNode,requestingNode,
-								Integer.parseInt(this.eta.getText()),Integer.parseInt(this.amount.getText()));
-						//Bid(Node bidder, Node requester, int eta, int amt)
-						requestingNode.addBid(currentMessage);
+								Integer.parseInt(this.eta.getText()),Integer.parseInt(this.amount.getText()),
+								oldResource.getMessageNumber());
+						ResourceRequestBid newRequestBid = new ResourceRequestBid(newBid, this.myNode);
+						requestingNode.addBid(newRequestBid);
 					}
 				}
 				((SimulationNode) this.myNode).removeMessage(currentMessage);

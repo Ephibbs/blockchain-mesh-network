@@ -6,13 +6,14 @@ public class Bid {
 	public Node Requester = null;
 	public int ETA = 0;
 	public int amount = 0;
+	public int messageNumber = 0;
 	
-	public Bid(Node bidder, Node requester, int eta, int amt){
-		//this.BidNumber = bidnum;
+	public Bid(Node bidder, Node requester, int eta, int amt, int messNum){
 		this.Bidder = bidder;
 		this.Requester = requester;
 		this.ETA = eta;
 		this.amount = amt;
+		this.messageNumber = messNum;
 	}
 	
 	/**
