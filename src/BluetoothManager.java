@@ -72,8 +72,8 @@ public class BluetoothManager {
     public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException, IOException {
     	BluetoothManager bm = new BluetoothManager();
     	bm.start();
-    	System.out.println("Sent message: Hey there");
-    	bm.send("Hey there");
+    	//System.out.println("Sent message: Hey there");
+    	//bm.send("Hey there");
     	//bm.send(new Block());
     }
 	    

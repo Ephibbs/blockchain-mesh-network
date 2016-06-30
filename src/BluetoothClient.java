@@ -20,12 +20,12 @@ public class BluetoothClient {
        	/*
     	 * comment out (add "//") the line with your name in it (no need to connect with yourself)
     	 */
-    	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC1", false)); //Colby
+    	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC1", false)); //Colby
     	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC2", false)); //Natalie
-    	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC3", false)); //Andrew
-    	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC4", false)); //Dylan
+    	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC3", false)); //Andrew
+    	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC4", false)); //Dylan
     	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC5", false)); //Evan
-    	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC6", false)); //Will
+    	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC6", false)); //Will
     	/*
     	 * END
     	 */
