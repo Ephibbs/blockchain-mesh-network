@@ -92,7 +92,7 @@ public class NodeGUI extends Program {
 		this.acceptNumber = new JTextField(TEXT_FIELD_SIZE);
 		add(this.acceptNumber, WEST);
 		add(new JButton("Generate Bid"), WEST);
-		
+
 		add(new JLabel("Bid Number"), WEST);
 		this.bidNumber = new JTextField(TEXT_FIELD_SIZE);
 		add(this.bidNumber, WEST);
@@ -148,11 +148,11 @@ public class NodeGUI extends Program {
 				e1.printStackTrace();
 			}
 		} else if (e.getActionCommand().equals("Generate Bid")) {
-			System.out.println("here");
+			// System.out.println("here");
 			generateBid();
 
 		} else if (e.getActionCommand().equals("Accept Bid")) {
-			//System.out.println("Accepted Bid");
+			// System.out.println("Accepted Bid");
 			acceptBid();
 		} else if (e.getActionCommand().equals("Check Accepted")) {
 			generateAcceptedMessages();
@@ -172,15 +172,14 @@ public class NodeGUI extends Program {
 		g.setColor(Color.WHITE);
 		if (((SimulationNode) this.myNode).getBids() != null) {
 			for (int i = 0; i < ((SimulationNode) this.myNode).getBids().size(); i++) {
-				String messageNumber = "" + ((Resource) (((SimulationNode) this.myNode).getBids().get(i))
-						.getMessageData()).messageNumber;
+				String messageNumber = ""
+						+ ((Resource) (((SimulationNode) this.myNode).getBids().get(i)).getMessageData()).messageNumber;
 				String resourceRequested = ((Resource) (((SimulationNode) this.myNode).getBids().get(i))
 						.getMessageData()).type;
 				String resourceAmount = ""
-						+ ((Resource) (((SimulationNode) this.myNode).getBids().get(i)).getMessageData())
-								.getAmount();
-				String destination = ((Resource) (((SimulationNode) this.myNode).getBids().get(i))
-						.getMessageData()).getOwnerName();
+						+ ((Resource) (((SimulationNode) this.myNode).getBids().get(i)).getMessageData()).getAmount();
+				String destination = ((Resource) (((SimulationNode) this.myNode).getBids().get(i)).getMessageData())
+						.getOwnerName();
 				g.drawString(messageNumber, MAXSIZE + 5, 40 + i * 20);
 				g.drawString(resourceRequested, MAXSIZE + 5 + MAXSIZE / 4, 40 + i * 20);
 				g.drawString(resourceAmount, MAXSIZE + 5 + 2 * MAXSIZE / 4, 40 + i * 20);
@@ -194,22 +193,14 @@ public class NodeGUI extends Program {
 		for (int i = 0; i < ((SimulationNode) this.myNode).getBids().size(); i++) {
 			Message currentMessage = ((SimulationNode) this.myNode).getBids().get(i);
 			if (((Resource) currentMessage.getMessageData()).getMessageNumber() == messageNum) {
-				//((SimulationNode) this.myNode).addAcceptedMessage(currentMessage);
 				((SimulationNode) this.myNode).removeBid(currentMessage);
-				// ((SimulationNode) this.myNode).removeMessage(currentMessage);
-				//System.out.println("I accepted a message");
-				//((SimulationNode) this.myNode).addBid(currentMessage);
-				
 				String bidder = ((Resource) currentMessage.getMessageData()).getOwnerName();
-				//System.out.println("ownerName: " + ownerName);
-				for(int j = 0; j < this.networkNodes.size();j++){
-					//System.out.println("nodeID: " + this.networkNodes.get(j).getNodeID());
-					if(this.networkNodes.get(j).getNodeID().equals(bidder)){
+				for (int j = 0; j < this.networkNodes.size(); j++) {
+					if (this.networkNodes.get(j).getNodeID().equals(bidder)) {
 						SimulationNode requestingNode = this.networkNodes.get(j);
+						System.out.println("requestingNode ID: " + requestingNode.getNodeID());
 						((Resource) currentMessage.getMessageData()).setOwnerName(this.myNode.getNodeID());
 						requestingNode.addAcceptedMessage(currentMessage);
-						//System.out.println(requestingNode.getNodeID());
-						//System.out.println("I accepted a bid");
 					}
 				}
 				((SimulationNode) this.myNode).removeMessage(currentMessage);
@@ -243,7 +234,7 @@ public class NodeGUI extends Program {
 			}
 		}
 	}
-	
+
 	private void generateBidMessageBoard() {
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
@@ -284,19 +275,18 @@ public class NodeGUI extends Program {
 
 	private void generateBid() {
 		int messageNum = Integer.parseInt(this.acceptNumber.getText());
-		//System.out.println("I got here");
 		for (int i = 0; i < this.myNode.getMessages().size(); i++) {
 			Message currentMessage = this.myNode.getMessages().get(i);
 			if (((Resource) currentMessage.getMessageData()).getMessageNumber() == messageNum) {
-				//((SimulationNode) this.myNode).addAcceptedMessage(currentMessage);
-				
 				String ownerName = ((Resource) currentMessage.getMessageData()).getOwnerName();
-				for(int j = 0; j < this.networkNodes.size();j++){
-					System.out.println("nodeID: " + this.networkNodes.get(j).getNodeID());
-					if(this.networkNodes.get(j).getNodeID().equals(ownerName)){
+				for (int j = 0; j < this.networkNodes.size(); j++) {
+					if (this.networkNodes.get(j).getNodeID().equals(ownerName)) {
 						// need to change the message to trying to send a bid
 						SimulationNode requestingNode = this.networkNodes.get(j);
-						((Resource) currentMessage.getMessageData()).setOwnerName(this.myNode.getNodeID());
+						// System.out.println("requestingNode ID: " +
+						// requestingNode.getNodeID());
+						// ((Resource)
+						// currentMessage.getMessageData()).setOwnerName(this.myNode.getNodeID());
 						requestingNode.addBid(currentMessage);
 					}
 				}
@@ -361,6 +351,7 @@ public class NodeGUI extends Program {
 	}
 
 	private void setMyNode() throws NoSuchAlgorithmException, NoSuchProviderException {
+		// System.out.println("I got here");
 		for (int i = 0; i < this.networkNodes.size(); i++) {
 			if (this.networkNodes.get(i).getNodeID().toString().equals(this.setMyNode.getText())) {
 				this.myNode = this.networkNodes.get(i);
@@ -368,9 +359,10 @@ public class NodeGUI extends Program {
 						((SimulationNode) this.myNode).getYCoord(), Color.CYAN,
 						((SimulationNode) this.myNode).getWidth());
 				((SimulationNode) this.myNode).Draw(g);
-				globalView();
+				// System.out.println("it made it here");
 			}
 		}
+		globalView();
 	}
 
 	private void beginSimulation() {

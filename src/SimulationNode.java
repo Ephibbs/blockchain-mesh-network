@@ -34,7 +34,7 @@ public class SimulationNode extends Node {
 	public int yCoordinate = 0;
 	public Color color = Color.BLUE;
 	public int WIDTH = 0;
-	public int BidNumber = 0;
+	public int BidNumber = 1;
 	public ArrayList<Message> acceptedMessages = new ArrayList<Message>();
 	public ArrayList<Message> submittedBids = new ArrayList<Message>();
 
@@ -136,6 +136,15 @@ public class SimulationNode extends Node {
 	public void removeMessage(Message text) {
 		if (this.localMSG.contains(text)) {
 			this.localMSG.remove(text);
+			
+		} else {
+			// do nothing
+		}
+	}
+	
+	public void removeGlobalMessage(Message text) {
+		if (this.localMSG.contains(text)) {
+			this.localMSG.remove(text);
 			for (int i = 0; i < networkNodes.size(); i++) { // distribute
 															// message to
 				// friend nodes (they
@@ -149,7 +158,11 @@ public class SimulationNode extends Node {
 	}
 	
 	public void addBid(Message bid){
+		System.out.println("submitted Bids Length: " + this.submittedBids.size());
+		((Resource) bid.getMessageData()).setMessageNumber(this.BidNumber);
+		this.BidNumber++;
 		this.submittedBids.add(bid);
+		System.out.println("submitted Bids Length after: " + this.submittedBids.size());
 	}
 	
 	public ArrayList<Message> getBids(){
