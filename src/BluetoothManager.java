@@ -35,7 +35,7 @@ public class BluetoothManager {
 	}
 	
 	static void send(String s) throws IOException {
-		client.send(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC1", false), s);
+		client.send(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC9", false), s);
 	}
 	
 	private Object fromString( String s ) throws IOException , ClassNotFoundException {
@@ -72,8 +72,8 @@ public class BluetoothManager {
     public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException, IOException {
     	BluetoothManager bm = new BluetoothManager();
     	bm.start();
-    	bm.broadcast("Hey there");
-    	System.out.println("Sent message: Hey there");
+    	//bm.broadcast("Hey there");
+    	//bm.send("Hey there");
     	//bm.send(new Block());
     }
 	    
