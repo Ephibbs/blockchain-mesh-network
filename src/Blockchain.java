@@ -1,10 +1,9 @@
-/*
-* Blockchain.java
-* An implementation of blockchain
- */
+
+
 
 import java.util.ArrayList;
 import java.util.Queue;
+
 import java.lang.Thread;
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -27,6 +26,7 @@ public class Blockchain implements Runnable {
 	private PuzzleSolver puzzleSolver;
 	private BlockChecker blockChecker;
 	private Thread t;
+	private boolean verbose = false;
 
 	// Constructor
     public Blockchain(Node node) {
@@ -38,11 +38,16 @@ public class Blockchain implements Runnable {
 	public Block getLastTreeNode() {
 		return blockStore.getLastBlock();
 	}
+	
+	public void makeVerbose() {
+		verbose = true;
+		blockStore.makeVerbose();
+	}
 
 	// Mutators
 	public void add(Message msg) { // assume message is already verified, added to arraylist msgs
 		blockStore.add(msg);
-		//System.out.println("added message");
+		System.out.println("added message");
 	}
 	public void add(Block b) { // block is added to incomingBlocks ArrayList, awaiting verification and addition to the blockchain
 		if(blockStore.getBlock(b.getPrevHash()) == null) {
@@ -81,7 +86,7 @@ public class Blockchain implements Runnable {
 	    				isSolved = Utils.checkHash(b, difficulty);
 	    			}
 	    			if(isSolved) {
-	    				//System.out.println("solved");
+	    				if(verbose) System.out.println("solved");
 		    			blockStore.add(b);
 		    			node.distributeBlock(b);
 	    			}
@@ -108,11 +113,12 @@ public class Blockchain implements Runnable {
     	public void run() {
     		while(node.isOnline()) {
     			for(int i = incBlks.size()-1; i >= 0; i--) {
-    				//System.out.println("block has arrived");
+    				if(verbose) System.out.println("block has arrived");
     				Block b = incBlks.get(i);
     				if(Utils.checkHash(b, difficulty)) {
-    					//System.out.println("block checked");
+    					if(verbose) System.out.println("block checked");
 		    			if(blockStore.add(b)) {
+		    				if(verbose) System.out.println("block added");
 		    				node.distributeBlock(b);
 		    			}
     				}

@@ -35,7 +35,7 @@ public class NetworkGUI extends Program {
 
 	public int nodeIDCounter = 0;
 
-	public int difficulty = 2;
+	public int difficulty = 4;
 	public int numberOfNodes = 100;
 	public int communicationRadius = 100;
 	public int OFFSET = 15;
@@ -263,8 +263,8 @@ public class NetworkGUI extends Program {
 		Message currentMessage = null;
 		for (int i = 0; i < networkNodes.size(); i++) {
 			for (int j = 0; j < networkNodes.size(); j++) {
-				String nodeNameSend = "SimulationNode" + networkNodes.get(i).nodeID;
-				String nodeNameRec = "SimulationNode" + networkNodes.get(j).nodeID;
+				String nodeNameSend = "Node" + networkNodes.get(i).nodeID;
+				String nodeNameRec = "Node" + networkNodes.get(j).nodeID;
 				if (networkNodes.get(i).nodeID.equals(sender) && networkNodes.get(j).nodeID.equals(receiver)) {
 					senderNode = networkNodes.get(i);
 					receiverNode = networkNodes.get(j);
@@ -274,7 +274,7 @@ public class NetworkGUI extends Program {
 					receiverNode.setNodeValues(receiverNode.getXCoord(), receiverNode.getYCoord(), Color.YELLOW,
 							receiverNode.getWidth());
 					receiverNode.Draw(g);
-					currentMessage = new TextMessage(message, receiverNode);
+					currentMessage = new TextMessage(message, senderNode, receiverNode);
 					senderNode.createMessage(currentMessage);
 				}
 			}
