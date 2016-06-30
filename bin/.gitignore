@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /Blockchain/
 /Block.class
 /BlockChainTesting.class
@@ -8,3 +9,11 @@
 /Blockchain.class
 /BlockchainGroup/
 /Sendable.class
+=======
+<<<<<<< HEAD
+/Bid.class
+=======
+/ResourceRequestBid.class
+>>>>>>> origin/master
+>>>>>>> bdfba9251c5f8c0d8fb0097ad945dcce348d4709
+/ResourceAgreement.class

@@ -30,6 +30,10 @@ public class Resource {
 		this.messageNumber = msg;
 	}
 	
+	public void setMessageNumber(int num){
+		this.messageNumber = num;
+	}
+	
 	/**
 	 * @return the ownerLocation
 	 */
