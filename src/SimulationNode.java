@@ -159,7 +159,7 @@ public class SimulationNode extends Node {
 	
 	public void addBid(Message bid){
 		System.out.println("submitted Bids Length: " + this.submittedBids.size());
-		((Resource) bid.getMessageData()).setMessageNumber(this.BidNumber);
+		((Bid) bid.getMessageData()).setBidNumber(this.BidNumber);
 		this.BidNumber++;
 		this.submittedBids.add(bid);
 		System.out.println("submitted Bids Length after: " + this.submittedBids.size());
