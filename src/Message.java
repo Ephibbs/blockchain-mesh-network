@@ -43,6 +43,9 @@ public abstract class Message implements Serializable {
 	 */
 
 	// Accessors
+	public String getMessageType() {
+		return messageType;
+	}
 	public Object getMessageData() {
 		return messageData;
 	}
