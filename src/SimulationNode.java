@@ -34,7 +34,9 @@ public class SimulationNode extends Node {
 	public int yCoordinate = 0;
 	public Color color = Color.BLUE;
 	public int WIDTH = 0;
+	public int BidNumber = 0;
 	public ArrayList<Message> acceptedMessages = new ArrayList<Message>();
+	public ArrayList<Message> submittedBids = new ArrayList<Message>();
 
 	// Constructor
 	public SimulationNode(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -125,8 +127,6 @@ public class SimulationNode extends Node {
 
 	public void addAcceptedMessage(Message msg) {
 		this.acceptedMessages.add(msg);
-		// System.out.println("inside: " + ((Resource)
-		// msg.getMessageData()).getMessageNumber());
 	}
 
 	public ArrayList<Message> getAcceptedMessages() {
@@ -147,6 +147,14 @@ public class SimulationNode extends Node {
 			// do nothing
 		}
 	}
+	
+	public void addBid(Message bid){
+		this.submittedBids.add(bid);
+	}
+	
+	public ArrayList<Message> getBids(){
+		return this.submittedBids;
+	}
 
 	// Utility
 	public void Draw(Graphics g) {
@@ -161,5 +169,10 @@ public class SimulationNode extends Node {
 			g.drawLine(this.xCoordinate + this.WIDTH / 2, this.yCoordinate + this.WIDTH / 2,
 					friend.getXCoord() + this.WIDTH / 2, friend.getYCoord() + this.WIDTH / 2);
 		}
+	}
+
+	public void removeBid(Message currentMessage) {
+		// TODO Auto-generated method stub
+		this.submittedBids.remove(currentMessage);
 	}
 }
