@@ -12,7 +12,7 @@ import java.util.Random;
  * Parameters: Data object, author node, (optional) receiver node
  */
 
-public abstract class Message implements Serializable {
+public abstract class Message extends Sendable implements Serializable {
 
 	// Variables
 //	public Node author = new Node(null);
@@ -26,15 +26,18 @@ public abstract class Message implements Serializable {
 
 	// Constructors
 	public Message(Object data, Node auth, Node rec) {
+		super("Message");
 		this.messageData = data;
 		this.author = auth;
 		this.recipient = rec;
 	}
 	public Message(Object data, Node auth) {
+		super("Message");
 		this.messageData = data;
 		this.author = auth;
 	}
 	public Message(Object data) {
+		super("Message");
 		this.messageData = data;
 	}
 	

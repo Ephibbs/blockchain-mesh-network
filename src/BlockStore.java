@@ -1,3 +1,5 @@
+
+
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +21,8 @@ public class BlockStore {
 	private ArrayList<String> messageIDs = new ArrayList<String>();
 	private HashMap<String, Message> allMessages = new HashMap<String, Message>();
 	private ArrayList<TreeNode<Block>> rootNodesToAdd = new ArrayList<TreeNode<Block>>(); // store nodes to add to blocktree
-
+	private boolean verbose = false;
+	
 	// Constructor
 	BlockStore() {
 		treeBlockIDs.add(root.getData().getMyHash());
@@ -30,6 +33,11 @@ public class BlockStore {
 	Block getLastBlock() {
 		return blockTree.getDeepestTreeNode().getData();
 	}
+	
+	void makeVerbose() {
+		verbose = true;
+	}
+	
 	ArrayList<Message> getOrphanMessages() {
 		ArrayList<Message> orphanMessages = new ArrayList<Message>();
 		ArrayList<String> orphanMessageIDs = new ArrayList<String>(messageIDs);
@@ -41,7 +49,10 @@ public class BlockStore {
 			p = p.getParent();
 		}
 		for(String s : orphanMessageIDs) {
-			orphanMessages.add(allMessages.get(s));
+			Message m = allMessages.get(s);
+			if(m != null) {
+				orphanMessages.add(m);
+			}
 		}
 		return orphanMessages;
 	}
@@ -93,7 +104,13 @@ public class BlockStore {
 							tempP = tempP.getParent();
 						}
 						s += "0";
-						//System.out.println(s);
+						if(verbose) System.out.println(s);
+						if(verbose) System.out.println("Messages:");
+						if(verbose) {
+							for(Message m : b.getMsgs()) {
+								System.out.println(m.toString());
+							}
+						}
 
 						// Check for matching orphan trees
 						if (rootNodesToAdd.isEmpty()) {

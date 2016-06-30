@@ -9,7 +9,7 @@ import java.util.Random;
  */
 
 /*
- * Abstract class to provide structure for the nodes in a network
+ * class to provide structure for the nodes in a network
  */
 public class Node {
 
@@ -51,6 +51,7 @@ public class Node {
         this.privKey = pair.getPrivate();
         this.pubKey = pair.getPublic();
         this.blockChain = new Blockchain(this);
+        this.blockChain.makeVerbose();
         // distributePublicKey()
     }
 
@@ -85,7 +86,7 @@ public class Node {
 
     }
     public void createMessage(Object data) {
-
+    	
         distributePublicKey(this.getPublicKey()); // distribute public key to
         // friend nodes (they will
         // propagate it to their
@@ -146,10 +147,10 @@ public class Node {
         networkNodes.add(node);
     }
     public void addMessage(Message text) {
-        if (this.localMSG.contains(text)) { // if message is unique, add and
-            // distribute
-            // do nothing
-        } else {
+    	// if message is unique, add and
+        // distribute
+        // do nothing
+        if (text != null && !this.localMSG.contains(text)) {
             this.blockChain.add(text);
             this.localMSG.add(text);
             this.distributeMessage(text);
@@ -203,28 +204,47 @@ public class Node {
             distributePing(ping);
         }
     }
-    public void requestBlock(String hash, String nodeID) {
-        if (!blockRequestIDs.contains(hash + nodeID)) {
-            Block b = blockChain.getBlock(hash);
-            if (b != null) {
-                broadcastBlock(b, nodeID);
-            } else {
-                makeBlockRequest(hash, nodeID);
-            }
-            blockRequestIDs.add(hash + nodeID);
-        }
-    }
     public void receiveBlock(Block b, String nodeID) {
         if (blockRequestIDs.contains(b.getMyHash() + nodeID)) {
+        	blockRequestIDs.remove(b.getMyHash() + nodeID);
             if (nodeID == this.nodeID) {
                 blockChain.add(b);
             } else {
                 broadcastBlock(b, nodeID);
             }
-            blockRequestIDs.remove(b.getMyHash() + nodeID);
         }
     }
-
+    public void requestBlock(String hash, String id) {
+        if (!blockRequestIDs.contains(hash + id)) {
+        	blockRequestIDs.add(hash + id);
+            Block b = blockChain.getBlock(hash);
+            if (b != null) {
+                broadcastBlock(b, id);
+            } else {
+                makeBlockRequest(hash, id);
+            }
+        }
+    }
+    public void makeBlockRequest(String hash, String id) {
+        for (int i = 0; i < networkNodes.size(); i++) { // distribute
+            // blockrequest to
+            // friend nodes (they
+            // will propagate to
+            // their friends if they
+            // cannot resolve)
+            networkNodes.get(i).requestBlock(hash, id);
+        }
+    }
+    public void broadcastBlock(Block b, String nodeID) {
+        for (int i = 0; i < networkNodes.size(); i++) { // distribute
+            // blockrequest to
+            // friend nodes (they
+            // will propagate to
+            // their friends if they
+            // cannot resolve)
+            networkNodes.get(i).receiveBlock(b, nodeID);
+        }
+    }
 
     // Utility
     public void start() {
@@ -271,29 +291,12 @@ public class Node {
             networkNodes.get(i).blockChain.add(b);
         }
     }
+    public void addBlock(Block b) {
+    	blockChain.add(b);
+    }
     public void distributePing(Ping receivedPing) {
         for (int i = 0; i < this.networkNodes.size(); i++) {
             networkNodes.get(i).receivePing(receivedPing);
-        }
-    }
-    public void makeBlockRequest(String hash, String nodeID) {
-        for (int i = 0; i < networkNodes.size(); i++) { // distribute
-            // blockrequest to
-            // friend nodes (they
-            // will propagate to
-            // their friends if they
-            // cannot resolve)
-            networkNodes.get(i).requestBlock(hash, nodeID);
-        }
-    }
-    public void broadcastBlock(Block b, String nodeID) {
-        for (int i = 0; i < networkNodes.size(); i++) { // distribute
-            // blockrequest to
-            // friend nodes (they
-            // will propagate to
-            // their friends if they
-            // cannot resolve)
-            networkNodes.get(i).receiveBlock(b, nodeID);
         }
     }
 }

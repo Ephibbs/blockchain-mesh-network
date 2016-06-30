@@ -5,5 +5,4 @@ public class ResourceRequest extends Message{
 		super(data, auth);
 		this.messageType = "ResourceRequest";
 	}
-
 }

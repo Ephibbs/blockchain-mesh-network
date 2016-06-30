@@ -1,15 +1,19 @@
+
+
+
 /**
  * Created by evan on 6/15/16.
  */
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.io.Serializable;
 
 /*
  * The blocks that make up the blockchain
  * Parameters: Previous hash string, list of messages
  */
 
-public class Block {
+public class Block extends Sendable implements Serializable {
 
     // Variables
     private String myHash = "";
@@ -21,9 +25,10 @@ public class Block {
 
     // Constructors
     Block() {
-    	
+    	super("Block");
     }
     Block(String prevHash, ArrayList<Message> msgs){
+    	super("Block");
     	this.prevHash = prevHash;
     	this.msgs = msgs;
     }
@@ -64,7 +69,9 @@ public class Block {
         this.nonce = nonce;
     }
     void addMessage(Message msg) {
-        msgs.add(msg);
+    	if(msg != null) {
+        	msgs.add(msg);
+    	}
     }
 
     // Utility
