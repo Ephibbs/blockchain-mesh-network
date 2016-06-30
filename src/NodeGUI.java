@@ -206,10 +206,22 @@ public class NodeGUI extends Program {
 			if (((Bid) currentMessage.getMessageData()).getBidNumber() == messageNum) {
 				((SimulationNode) this.myNode).removeBid(currentMessage);
 				String bidder = ((Bid) currentMessage.getMessageData()).getBidder().getNodeID();
+				int messNum = ((Bid) currentMessage.getMessageData()).getMessageNumber();
+				Message acceptedMessage = null;
+				for(int o = 0; o < this.networkNodes.size();o++){
+					for(int k = 0; k < this.networkNodes.get(o).getMessages().size();k++) {
+						if (((Resource) ((SimulationNode) this.networkNodes.get(o))
+								.getMessages().get(k).getMessageData()).getMessageNumber() == messNum){
+							((SimulationNode) this.networkNodes.get(o)).addAcceptedMessage(((SimulationNode) this.networkNodes.get(o))
+								.getMessages().get(k));
+							((SimulationNode) this.networkNodes.get(o)).removeGlobalMessage(((SimulationNode) this.networkNodes.get(o))
+									.getMessages().get(k));
+						}
+					}
+				}
 				for (int j = 0; j < this.networkNodes.size(); j++) {
 					if (this.networkNodes.get(j).getNodeID().equals(bidder)) {
 						SimulationNode requestingNode = this.networkNodes.get(j);
-						//System.out.println("requestingNode ID: " + requestingNode.getNodeID());
 						requestingNode.addAcceptedMessage(currentMessage);
 					}
 				}
@@ -229,6 +241,7 @@ public class NodeGUI extends Program {
 		if (((SimulationNode) this.myNode).getAcceptedMessages() != null) {
 			for (int i = 0; i < ((SimulationNode) this.myNode).getAcceptedMessages().size(); i++) {
 				String messageNumber = "" + ((Resource) (((SimulationNode) this.myNode).getAcceptedMessages().get(0))
+						
 						.getMessageData()).messageNumber;
 				String resourceRequested = ((Resource) (((SimulationNode) this.myNode).getAcceptedMessages().get(0))
 						.getMessageData()).type;
@@ -301,7 +314,7 @@ public class NodeGUI extends Program {
 						requestingNode.addBid(newRequestBid);
 					}
 				}
-				((SimulationNode) this.myNode).removeMessage(currentMessage);
+				//((SimulationNode) this.myNode).removeMessage(currentMessage);
 				globalView();
 			}
 		}

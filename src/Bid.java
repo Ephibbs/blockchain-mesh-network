@@ -16,6 +16,10 @@ public class Bid {
 		this.messageNumber = messNum;
 	}
 	
+	public int getMessageNumber(){
+		return this.messageNumber;
+	}
+	
 	/**
 	 * @return the bidNumber
 	 */
