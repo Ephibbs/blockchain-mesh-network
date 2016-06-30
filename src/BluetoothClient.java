@@ -9,9 +9,9 @@ import java.util.*;
  */
 public class BluetoothClient {
 
-    private static final String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC9";
-    private static final ArrayList<UUID> SERVICE_UUIDS = new ArrayList<UUID>();
-    private static final UUID SERVICE_UUID = new UUID(SERVICE_UUID_STRING, false);
+    private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC9";
+    private ArrayList<UUID> SERVICE_UUIDS = new ArrayList<UUID>();
+    private UUID SERVICE_UUID = new UUID(SERVICE_UUID_STRING, false);
 
     private LocalDevice localDevice;
     private DiscoveryAgent discoveryAgent;
@@ -20,11 +20,11 @@ public class BluetoothClient {
        	/*
     	 * comment out (add "//") the line with your name in it (no need to connect with yourself)
     	 */
-    	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC1", false)); //Colby
+    	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC1", false)); //Colby
     	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC2", false)); //Natalie
     	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC3", false)); //Andrew
     	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC4", false)); //Dylan
-    	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC5", false)); //Evan
+    	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC5", false)); //Evan
     	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC6", false)); //Will
     	/*
     	 * END
@@ -36,8 +36,48 @@ public class BluetoothClient {
         discoveryAgent = localDevice.getDiscoveryAgent();
     }
 
-    public void connect() throws IOException {
-        String connectionUrl = discoveryAgent.selectService(SERVICE_UUID, ServiceRecord.NOAUTHENTICATE_NOENCRYPT, false);
+//    public void connect() throws IOException {
+//        String connectionUrl = discoveryAgent.selectService(SERVICE_UUID, ServiceRecord.NOAUTHENTICATE_NOENCRYPT, false);
+//        System.out.println("Connecting to " + connectionUrl);
+//
+//        StreamConnection sc = (StreamConnection) Connector.open(connectionUrl);
+//
+//        RemoteDevice remoteDevice = RemoteDevice.getRemoteDevice(sc);
+//        String remoteAddress = remoteDevice.getBluetoothAddress();
+//
+//        String remoteName = "NetworkNode";
+//        try {
+//            remoteName = remoteDevice.getFriendlyName(false);
+//        }
+//        catch (IOException e) {
+//            System.err.println("Unable to get remote device name");
+//        }
+//
+//        System.out.println("Connection opened to " + remoteAddress);
+//
+//        BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(sc.openDataInputStream()));
+//        PrintWriter writer = new PrintWriter(new OutputStreamWriter(sc.openDataOutputStream()));
+//       
+//        String line;
+//        while ((line = consoleReader.readLine()) != null) {
+//            writer.println(line);
+//            writer.flush();
+//            line = reader.readLine();
+//            System.out.println(remoteName + " (" + remoteAddress + "): " + line);
+//        }
+//
+//        sc.close();
+//    }
+    
+    public void broadcast(String s) throws IOException {
+    	for(UUID uuid : SERVICE_UUIDS) {
+    		send(uuid, s);
+    	}
+    }
+    
+    public void send(UUID uuid, String s) throws IOException {
+    	String connectionUrl = discoveryAgent.selectService(uuid, ServiceRecord.NOAUTHENTICATE_NOENCRYPT, false);
         System.out.println("Connecting to " + connectionUrl);
 
         StreamConnection sc = (StreamConnection) Connector.open(connectionUrl);
@@ -55,60 +95,15 @@ public class BluetoothClient {
 
         System.out.println("Connection opened to " + remoteAddress);
 
-        BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
+        //BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
         BufferedReader reader = new BufferedReader(new InputStreamReader(sc.openDataInputStream()));
         PrintWriter writer = new PrintWriter(new OutputStreamWriter(sc.openDataOutputStream()));
        
-        String line;
-        while ((line = consoleReader.readLine()) != null) {
-            writer.println(line);
-            writer.flush();
-            line = reader.readLine();
-            System.out.println(remoteName + " (" + remoteAddress + "): " + line);
-        }
-
-        sc.close();
-    }
-    
-    public void broadcast(String s) throws IOException {
-    	for(UUID uuid : SERVICE_UUIDS) {
-    		send(uuid, s);
-    	}
-    }
-    
-    public void send(UUID uuid, String s) throws IOException {
-    	String connectionUrl = discoveryAgent.selectService(uuid, ServiceRecord.NOAUTHENTICATE_NOENCRYPT, false);
-        System.out.println("Connecting to " + connectionUrl);
-
-        StreamConnection sc = (StreamConnection) Connector.open(connectionUrl);
-
-//        RemoteDevice remoteDevice = RemoteDevice.getRemoteDevice(sc);
-//        String remoteAddress = remoteDevice.getBluetoothAddress();
-//
-//        String remoteName = "NetworkNode";
-//        try {
-//            remoteName = remoteDevice.getFriendlyName(false);
-//        }
-//        catch (IOException e) {
-//            System.err.println("Unable to get remote device name");
-//        }
-
-//        System.out.println("Connection opened to " + remoteAddress);
-
-        //BufferedReader reader = new BufferedReader(new InputStreamReader(sc.openDataInputStream()));
-        PrintWriter writer = new PrintWriter(new OutputStreamWriter(sc.openDataOutputStream()));
-        
         writer.println(s);
         writer.flush();
-        
+        System.out.println(remoteName + " (" + remoteAddress + "): " + s);
+
         sc.close();
     }
-
-    public static void main(String[] args) throws BluetoothStateException, IOException, InterruptedException {
-        BluetoothClient client = new BluetoothClient();
-        client.init();
-        client.connect();
-    }
-
 }
 

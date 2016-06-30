@@ -10,19 +10,17 @@ public class BluetoothServer implements Runnable {
     /*
      * setting this node's service id
      */
-    //private static final String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC1"; //Colby
-    private static final String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC2"; //Natalie
-    //private static final String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC3"; //Andrew
-    //private static final String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC4"; //Dylan
-    //private static final String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC5"; //Evan
-    //private static final String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC6"; //Will
+    //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC1"; //Colby
+    //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC2"; //Natalie
+    //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC3"; //Andrew
+    //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC4"; //Dylan
+    private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC5"; //Evan
+    //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC6"; //Will
     /*
      * END
      **/
     
-    private static final UUID SERVICE_UUID          = new UUID(SERVICE_UUID_STRING, false);
-    
-    private ArrayList<String> receivedLines = new ArrayList<String>();
+    private UUID SERVICE_UUID          = new UUID(SERVICE_UUID_STRING, false);
     
     private LocalDevice localDevice;
     
@@ -100,26 +98,26 @@ public class BluetoothServer implements Runnable {
 
         System.out.println("Ready to accept connections");
         StreamConnection sc = scn.acceptAndOpen();
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(sc.openDataInputStream()));
-        String line;
-        //PrintWriter writer = new PrintWriter(new OutputStreamWriter(sc.openDataOutputStream()));
         
         while (!isExit) {
+        	sc = scn.acceptAndOpen();
+        	
+        	RemoteDevice remoteDevice = RemoteDevice.getRemoteDevice(sc);
+        	String remoteAddress = remoteDevice.getBluetoothAddress();
+        	
+        	System.out.println("Connection from " + remoteAddress);
+        	
+        	String remoteName = "NetworkNode";
+        	try {
+                remoteName = remoteDevice.getFriendlyName(false);
+            }
+            catch (IOException e) {
+                System.err.println("Unable to get remote device name");
+            }
 
-//            RemoteDevice remoteDevice = RemoteDevice.getRemoteDevice(sc);
-//            String remoteAddress = remoteDevice.getBluetoothAddress();
-//
-//            System.out.println("Connection from " + remoteAddress);
-//
-//            String remoteName = "NetworkNode";
-//            try {
-//                remoteName = remoteDevice.getFriendlyName(false);
-//            }
-//            catch (IOException e) {
-//                System.err.println("Unable to get remote device name");
-//            }
-
+            BufferedReader reader = new BufferedReader(new InputStreamReader(sc.openDataInputStream()));
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(sc.openDataOutputStream()));
+            String line;
             while ((line = reader.readLine()) != null) {
             	bm.addReceived(line);
             }
