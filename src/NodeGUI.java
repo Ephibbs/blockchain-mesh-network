@@ -30,6 +30,8 @@ public class NodeGUI extends Program {
 	public JTextField resourceCategory;
 	public JTextField acceptNumber;
 	public JTextField bidNumber;
+	public JTextField amount;
+	public JTextField eta;
 
 	public ArrayList<SimulationNode> networkNodes = new ArrayList<SimulationNode>();
 
@@ -64,6 +66,8 @@ public class NodeGUI extends Program {
 		this.resourceAmount.addActionListener(this);
 		this.resourceCategory.addActionListener(this);
 		this.bidNumber.addActionListener(this);
+		this.amount.addActionListener(this);
+		this.eta.addActionListener(this);
 	}
 
 	private void generateWestFrame() {
@@ -96,6 +100,12 @@ public class NodeGUI extends Program {
 		add(new JLabel("Bid Number"), WEST);
 		this.bidNumber = new JTextField(TEXT_FIELD_SIZE);
 		add(this.bidNumber, WEST);
+		add(new JLabel("ETA"), WEST);
+		this.eta = new JTextField(TEXT_FIELD_SIZE);
+		add(this.eta, WEST);
+		add(new JLabel("Amount"), WEST);
+		this.amount = new JTextField(TEXT_FIELD_SIZE);
+		add(this.amount, WEST);
 		add(new JButton("Accept Bid"), WEST);
 
 		this.removeNode = new JTextField(TEXT_FIELD_SIZE);
@@ -287,6 +297,10 @@ public class NodeGUI extends Program {
 						// requestingNode.getNodeID());
 						// ((Resource)
 						// currentMessage.getMessageData()).setOwnerName(this.myNode.getNodeID());
+						Resource oldResource = ((Resource) currentMessage.getMessageData());
+						Bid newBid = new Bid(this.myNode,requestingNode,
+								Integer.parseInt(this.eta.getText()),Integer.parseInt(this.amount.getText()));
+						//Bid(Node bidder, Node requester, int eta, int amt)
 						requestingNode.addBid(currentMessage);
 					}
 				}
