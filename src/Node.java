@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.security.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Random;
 
@@ -30,6 +31,7 @@ public class Node {
     public Random rand = new Random();
     private Ping ping;
     public ArrayList<String> blockRequestIDs = new ArrayList<String>();
+    public HashMap<String,Integer> myResources = new HashMap<String,Integer>();
 
     // Constructor
     public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -52,7 +54,20 @@ public class Node {
         this.pubKey = pair.getPublic();
         this.blockChain = new Blockchain(this);
         this.blockChain.makeVerbose();
-        // distributePublicKey()
+    }
+    
+    public void addResource(String type, int amount){
+    	String resourceType = type.toLowerCase();
+    	if(myResources.containsKey(resourceType)){
+    		myResources.replace(resourceType, amount + myResources.get(resourceType));
+    	}
+    	else{
+    		myResources.put(resourceType, amount);
+    	}
+    }
+    
+    public HashMap<String, Integer> getResources(){
+    	return this.myResources;
     }
 
     // Accessors
