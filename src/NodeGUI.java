@@ -17,7 +17,7 @@ import java.util.Set;
 
 import javax.swing.*;
 
-public class NodeGUI extends Program {
+public class NodeGUI extends Program{
 
 	public static final int TEXT_FIELD_SIZE = 15;
 	public static final int MAXMOVE = 50;
@@ -324,10 +324,8 @@ public class NodeGUI extends Program {
 						Resource mess = ((Resource) ((SimulationNode) this.networkNodes.get(o)).getMessages().get(k)
 								.getMessageData());
 						SimulationNode simNode = ((SimulationNode) this.networkNodes.get(o));
-						//System.out.println("but at least i got here");
 						if (mess.getMessageNumber() == messNum) {
 							if (bidObject.getBidder().getNodeID().equals(this.networkNodes.get(o).getNodeID())) {
-								//System.out.println("I got here");
 								simNode.addAcceptedMessage(simNode.getMessages().get(k));
 								((SimulationNode) this.myNode).addAcceptedMessage(simNode.getMessages().get(k));
 								simNode.removeGlobalMessage(simNode.getMessages().get(k));

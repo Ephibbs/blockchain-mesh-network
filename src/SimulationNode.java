@@ -27,7 +27,7 @@ import java.util.Random;
  * possible alter the contents of it without having to alter the signature.
  */
 
-public class SimulationNode extends Node {
+public class SimulationNode extends Node implements Serializable {
 
 	// Variables
 	public int xCoordinate = 0;

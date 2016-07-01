@@ -1,5 +1,6 @@
 
 
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +9,7 @@ import java.util.HashMap;
  * BlockStore class to store the blocks, each blockchain has this
  */
 
-public class BlockStore {
+public class BlockStore implements Serializable {
 
 	// Variables
 	private TreeNode<Block> root = new TreeNode<Block>(new Block("1", new ArrayList<Message>()));

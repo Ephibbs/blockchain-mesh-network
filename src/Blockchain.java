@@ -17,7 +17,7 @@ import java.security.NoSuchAlgorithmException;
  * Parameters: Node node
  */
 
-public class Blockchain implements Runnable {
+public class Blockchain implements Runnable, Serializable {
 
 	// Variables
 	private BlockStore blockStore = new BlockStore();
