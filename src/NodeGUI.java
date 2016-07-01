@@ -35,6 +35,8 @@ public class NodeGUI extends Program {
 	public JTextField amount;
 	public JTextField eta;
 	public JTextField viewResources;
+	public JTextField sentResource;
+	public JTextField receiveResource;
 
 	public ArrayList<SimulationNode> networkNodes = new ArrayList<SimulationNode>();
 
@@ -73,6 +75,7 @@ public class NodeGUI extends Program {
 		this.amount.addActionListener(this);
 		this.eta.addActionListener(this);
 		this.viewResources.addActionListener(this);
+		this.sentResource.addActionListener(this);
 	}
 
 	// Just the window, don't worry about it
@@ -115,20 +118,34 @@ public class NodeGUI extends Program {
 
 		add(new JButton("Accept Bid"), WEST);
 
-		this.removeNode = new JTextField(TEXT_FIELD_SIZE);
-		add(this.removeNode, WEST);
-		add(new JButton("Remove Node"), WEST);
-
-		add(new JButton("Move Nodes"), WEST);
+//		this.removeNode = new JTextField(TEXT_FIELD_SIZE);
+//		add(this.removeNode, WEST);
+//		add(new JButton("Remove Node"), WEST);
+//
+//		add(new JButton("Move Nodes"), WEST);
 
 		add(new JButton("Check Accepted"), WEST);
 		add(new JButton("Check Bids"), WEST);
 
 		add(new JButton("Global View"), WEST);
 
+//		this.viewResources = new JTextField(TEXT_FIELD_SIZE);
+//		add(this.viewResources, WEST);
+//		add(new JButton("View Resources"), WEST);
+		
+		add(new JButton("Put Initial Resources"), NORTH);
+		
 		this.viewResources = new JTextField(TEXT_FIELD_SIZE);
-		add(this.viewResources, WEST);
-		add(new JButton("View Resources"), WEST);
+		add(this.viewResources, NORTH);
+		add(new JButton("View Resources"), NORTH);
+		
+		this.sentResource = new JTextField(TEXT_FIELD_SIZE);
+		add(this.sentResource, NORTH);
+		add(new JButton("Send Resource"), NORTH);
+		
+		this.receiveResource = new JTextField(TEXT_FIELD_SIZE);
+		add(this.receiveResource, NORTH);
+		add(new JButton("Receive Resource"), NORTH);
 	}
 
 	/**
@@ -148,9 +165,7 @@ public class NodeGUI extends Program {
 		} else if (e.getActionCommand().equals("Generate Nodes")) {
 			try {
 				generateNodes();
-			} catch (NoSuchAlgorithmException e1) {
-				e1.printStackTrace();
-			} catch (NoSuchProviderException e1) {
+			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
 				e1.printStackTrace();
 			}
 		} else if (e.getActionCommand().equals("Move Nodes")) {
@@ -179,24 +194,68 @@ public class NodeGUI extends Program {
 		} else if (e.getActionCommand().equals("Check Bids")) {
 			checkBids();
 		} else if (e.getActionCommand().equals("View Resources")) {
-			viewNodesResources();
+			viewNodesResources(this.viewResources.getText());
+		} else if (e.getActionCommand().equals("Send Resource")) {
+			sendResource();
+		} else if (e.getActionCommand().equals("Put Initial Resources")) {
+			putInitResources();
+		} else if (e.getActionCommand().equals("Receive Resource")) {
+			receiveResource();
 		}
 	}
 
-	private void viewNodesResources() {
+	
+	private void receiveResource() {
+		int sendResourceNumber = Integer.parseInt(this.sentResource.getText());
+		SimulationNode thisNode = (SimulationNode) this.myNode;
+		if(((SimulationNode) this.myNode).getAcceptedMessages() != null){
+			for(int i = 0; i < thisNode.getAcceptedMessages().size(); i++){
+				Resource thisResource = (Resource) thisNode.getAcceptedMessages().get(i).getMessageData();
+				if(thisResource.getMessageNumber() == sendResourceNumber){
+					thisNode.removeAcceptedMessage(thisNode.getAcceptedMessages().get(i));
+					thisNode.addResource(thisResource.getType(), (+1*thisResource.getAmount()));
+				}
+			}
+		}
+		viewNodesResources(thisNode.getNodeID());
+		
+	}
+
+	private void putInitResources() {
+		for(int i = 0; i < this.networkNodes.size();i++){
+			SimulationNode thisNode = (SimulationNode) this.networkNodes.get(i);
+			thisNode.getResources().put("water", 500);
+			thisNode.getResources().put("medical supplies", 20);
+			thisNode.getResources().put("food", 300);
+			thisNode.getResources().put("blankets", 100);
+			thisNode.getResources().put("tents", 50);
+			
+		}
+	}
+
+	private void sendResource() {
+		int sendResourceNumber = Integer.parseInt(this.sentResource.getText());
+		SimulationNode thisNode = (SimulationNode) this.myNode;
+		if(((SimulationNode) this.myNode).getAcceptedMessages() != null){
+			for(int i = 0; i < thisNode.getAcceptedMessages().size(); i++){
+				Resource thisResource = (Resource) thisNode.getAcceptedMessages().get(i).getMessageData();
+				if(thisResource.getMessageNumber() == sendResourceNumber){
+					thisNode.removeAcceptedMessage(thisNode.getAcceptedMessages().get(i));
+					thisNode.addResource(thisResource.getType(), (-1*thisResource.getAmount()));					
+				}
+			}
+		}
+		viewNodesResources(thisNode.getNodeID());		
+	}
+
+	private void viewNodesResources(String nodeName) {
 		generateNodesResourcesBoard();
 		for (int i = 0; i < this.networkNodes.size(); i++) {
-			if (this.networkNodes.get(i).getNodeID().equals(this.viewResources.getText())) {
+			if (this.networkNodes.get(i).getNodeID().equals(nodeName)) {
 				HashMap<String, Integer> nodeResources = this.networkNodes.get(i).getResources();
-				nodeResources.put("water", 20);
-				nodeResources.put("food", 2);
-				nodeResources.put("drinks", 200);
 				Set<String> nodesR = nodeResources.keySet();
 				int o = 0;
 				for (String key: nodesR) {
-					//System.out.println(key);
-					//System.out.println(nodeResources.get(key));
-					
 					String resourceName = key;
 					String resourceAmount = "" + nodeResources.get(key);
 					g.drawString(resourceName,MAXSIZE + 5 , 75 + o*25);
@@ -265,9 +324,12 @@ public class NodeGUI extends Program {
 						Resource mess = ((Resource) ((SimulationNode) this.networkNodes.get(o)).getMessages().get(k)
 								.getMessageData());
 						SimulationNode simNode = ((SimulationNode) this.networkNodes.get(o));
+						//System.out.println("but at least i got here");
 						if (mess.getMessageNumber() == messNum) {
 							if (bidObject.getBidder().getNodeID().equals(this.networkNodes.get(o).getNodeID())) {
+								//System.out.println("I got here");
 								simNode.addAcceptedMessage(simNode.getMessages().get(k));
+								((SimulationNode) this.myNode).addAcceptedMessage(simNode.getMessages().get(k));
 								simNode.removeGlobalMessage(simNode.getMessages().get(k));
 							}
 						}

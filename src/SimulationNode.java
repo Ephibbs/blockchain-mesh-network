@@ -150,7 +150,7 @@ public class SimulationNode extends Node {
 				// friend nodes (they
 				// will propagate to
 				// their friends)
-				((SimulationNode) networkNodes.get(i)).removeMessage(text);
+				((SimulationNode) networkNodes.get(i)).removeGlobalMessage(text);
 			}
 		} else {
 			// do nothing
@@ -187,5 +187,10 @@ public class SimulationNode extends Node {
 	public void removeBid(Message currentMessage) {
 		// TODO Auto-generated method stub
 		this.submittedBids.remove(currentMessage);
+	}
+
+	public void removeAcceptedMessage(Message message) {
+		// TODO Auto-generated method stub
+		this.acceptedMessages.remove(message);
 	}
 }
