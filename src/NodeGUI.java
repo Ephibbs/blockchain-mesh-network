@@ -11,7 +11,9 @@ import java.awt.event.*;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
+import java.util.Set;
 
 import javax.swing.*;
 
@@ -32,6 +34,7 @@ public class NodeGUI extends Program {
 	public JTextField bidNumber;
 	public JTextField amount;
 	public JTextField eta;
+	public JTextField viewResources;
 
 	public ArrayList<SimulationNode> networkNodes = new ArrayList<SimulationNode>();
 
@@ -69,6 +72,7 @@ public class NodeGUI extends Program {
 		this.bidNumber.addActionListener(this);
 		this.amount.addActionListener(this);
 		this.eta.addActionListener(this);
+		this.viewResources.addActionListener(this);
 	}
 
 	// Just the window, don't worry about it
@@ -121,6 +125,10 @@ public class NodeGUI extends Program {
 		add(new JButton("Check Bids"), WEST);
 
 		add(new JButton("Global View"), WEST);
+
+		this.viewResources = new JTextField(TEXT_FIELD_SIZE);
+		add(this.viewResources, WEST);
+		add(new JButton("View Resources"), WEST);
 	}
 
 	/**
@@ -170,7 +178,52 @@ public class NodeGUI extends Program {
 			globalView();
 		} else if (e.getActionCommand().equals("Check Bids")) {
 			checkBids();
+		} else if (e.getActionCommand().equals("View Resources")) {
+			viewNodesResources();
 		}
+	}
+
+	private void viewNodesResources() {
+		generateNodesResourcesBoard();
+		for (int i = 0; i < this.networkNodes.size(); i++) {
+			if (this.networkNodes.get(i).getNodeID().equals(this.viewResources.getText())) {
+				HashMap<String, Integer> nodeResources = this.networkNodes.get(i).getResources();
+				nodeResources.put("water", 20);
+				nodeResources.put("food", 2);
+				nodeResources.put("drinks", 200);
+				Set<String> nodesR = nodeResources.keySet();
+				int o = 0;
+				for (String key: nodesR) {
+					//System.out.println(key);
+					//System.out.println(nodeResources.get(key));
+					
+					String resourceName = key;
+					String resourceAmount = "" + nodeResources.get(key);
+					g.drawString(resourceName,MAXSIZE + 5 , 75 + o*25);
+					g.drawString(resourceAmount, MAXSIZE + 10 + MAXSIZE/5, 75+o*25);
+					g.drawLine(MAXSIZE, 78 + o*25, 2 * MAXSIZE, 78 + o*25);
+					o++;
+				}
+			}
+		}
+	}
+
+	private void generateNodesResourcesBoard() {
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
+
+		g.setColor(Color.WHITE);
+		g.drawRect(0 + MAXSIZE, 0, MAXSIZE / 5, MAXSIZE);
+		g.drawRect(MAXSIZE / 5 + MAXSIZE, 0, 4 * MAXSIZE / 5, MAXSIZE);
+
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.setColor(Color.WHITE);
+		g.drawString(this.viewResources.getText() + "'s resources at Location ", MAXSIZE + 5 + 2 * MAXSIZE / 5, 20);
+		g.drawString("Resource Name", MAXSIZE + 5, 45);
+		g.drawString("Quantity", MAXSIZE + 5 + MAXSIZE / 5, 45);
+		g.drawLine(MAXSIZE, 25, 2 * MAXSIZE, 25);
+		g.drawLine(MAXSIZE, 50, 2 * MAXSIZE, 50);
+
 	}
 
 	private void checkBids() {
@@ -404,32 +457,6 @@ public class NodeGUI extends Program {
 		g.drawString("Amount Requested", MAXSIZE + 5 + 2 * MAXSIZE / 4, 20);
 		g.drawString("Originator", MAXSIZE + 5 + 3 * MAXSIZE / 4, 20);
 		g.drawLine(MAXSIZE, 25, 2 * MAXSIZE, 25);
-	}
-
-	private void generateRandomMessages() throws NoSuchAlgorithmException, NoSuchProviderException {
-		ArrayList<String> messageContext = new ArrayList<String>();
-		messageContext.add("a");
-		messageContext.add("b");
-		messageContext.add("c");
-		messageContext.add("d");
-		messageContext.add("e");
-		messageContext.add("f");
-		messageContext.add("g");
-		messageContext.add("h");
-		messageContext.add("i");
-		messageContext.add("j");
-		for (int i = 0; i < messageContext.size(); i++) {
-			int random1 = rand.nextInt(this.networkNodes.size() - 1);
-			int random2 = rand.nextInt(this.networkNodes.size() - 1);
-			this.sendMessage(messageContext.get(i), this.networkNodes.get(random1).nodeID,
-					this.networkNodes.get(random2).nodeID);
-		}
-	}
-
-	private void globalPingCreation() {
-		for (int i = 0; i < networkNodes.size(); i++) {
-			this.networkNodes.get(i).createPing();
-		}
 	}
 
 	private void removeNode(String text) {
