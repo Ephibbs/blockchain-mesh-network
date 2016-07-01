@@ -119,10 +119,8 @@ public class BluetoothServer implements Runnable {
             String line;
             if ((line = reader.readLine()) != null) {
             	System.out.println(line);
+            	bm.addReceived(line);
             }
-            //while ((line = reader.readLine()) != null) {
-            	//bm.addReceived(line);
-            //}
         	sc = scn.acceptAndOpen();
         }
         sc.close();
