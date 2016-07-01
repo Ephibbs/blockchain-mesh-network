@@ -2,6 +2,7 @@
 
 
 import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.Queue;
 
 import java.lang.Thread;

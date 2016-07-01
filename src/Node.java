@@ -12,7 +12,7 @@ import java.util.Random;
 /*
  * class to provide structure for the nodes in a network
  */
-public class Node {
+public class Node implements Serializable {
 
     // Variables
     public String nodeID = null;

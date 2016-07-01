@@ -73,7 +73,8 @@ public class BluetoothManager {
     	BluetoothManager bm = new BluetoothManager();
     	bm.start();
     	//bm.broadcast("Hey there");
-    	Block b = new Block();
+    	//TextMessage b = new TextMessage("Hi", new Node("Evan"));
+    	//Block b = new Block();
     	System.out.println(b);
     	bm.broadcast(b);
     }

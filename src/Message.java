@@ -23,6 +23,7 @@ public abstract class Message extends Sendable implements Serializable {
 	public Node recipient = null;
 	public Object messageData = new Object();
 	public int id=0;
+	public final long serialVersionUID = 2L;
 
 	// Constructors
 	public Message(Object data, Node auth, Node rec) {
