@@ -21,12 +21,12 @@ public class BluetoothClient {
        	/*
     	 * make sure only the line with your name at the end of it has "//" at the beginning of it
     	 */
-    	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC1", false)); //Colby
-    	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC2", false)); //Natalie
-    	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC3", false)); //Andrew
-    	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC4", false)); //Dylan
-    	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC5", false)); //Evan
-    	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC6", false)); //Will
+    	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC1", false)); //Colby
+    	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC2", false)); //Natalie
+    	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC3", false)); //Andrew
+    	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC4", false)); //Dylan
+    	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC5", false)); //Evan
+    	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC6", false)); //Will
     	/*
     	 * END
     	 */
@@ -45,12 +45,11 @@ public class BluetoothClient {
     }
     
     public void send(UUID uuid, String s) throws IOException {
-    	int numAttempts = 0;
-    	boolean success = false;
-    	while(numAttempts < maxNumAttempts || success) {
-	    	try {
-		    	String connectionUrl = discoveryAgent.selectService(uuid, ServiceRecord.NOAUTHENTICATE_NOENCRYPT, false);
-		        System.out.println("Connecting to " + connectionUrl);
+    	for(int numAttempts = 0; numAttempts < maxNumAttempts; numAttempts++) {
+    		System.out.println("attempt");
+	    	String connectionUrl = discoveryAgent.selectService(uuid, ServiceRecord.NOAUTHENTICATE_NOENCRYPT, false);
+	        if(connectionUrl != null) {
+		    	System.out.println("Connecting to " + connectionUrl);
 		
 		        StreamConnection sc = (StreamConnection) Connector.open(connectionUrl);
 		
@@ -76,10 +75,8 @@ public class BluetoothClient {
 		        System.out.println("Sent: " + remoteName + " (" + remoteAddress + "): " + s);
 		
 		        sc.close();
-		        success = true;
-	    	} catch(IOException e) {
-	    		numAttempts++;
-	    	}
+		        break;
+	        }
     	}
     }
 }

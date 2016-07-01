@@ -10,11 +10,11 @@ public class BluetoothServer implements Runnable {
     /*
      * setting this node's service id
      */
-    //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC1"; //Colby
+    private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC1"; //Colby
     //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC9"; //Natalie
     //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC3"; //Andrew
     //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC4"; //Dylan
-    private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC5"; //Evan
+    //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC5"; //Evan
     //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC6"; //Will
     /*
      * END
