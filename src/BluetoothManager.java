@@ -29,16 +29,16 @@ public class BluetoothManager {
 		client.init();
 	}
 	
-	void broadcast(String b) throws IOException {
-		//String s = toString(b);
-		client.broadcast(b);
+	void broadcast(Serializable b) throws IOException {
+		String s = toString(b);
+		client.broadcast(s);
 	}
 	
 	static void send(String s) throws IOException {
-		client.send(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC9", false), s);
+		client.send(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC2", false), s);
 	}
 	
-	private Object fromString( String s ) throws IOException , ClassNotFoundException {
+	private static Object fromString( String s ) throws IOException , ClassNotFoundException {
         byte [] data = Base64.getDecoder().decode( s );
         ObjectInputStream ois = new ObjectInputStream( 
                                         new ByteArrayInputStream(  data ) );
@@ -48,7 +48,7 @@ public class BluetoothManager {
 	}
 
     /** Write the object to a Base64 string. */
-    private String toString( Serializable o ) throws IOException {
+    private static String toString( Serializable o ) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream( baos );
         oos.writeObject( o );
@@ -60,21 +60,22 @@ public class BluetoothManager {
     	System.out.print("Received string: ");
     	System.out.println(s);
     	Sendable o = (Sendable) fromString(s);
-    	if(o != null && o.getType() == "Block") {
+    	if(o != null && o.getType().equals("Block")) {
     		System.out.print("received Block");
     		//node.addBlock((Block) o);
-    	} else if(o != null && o.getType() == "Message") {
+    	} else if(o != null && o.getType().equals("Message")) {
     		System.out.print("received Message");
     		//node.addMessage((Message) o);
     	}
     }
     
-    public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException, IOException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException, IOException, ClassNotFoundException {
     	BluetoothManager bm = new BluetoothManager();
     	bm.start();
     	//bm.broadcast("Hey there");
-    	//bm.send("Hey there");
-    	//bm.send(new Block());
+    	Block b = new Block();
+    	System.out.println(b);
+    	bm.broadcast(b);
     }
 	    
 }

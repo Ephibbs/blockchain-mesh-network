@@ -11,10 +11,10 @@ public class BluetoothServer implements Runnable {
      * setting this node's service id
      */
     //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC1"; //Colby
-    private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC9"; //Natalie
+    //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC9"; //Natalie
     //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC3"; //Andrew
     //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC4"; //Dylan
-    //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC5"; //Evan
+    private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC5"; //Evan
     //private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC6"; //Will
     /*
      * END
@@ -100,7 +100,6 @@ public class BluetoothServer implements Runnable {
         StreamConnection sc = scn.acceptAndOpen();
         
         while (!isExit) {
-        	sc = scn.acceptAndOpen();
         	
         	RemoteDevice remoteDevice = RemoteDevice.getRemoteDevice(sc);
         	String remoteAddress = remoteDevice.getBluetoothAddress();
@@ -118,10 +117,13 @@ public class BluetoothServer implements Runnable {
             BufferedReader reader = new BufferedReader(new InputStreamReader(sc.openDataInputStream()));
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(sc.openDataOutputStream()));
             String line;
-            while ((line = reader.readLine()) != null) {
+            if ((line = reader.readLine()) != null) {
             	System.out.println(line);
-            	bm.addReceived(line);
             }
+            //while ((line = reader.readLine()) != null) {
+            	//bm.addReceived(line);
+            //}
+        	sc = scn.acceptAndOpen();
         }
         sc.close();
     }

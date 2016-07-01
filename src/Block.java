@@ -18,10 +18,11 @@ public class Block extends Sendable implements Serializable {
     // Variables
     private String myHash = "";
     private String prevHash;
-    private ArrayList<Message> msgs;
+    private ArrayList<Message> msgs = new ArrayList<Message>();
     private String nonce = "";
     private int difficulty;
     private int id;
+    private final long serialVersionUID = 1L;
 
     // Constructors
     Block() {
