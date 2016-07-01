@@ -38,47 +38,6 @@ public class BluetoothServer implements Runnable {
 		t = new Thread(this, "bluetooth server");
 		t.start();
 	}
-
-   /*
-    * This is the old method for echoing back messages to clients - for reference
-    */
-//    public void start() throws BluetoothStateException, IOException {
-//        String connUrl = "btspp://localhost:" + SERVICE_UUID_STRING + ";" + "name=" + SERVICE_NAME;
-//        StreamConnectionNotifier scn = (StreamConnectionNotifier) Connector.open(connUrl);
-//
-//        System.out.println("Ready to accept connections");
-//
-//        while (true) {
-//            StreamConnection sc = scn.acceptAndOpen();
-//
-//            RemoteDevice remoteDevice = RemoteDevice.getRemoteDevice(sc);
-//            String remoteAddress = remoteDevice.getBluetoothAddress();
-//
-//            System.out.println("Connection from " + remoteAddress);
-//
-//            String remoteName = "NetworkNode";
-//            try {
-//                remoteName = remoteDevice.getFriendlyName(false);
-//            }
-//            catch (IOException e) {
-//                System.err.println("Unable to get remote device name");
-//            }
-//
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(sc.openDataInputStream()));
-//            PrintWriter writer = new PrintWriter(new OutputStreamWriter(sc.openDataOutputStream()));
-//
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                System.out.println(remoteName + " (" + remoteAddress + "): " + line);
-//                writer.println(line);
-//                writer.flush();
-//            }
-//
-//            sc.close();
-//
-//            System.out.println("Connection from " + remoteAddress + " closed");
-//        }
-//    }
     
     public void run() {
         try {

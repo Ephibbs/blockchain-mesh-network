@@ -53,7 +53,7 @@ public class Node implements Serializable {
         this.privKey = pair.getPrivate();
         this.pubKey = pair.getPublic();
         this.blockChain = new Blockchain(this);
-        this.blockChain.makeVerbose();
+        //this.blockChain.makeVerbose();
     }
     
     public void addResource(String type, int amount){
