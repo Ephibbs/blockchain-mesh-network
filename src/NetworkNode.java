@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.*;
 
 /**
  * Created by 585728 on 6/28/2016.
@@ -42,5 +43,22 @@ public class NetworkNode extends Node {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public ArrayList<Message> getOpenRequests() {
+		 ArrayList<Message> list = super.blockChain.getMessages();
+		 
+		 ArrayList<Message> openRequests = new ArrayList<Message>();
+		 HashMap<String, Message> msgs = new HashMap<String, Message>();
+		 
+		 for(Message m : list) {
+			 if(m.getMessageType() == "ResourceRequest") {
+				 openRequests.add(m);
+				 msgs.put(m.getMessageData().getMessageID(), m);
+			 } else if(m.getMessageType() == "ResourceAgreement") {
+				 openRequests.remove(msgs.get(m.getMessageData().getMessageID()));
+			 }
+		 }
+		 return openRequests;
 	}
 }
