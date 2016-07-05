@@ -250,9 +250,9 @@ public class BlueToothGUI extends Program{
 				((NetworkNode) this.myNode).getYCoord(), Color.CYAN,
 				((NetworkNode) this.myNode).getWidth());
 		
-		for(int i = 0; i < this.networkNodes.size();i++){
-			this.networkNodes.get(i).Draw(g);
-		}
+//		for(int i = 0; i < this.networkNodes.size();i++){
+//			this.networkNodes.get(i).Draw(g);
+//		}
 		System.out.println("I tried");
 	}
 
@@ -309,9 +309,9 @@ public class BlueToothGUI extends Program{
 				for (String key: nodesR) {
 					String resourceName = key;
 					String resourceAmount = "" + nodeResources.get(key);
-					g.drawString(resourceName,MAXSIZE + 5 , 75 + o*25);
-					g.drawString(resourceAmount, MAXSIZE + 10 + MAXSIZE/5, 75+o*25);
-					g.drawLine(MAXSIZE, 78 + o*25, 2 * MAXSIZE, 78 + o*25);
+					g.drawString(resourceName, 5 , 75 + o*25);
+					g.drawString(resourceAmount,  10 + 0/5, 75+o*25);
+					g.drawLine(0, 78 + o*25, MAXSIZE, 78 + o*25);
 					o++;
 				}
 			}
@@ -323,16 +323,16 @@ public class BlueToothGUI extends Program{
 		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
 
 		g.setColor(Color.WHITE);
-		g.drawRect(0 + MAXSIZE, 0, MAXSIZE / 5, MAXSIZE);
-		g.drawRect(MAXSIZE / 5 + MAXSIZE, 0, 4 * MAXSIZE / 5, MAXSIZE);
+		g.drawRect(0 , 0, MAXSIZE / 5, MAXSIZE);
+		g.drawRect(MAXSIZE / 5, 0, 4 * MAXSIZE / 5, MAXSIZE);
 
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g.setColor(Color.WHITE);
-		g.drawString(this.viewResources.getText() + "'s resources at Location ", MAXSIZE + 5 + 2 * MAXSIZE / 5, 20);
-		g.drawString("Resource Name", MAXSIZE + 5, 45);
-		g.drawString("Quantity", MAXSIZE + 5 + MAXSIZE / 5, 45);
-		g.drawLine(MAXSIZE, 25, 2 * MAXSIZE, 25);
-		g.drawLine(MAXSIZE, 50, 2 * MAXSIZE, 50);
+		g.drawString(this.viewResources.getText() + "'s resources at Location ", 5 + 2 * MAXSIZE / 5, 20);
+		g.drawString("Resource Name", 5, 45);
+		g.drawString("Quantity", 5 + MAXSIZE / 5, 45);
+		g.drawLine(0, 25,  MAXSIZE, 25);
+		g.drawLine(0, 50,  MAXSIZE, 50);
 
 	}
 
@@ -352,10 +352,10 @@ public class BlueToothGUI extends Program{
 						+ ((Bid) (((NetworkNode) this.myNode).getBids().get(i)).getMessageData()).getAmount();
 				String bidder = ((Bid) (((NetworkNode) this.myNode).getBids().get(i)).getMessageData()).getBidder()
 						.getNodeID();
-				g.drawString(bidNumber, MAXSIZE + 5, 40 + i * 20);
-				g.drawString(eta, MAXSIZE + 5 + MAXSIZE / 4, 40 + i * 20);
-				g.drawString(resourceAmount, MAXSIZE + 5 + 2 * MAXSIZE / 4, 40 + i * 20);
-				g.drawString(bidder, MAXSIZE + 5 + 3 * MAXSIZE / 4, 40 + i * 20);
+				g.drawString(bidNumber,  5, 40 + i * 20);
+				g.drawString(eta,  5 + MAXSIZE / 4, 40 + i * 20);
+				g.drawString(resourceAmount,  5 + 2 * MAXSIZE / 4, 40 + i * 20);
+				g.drawString(bidder, 5 + 3 * MAXSIZE / 4, 40 + i * 20);
 			}
 		}
 	}
@@ -408,10 +408,10 @@ public class BlueToothGUI extends Program{
 								.getAmount();
 				String destination = ((Resource) (((NetworkNode) this.myNode).getAcceptedMessages().get(i))
 						.getMessageData()).getOwnerName();
-				g.drawString(messageNumber, MAXSIZE + 5, 40 + i * 20);
-				g.drawString(resourceRequested, MAXSIZE + 5 + MAXSIZE / 4, 40 + i * 20);
-				g.drawString(resourceAmount, MAXSIZE + 5 + 2 * MAXSIZE / 4, 40 + i * 20);
-				g.drawString(destination, MAXSIZE + 5 + 3 * MAXSIZE / 4, 40 + i * 20);
+				g.drawString(messageNumber,  5, 40 + i * 20);
+				g.drawString(resourceRequested,  5 + MAXSIZE / 4, 40 + i * 20);
+				g.drawString(resourceAmount,  5 + 2 * MAXSIZE / 4, 40 + i * 20);
+				g.drawString(destination,  5 + 3 * MAXSIZE / 4, 40 + i * 20);
 			}
 		}
 	}
@@ -421,18 +421,18 @@ public class BlueToothGUI extends Program{
 		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
 
 		g.setColor(Color.WHITE);
-		g.drawRect(0 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(2 * MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(3 * MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(0 , 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(MAXSIZE / 4 , 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(2 * MAXSIZE / 4 , 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(3 * MAXSIZE / 4 , 0, MAXSIZE / 4, MAXSIZE);
 
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g.setColor(Color.WHITE);
-		g.drawString("Bid Number", MAXSIZE + 5, 20);
-		g.drawString("Time of Arrival", MAXSIZE + 5 + MAXSIZE / 4, 20);
-		g.drawString("Amount Can Send", MAXSIZE + 5 + 2 * MAXSIZE / 4, 20);
-		g.drawString("Bidder", MAXSIZE + 5 + 3 * MAXSIZE / 4, 20);
-		g.drawLine(MAXSIZE, 25, 2 * MAXSIZE, 25);
+		g.drawString("Bid Number",  5, 20);
+		g.drawString("Time of Arrival",  5 + 0 / 4, 20);
+		g.drawString("Amount Can Send",  5 + 2 * MAXSIZE / 4, 20);
+		g.drawString("Bidder", 5 + 3 * MAXSIZE / 4, 20);
+		g.drawLine(0, 25,  MAXSIZE, 25);
 	}
 
 	private void generateAcceptedMessageBoard() {
@@ -440,18 +440,18 @@ public class BlueToothGUI extends Program{
 		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
 
 		g.setColor(Color.WHITE);
-		g.drawRect(0 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(2 * MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(3 * MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(0 , 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(MAXSIZE / 4 , 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(2 * MAXSIZE / 4 , 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(3 * MAXSIZE / 4 , 0, MAXSIZE / 4, MAXSIZE);
 
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g.setColor(Color.WHITE);
-		g.drawString("Message Number", MAXSIZE + 5, 20);
-		g.drawString("Resource Requested", MAXSIZE + 5 + MAXSIZE / 4, 20);
-		g.drawString("Amount Requested", MAXSIZE + 5 + 2 * MAXSIZE / 4, 20);
-		g.drawString("Destination", MAXSIZE + 5 + 3 * MAXSIZE / 4, 20);
-		g.drawLine(MAXSIZE, 25, 2 * MAXSIZE, 25);
+		g.drawString("Message Number",  5, 20);
+		g.drawString("Resource Requested",  5 + MAXSIZE / 4, 20);
+		g.drawString("Amount Requested",  5 + 2 * MAXSIZE / 4, 20);
+		g.drawString("Destination",  5 + 3 * MAXSIZE / 4, 20);
+		g.drawLine(0, 25, MAXSIZE, 25);
 	}
 
 	private void generateBid() {
@@ -522,10 +522,10 @@ public class BlueToothGUI extends Program{
 			String resourceRequested = ((Resource) this.myNode.getMessages().get(i).getMessageData()).type;
 			String resourceAmount = "" + ((Resource) this.myNode.getMessages().get(i).getMessageData()).getAmount();
 			String originator = ((Resource) this.myNode.getMessages().get(i).getMessageData()).getOwnerName();
-			g.drawString(messageNumber, MAXSIZE + 5, 40 + i * 20);
-			g.drawString(resourceRequested, MAXSIZE + 5 + MAXSIZE / 4, 40 + i * 20);
-			g.drawString(resourceAmount, MAXSIZE + 5 + 2 * MAXSIZE / 4, 40 + i * 20);
-			g.drawString(originator, MAXSIZE + 5 + 3 * MAXSIZE / 4, 40 + i * 20);
+			g.drawString(messageNumber,  5, 40 + i * 20);
+			g.drawString(resourceRequested, 5 + MAXSIZE / 4, 40 + i * 20);
+			g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
+			g.drawString(originator, 5 + 3 * MAXSIZE / 4, 40 + i * 20);
 		}
 	}
 
@@ -545,8 +545,8 @@ public class BlueToothGUI extends Program{
 
 	private void beginSimulation() {
 		this.g = this.canvas.getGraphics();
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
+//		g.setColor(Color.LIGHT_GRAY);
+//		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 		g.setColor(Color.BLACK);
 
 		generateMessageBoard();
@@ -554,21 +554,21 @@ public class BlueToothGUI extends Program{
 
 	private void generateMessageBoard() {
 		g.setColor(Color.DARK_GRAY);
-		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
+		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 
 		g.setColor(Color.WHITE);
-		g.drawRect(0 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(2 * MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(3 * MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(0 + 0, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(2 * MAXSIZE / 4 + 0, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(3 * MAXSIZE / 4 + 0, 0, MAXSIZE / 4, MAXSIZE);
 
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g.setColor(Color.WHITE); // Here
-		g.drawString("Message Number", MAXSIZE + 5, 20);
-		g.drawString("Resource Requested", MAXSIZE + 5 + MAXSIZE / 4, 20);
-		g.drawString("Amount Requested", MAXSIZE + 5 + 2 * MAXSIZE / 4, 20);
-		g.drawString("Originator", MAXSIZE + 5 + 3 * MAXSIZE / 4, 20);
-		g.drawLine(MAXSIZE, 25, 2 * MAXSIZE, 25);
+		g.drawString("Message Number", 5, 20);
+		g.drawString("Resource Requested", 5 + MAXSIZE / 4, 20);
+		g.drawString("Amount Requested", 5 + 2 * MAXSIZE / 4, 20);
+		g.drawString("Originator", 5 + 3 * MAXSIZE / 4, 20);
+		g.drawLine(0, 25, MAXSIZE, 25);
 	}
 
 	private void removeNode(String text) {
@@ -587,24 +587,24 @@ public class BlueToothGUI extends Program{
 	}
 
 	private void resetNodesCommunicationLines() {
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
-		for (int i = 0; i < this.networkNodes.size(); i++) {
-			this.networkNodes.get(i).getFriends().clear();
-			this.networkNodes.get(i).Draw(g);
-		}
-		recolorNodes();
+//		g.setColor(Color.LIGHT_GRAY);
+//		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
+//		for (int i = 0; i < this.networkNodes.size(); i++) {
+//			this.networkNodes.get(i).getFriends().clear();
+//			this.networkNodes.get(i).Draw(g);
+//		}
+//		recolorNodes();
 	}
 
 	private void moveNodes() {
-		for (int i = 0; i < this.networkNodes.size(); i++) {
-			this.networkNodes.get(i).moveNode(this.MAXSIZE, this.OFFSET, this.MAXMOVE, this.g);
-		}
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
-		resetNodesCommunicationLines();
-		generateCommunicationLines();
-		generateLineToFriends();
+//		for (int i = 0; i < this.networkNodes.size(); i++) {
+//			this.networkNodes.get(i).moveNode(this.MAXSIZE, this.OFFSET, this.MAXMOVE, this.g);
+//		}
+//		g.setColor(Color.LIGHT_GRAY);
+//		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
+//		resetNodesCommunicationLines();
+//		generateCommunicationLines();
+//		generateLineToFriends();
 	}
 
 	private void sendMessage(String message, String sender, String receiver)
@@ -622,10 +622,10 @@ public class BlueToothGUI extends Program{
 					receiverNode = networkNodes.get(j);
 					senderNode.setNodeValues(senderNode.getXCoord(), senderNode.getYCoord(), Color.RED,
 							senderNode.getWidth());
-					senderNode.Draw(g);
+					//senderNode.Draw(g);
 					receiverNode.setNodeValues(receiverNode.getXCoord(), receiverNode.getYCoord(), Color.YELLOW,
 							receiverNode.getWidth());
-					receiverNode.Draw(g);
+					//receiverNode.Draw(g);
 
 					currentMessage = new TextMessage(message, receiverNode);
 					senderNode.createMessage(currentMessage);
@@ -641,7 +641,7 @@ public class BlueToothGUI extends Program{
 					if (!currentNode.equals(senderNode) && !currentNode.equals(receiverNode)) {
 						currentNode.setNodeValues(currentNode.getXCoord(), currentNode.getYCoord(), Color.GREEN,
 								currentNode.getWidth());
-						currentNode.Draw(g);
+						//currentNode.Draw(g);
 					}
 				}
 
@@ -650,31 +650,22 @@ public class BlueToothGUI extends Program{
 	}
 
 	private void recolorNodes() {
-		for (int i = 0; i < networkNodes.size(); i++) {
-			networkNodes.get(i).setColor(Color.BLUE);
-			networkNodes.get(i).Draw(g);
-		}
+//		for (int i = 0; i < networkNodes.size(); i++) {
+//			networkNodes.get(i).setColor(Color.BLUE);
+//			networkNodes.get(i).Draw(g);
+//		}
 	}
 
 	private void generateNodes() throws NoSuchAlgorithmException, NoSuchProviderException {
 		NetworkNode n;
 		this.g = this.canvas.getGraphics();
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 		for (int i = 0; i < this.numberOfNodes; i++) {
-			int randomX = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
-			int randomY = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
 			n = new NetworkNode("Node" + nodeIDCounter);
 			n.setBlockChainDifficulty(this.difficulty);
-			n.setNodeValues(randomX, randomY, Color.BLUE, OFFSET);
 			n.start();
 			networkNodes.add(n);
 			this.nodeIDCounter++;
-			n.Draw(g);
 		}
-		this.recolorNodes();
-		generateCommunicationLines();
-		generateLineToFriends();
 	}
 
 	private void generateLineToFriends() {
@@ -713,8 +704,8 @@ public class BlueToothGUI extends Program{
 	}
 
 	private int calculateDistance(int xLoc, int yLoc, int targetXLoc, int targetYLoc) {
-		double distance = Math.sqrt(Math.pow((targetXLoc - xLoc), 2) + Math.pow((targetYLoc - yLoc), 2));
-		return (int) distance;
+//		double distance = Math.sqrt(Math.pow((targetXLoc - xLoc), 2) + Math.pow((targetYLoc - yLoc), 2));
+		return 0;
 	}
 
 	private void generateNodeNetwork() {
