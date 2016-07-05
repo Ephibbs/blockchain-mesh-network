@@ -44,7 +44,7 @@ public class NodeGUI extends Program{
 	public int nodeIDCounter = 0;
 	public int difficulty = 5;
 	public int numberOfNodes = 10;
-	public int communicationRadius = 300;
+	public int communicationRadius = 150;
 	public int OFFSET = 15;
 	public int messageNumber = 1;
 	public Canvas canvas = new Canvas();
