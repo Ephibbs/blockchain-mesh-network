@@ -57,6 +57,18 @@ public class BlockStore implements Serializable {
 		}
 		return orphanMessages;
 	}
+	
+	ArrayList<Message> getMessages() { // get all messages up the tree
+		TreeNode<Block> n = blockTree.getDeepestTreeNode();
+		ArrayList<Message> msgList = new ArrayList<Message>();
+		while (n != null) {
+			for (Message msg : n.getData().getMsgs()) {
+				msgList.add(msg);
+			}
+			n = n.getParent();
+		}
+		return msgList;
+	}
 
 	// Mutators
 	boolean add(Block b) {
@@ -179,14 +191,5 @@ public class BlockStore implements Serializable {
 	}
 	TreeNode<Block> getBlock(String hash) {
 		return blockMap.get(hash);
-	}
-	
-	ArrayList<Message> getMessages() {
-		TreeNode<Block> n = blockTree.getDeepestTreeNode();
-		ArrayList<Message> msgList = new ArrayList<Message>(n.getData().getMsgs());
-		while((n = n.getParent()) != null) {
-			msgList += n.getData().getMsgs();
-		}
-		return msgList;
 	}
  }
