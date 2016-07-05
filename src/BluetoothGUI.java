@@ -43,14 +43,14 @@ public class BluetoothGUI extends Program{
 
 	public int nodeIDCounter = 0;
 	public int difficulty = 5;
-	public int numberOfNodes = 10;
+	public int numberOfNodes = 1;
 	public int communicationRadius = 200;
 	public int OFFSET = 15;
 	public int messageNumber = 1;
 	public Canvas canvas = new Canvas();
 	public Random rand = new Random();
 	public Graphics g = this.canvas.getGraphics();
-	public Node myNode = null;
+	public NetworkNode myNode = null;
 
 	/**
 	 * This method has the responsibility for initializing the interactors in

@@ -54,9 +54,9 @@ public class NetworkNode extends Node {
 		 for(Message m : list) {
 			 if(m.getMessageType() == "ResourceRequest") {
 				 openRequests.add(m);
-				 msgs.put(m.getMessageData().getMessageID(), m);
+				 //msgs.put(m.getMessageData().getMessageID(), m);
 			 } else if(m.getMessageType() == "ResourceAgreement") {
-				 openRequests.remove(msgs.get(m.getMessageData().getMessageID()));
+				 //openRequests.remove(msgs.get(m.getMessageData().getMessageID()));
 			 }
 		 }
 		 return openRequests;
