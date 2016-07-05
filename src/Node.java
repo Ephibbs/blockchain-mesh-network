@@ -36,6 +36,7 @@ public class Node implements Serializable {
 	public HashMap<String, Integer> myResources = new HashMap<String, Integer>();
 	public HashMap<String, ArrayList<Ping>> pingHash = new HashMap<String, ArrayList<Ping>>();
 	public ArrayList<Message> directMessages = new ArrayList<Message>();
+	public HashMap<Node, Integer> countHash = new HashMap<Node, Integer>();
 
 	// Constructor
 	public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -264,12 +265,18 @@ public class Node implements Serializable {
 					Node originator = nodePings.get(i).getOriginator();
 					Node relayer = nodePings.get(i).getRelayer();
 					routeTable.put(originator, relayer);
+					this.countHash.put(originator, min);
 				}
-				else if(nodePings.get(i).getCount()<min){
+				else if(nodePings.get(i).getCount() < min){
 					min = nodePings.get(i).getCount();
 					Node originator = nodePings.get(i).getOriginator();
 					Node relayer = nodePings.get(i).getRelayer();
-					routeTable.put(originator, relayer);
+					if(this.countHash.get(originator) < min) {
+						routeTable.remove(originator);
+						routeTable.put(originator, relayer);
+					}
+					//routeTable.remove(originator);
+					//routeTable.put(originator, relayer);
 				}
 				else{
 					// do nothing

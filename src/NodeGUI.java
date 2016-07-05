@@ -44,7 +44,7 @@ public class NodeGUI extends Program{
 	public int nodeIDCounter = 0;
 	public int difficulty = 5;
 	public int numberOfNodes = 10;
-	public int communicationRadius = 150;
+	public int communicationRadius = 200;
 	public int OFFSET = 15;
 	public int messageNumber = 1;
 	public Canvas canvas = new Canvas();
@@ -234,6 +234,7 @@ public class NodeGUI extends Program{
 	}
 
 	private void showFastestPath() throws NoSuchAlgorithmException, NoSuchProviderException {
+		this.recolorNodes();
 		String nodeToGetTo = this.shortestPathTo.getText();
 		SimulationNode nodeToSendTo = null;
 		for(int j = 0; j < this.networkNodes.size();j++){
