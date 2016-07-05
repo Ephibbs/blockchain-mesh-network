@@ -213,7 +213,6 @@ public class NodeGUI extends Program{
 			try {
 				showFastestPath();
 			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		} 

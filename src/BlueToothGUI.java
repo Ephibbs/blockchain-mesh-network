@@ -39,7 +39,7 @@ public class BlueToothGUI extends Program{
 	public JTextField receiveResource;
 	public JTextField shortestPathTo;
 
-	public ArrayList<SimulationNode> networkNodes = new ArrayList<SimulationNode>();
+	public ArrayList<NetworkNode> networkNodes = new ArrayList<NetworkNode>();
 
 	public int nodeIDCounter = 0;
 	public int difficulty = 5;
@@ -236,7 +236,7 @@ public class BlueToothGUI extends Program{
 	private void showFastestPath() throws NoSuchAlgorithmException, NoSuchProviderException {
 		this.recolorNodes();
 		String nodeToGetTo = this.shortestPathTo.getText();
-		SimulationNode nodeToSendTo = null;
+		NetworkNode nodeToSendTo = null;
 		for(int j = 0; j < this.networkNodes.size();j++){
 			if(nodeToGetTo.equals(this.networkNodes.get(j).getNodeID())) {
 				nodeToSendTo = this.networkNodes.get(j);
@@ -244,11 +244,11 @@ public class BlueToothGUI extends Program{
 		}
 
 		Message text = new TextMessage("help", this.myNode, nodeToSendTo);
-		((SimulationNode) this.myNode).sendDirectMessage(nodeToSendTo, text);
+		((NetworkNode) this.myNode).sendDirectMessage(nodeToSendTo, text);
 		
-		((SimulationNode) this.myNode).setNodeValues(((SimulationNode) this.myNode).getXCoord(), 
-				((SimulationNode) this.myNode).getYCoord(), Color.CYAN,
-				((SimulationNode) this.myNode).getWidth());
+		((NetworkNode) this.myNode).setNodeValues(((NetworkNode) this.myNode).getXCoord(), 
+				((NetworkNode) this.myNode).getYCoord(), Color.CYAN,
+				((NetworkNode) this.myNode).getWidth());
 		
 		for(int i = 0; i < this.networkNodes.size();i++){
 			this.networkNodes.get(i).Draw(g);
@@ -258,8 +258,8 @@ public class BlueToothGUI extends Program{
 
 	private void receiveResource() {
 		int sendResourceNumber = Integer.parseInt(this.sentResource.getText());
-		SimulationNode thisNode = (SimulationNode) this.myNode;
-		if(((SimulationNode) this.myNode).getAcceptedMessages() != null){
+		NetworkNode thisNode = (NetworkNode) this.myNode;
+		if(((NetworkNode) this.myNode).getAcceptedMessages() != null){
 			for(int i = 0; i < thisNode.getAcceptedMessages().size(); i++){
 				Resource thisResource = (Resource) thisNode.getAcceptedMessages().get(i).getMessageData();
 				if(thisResource.getMessageNumber() == sendResourceNumber){
@@ -274,7 +274,7 @@ public class BlueToothGUI extends Program{
 
 	private void putInitResources() {
 		for(int i = 0; i < this.networkNodes.size();i++){
-			SimulationNode thisNode = (SimulationNode) this.networkNodes.get(i);
+			NetworkNode thisNode = (NetworkNode) this.networkNodes.get(i);
 			thisNode.getResources().put("water", 500);
 			thisNode.getResources().put("medical supplies", 20);
 			thisNode.getResources().put("food", 300);
@@ -286,8 +286,8 @@ public class BlueToothGUI extends Program{
 
 	private void sendResource() {
 		int sendResourceNumber = Integer.parseInt(this.sentResource.getText());
-		SimulationNode thisNode = (SimulationNode) this.myNode;
-		if(((SimulationNode) this.myNode).getAcceptedMessages() != null){
+		NetworkNode thisNode = (NetworkNode) this.myNode;
+		if(((NetworkNode) this.myNode).getAcceptedMessages() != null){
 			for(int i = 0; i < thisNode.getAcceptedMessages().size(); i++){
 				Resource thisResource = (Resource) thisNode.getAcceptedMessages().get(i).getMessageData();
 				if(thisResource.getMessageNumber() == sendResourceNumber){
@@ -343,14 +343,14 @@ public class BlueToothGUI extends Program{
 
 	private void displayBids() {
 		g.setColor(Color.WHITE);
-		if (((SimulationNode) this.myNode).getBids() != null) {
-			for (int i = 0; i < ((SimulationNode) this.myNode).getBids().size(); i++) {
+		if (((NetworkNode) this.myNode).getBids() != null) {
+			for (int i = 0; i < ((NetworkNode) this.myNode).getBids().size(); i++) {
 				String bidNumber = ""
-						+ ((Bid) (((SimulationNode) this.myNode).getBids().get(i)).getMessageData()).getBidNumber();
-				String eta = "" + ((Bid) (((SimulationNode) this.myNode).getBids().get(i)).getMessageData()).getETA();
+						+ ((Bid) (((NetworkNode) this.myNode).getBids().get(i)).getMessageData()).getBidNumber();
+				String eta = "" + ((Bid) (((NetworkNode) this.myNode).getBids().get(i)).getMessageData()).getETA();
 				String resourceAmount = ""
-						+ ((Bid) (((SimulationNode) this.myNode).getBids().get(i)).getMessageData()).getAmount();
-				String bidder = ((Bid) (((SimulationNode) this.myNode).getBids().get(i)).getMessageData()).getBidder()
+						+ ((Bid) (((NetworkNode) this.myNode).getBids().get(i)).getMessageData()).getAmount();
+				String bidder = ((Bid) (((NetworkNode) this.myNode).getBids().get(i)).getMessageData()).getBidder()
 						.getNodeID();
 				g.drawString(bidNumber, MAXSIZE + 5, 40 + i * 20);
 				g.drawString(eta, MAXSIZE + 5 + MAXSIZE / 4, 40 + i * 20);
@@ -362,29 +362,29 @@ public class BlueToothGUI extends Program{
 
 	private void acceptBid() {
 		int messageNum = Integer.parseInt(this.bidNumber.getText());
-		for (int i = 0; i < ((SimulationNode) this.myNode).getBids().size(); i++) {
-			Message currentMessage = ((SimulationNode) this.myNode).getBids().get(i);
+		for (int i = 0; i < ((NetworkNode) this.myNode).getBids().size(); i++) {
+			Message currentMessage = ((NetworkNode) this.myNode).getBids().get(i);
 			Bid bidObject = ((Bid) currentMessage.getMessageData());
 			if (((Bid) currentMessage.getMessageData()).getBidNumber() == messageNum) {
-				((SimulationNode) this.myNode).removeBid(currentMessage);
+				((NetworkNode) this.myNode).removeBid(currentMessage);
 				String bidder = ((Bid) currentMessage.getMessageData()).getBidder().getNodeID();
 				int messNum = ((Bid) currentMessage.getMessageData()).getMessageNumber();
 				Message acceptedMessage = null;
 				for (int o = 0; o < this.networkNodes.size(); o++) {
 					for (int k = 0; k < this.networkNodes.get(o).getMessages().size(); k++) {
-						Resource mess = ((Resource) ((SimulationNode) this.networkNodes.get(o)).getMessages().get(k)
+						Resource mess = ((Resource) ((NetworkNode) this.networkNodes.get(o)).getMessages().get(k)
 								.getMessageData());
-						SimulationNode simNode = ((SimulationNode) this.networkNodes.get(o));
+						NetworkNode simNode = ((NetworkNode) this.networkNodes.get(o));
 						if (mess.getMessageNumber() == messNum) {
 							if (bidObject.getBidder().getNodeID().equals(this.networkNodes.get(o).getNodeID())) {
 								simNode.addAcceptedMessage(simNode.getMessages().get(k));
-								((SimulationNode) this.myNode).addAcceptedMessage(simNode.getMessages().get(k));
+								((NetworkNode) this.myNode).addAcceptedMessage(simNode.getMessages().get(k));
 								simNode.removeGlobalMessage(simNode.getMessages().get(k));
 							}
 						}
 					}
 				}
-				((SimulationNode) this.myNode).removeGlobalMessage(currentMessage);
+				((NetworkNode) this.myNode).removeGlobalMessage(currentMessage);
 				globalView();
 			}
 		}
@@ -397,16 +397,16 @@ public class BlueToothGUI extends Program{
 	private void generateAcceptedMessages() {
 		generateAcceptedMessageBoard();
 		g.setColor(Color.WHITE);
-		if (((SimulationNode) this.myNode).getAcceptedMessages() != null) {
-			for (int i = 0; i < ((SimulationNode) this.myNode).getAcceptedMessages().size(); i++) {
-				String messageNumber = "" + ((Resource) (((SimulationNode) this.myNode).getAcceptedMessages().get(i))
+		if (((NetworkNode) this.myNode).getAcceptedMessages() != null) {
+			for (int i = 0; i < ((NetworkNode) this.myNode).getAcceptedMessages().size(); i++) {
+				String messageNumber = "" + ((Resource) (((NetworkNode) this.myNode).getAcceptedMessages().get(i))
 						.getMessageData()).messageNumber;
-				String resourceRequested = ((Resource) (((SimulationNode) this.myNode).getAcceptedMessages().get(i))
+				String resourceRequested = ((Resource) (((NetworkNode) this.myNode).getAcceptedMessages().get(i))
 						.getMessageData()).type;
 				String resourceAmount = ""
-						+ ((Resource) (((SimulationNode) this.myNode).getAcceptedMessages().get(0)).getMessageData())
+						+ ((Resource) (((NetworkNode) this.myNode).getAcceptedMessages().get(0)).getMessageData())
 								.getAmount();
-				String destination = ((Resource) (((SimulationNode) this.myNode).getAcceptedMessages().get(i))
+				String destination = ((Resource) (((NetworkNode) this.myNode).getAcceptedMessages().get(i))
 						.getMessageData()).getOwnerName();
 				g.drawString(messageNumber, MAXSIZE + 5, 40 + i * 20);
 				g.drawString(resourceRequested, MAXSIZE + 5 + MAXSIZE / 4, 40 + i * 20);
@@ -462,7 +462,7 @@ public class BlueToothGUI extends Program{
 				String ownerName = ((Resource) currentMessage.getMessageData()).getOwnerName();
 				for (int j = 0; j < this.networkNodes.size(); j++) {
 					if (this.networkNodes.get(j).getNodeID().equals(ownerName)) {
-						SimulationNode requestingNode = this.networkNodes.get(j);
+						NetworkNode requestingNode = this.networkNodes.get(j);
 						Resource oldResource = ((Resource) currentMessage.getMessageData());
 						Bid newBid = new Bid(this.myNode, requestingNode, Integer.parseInt(this.eta.getText()),
 								Integer.parseInt(this.amount.getText()), oldResource.getMessageNumber());
@@ -476,7 +476,7 @@ public class BlueToothGUI extends Program{
 	}
 
 	private void generateResourceRequest() throws NoSuchAlgorithmException, NoSuchProviderException {
-		SimulationNode nodeRequesting = null;
+		NetworkNode nodeRequesting = null;
 		for (int i = 0; i < this.networkNodes.size(); i++) {
 			if (this.networkNodes.get(i).getNodeID().toString().equals(this.resourceRequester.getText())) {
 				nodeRequesting = this.networkNodes.get(i);
@@ -495,7 +495,7 @@ public class BlueToothGUI extends Program{
 		nodeRequesting.createMessage(currentMessage);
 
 		for (int o = 0; o < this.networkNodes.size(); o++) {
-			SimulationNode currentNode = this.networkNodes.get(o);
+			NetworkNode currentNode = this.networkNodes.get(o);
 			for (int p = 0; p < currentNode.getMessages().size(); p++) {
 				if (currentNode.getMessages().get(p).getMessageData().toString()
 						.equals(currentMessage.getMessageData().toString())) {
@@ -534,10 +534,10 @@ public class BlueToothGUI extends Program{
 		for (int i = 0; i < this.networkNodes.size(); i++) {
 			if (this.networkNodes.get(i).getNodeID().toString().equals(this.setMyNode.getText())) {
 				this.myNode = this.networkNodes.get(i);
-				((SimulationNode) this.myNode).setNodeValues(((SimulationNode) this.myNode).getXCoord(),
-						((SimulationNode) this.myNode).getYCoord(), Color.CYAN,
-						((SimulationNode) this.myNode).getWidth());
-				((SimulationNode) this.myNode).Draw(g);
+				((NetworkNode) this.myNode).setNodeValues(((NetworkNode) this.myNode).getXCoord(),
+						((NetworkNode) this.myNode).getYCoord(), Color.CYAN,
+						((NetworkNode) this.myNode).getWidth());
+				((NetworkNode) this.myNode).Draw(g);
 			}
 		}
 		globalView();
@@ -610,8 +610,8 @@ public class BlueToothGUI extends Program{
 	private void sendMessage(String message, String sender, String receiver)
 			throws NoSuchAlgorithmException, NoSuchProviderException {
 		recolorNodes();
-		SimulationNode senderNode = null;
-		SimulationNode receiverNode = null;
+		NetworkNode senderNode = null;
+		NetworkNode receiverNode = null;
 		Message currentMessage = null;
 		for (int i = 0; i < networkNodes.size(); i++) {
 			for (int j = 0; j < networkNodes.size(); j++) {
@@ -633,7 +633,7 @@ public class BlueToothGUI extends Program{
 			}
 		}
 		for (int o = 0; o < this.networkNodes.size(); o++) {
-			SimulationNode currentNode = this.networkNodes.get(o);
+			NetworkNode currentNode = this.networkNodes.get(o);
 			for (int p = 0; p < currentNode.getMessages().size(); p++) {
 				if (currentNode.getMessages().get(p).getMessageData().toString()
 						.equals(currentMessage.getMessageData().toString())) {
@@ -657,14 +657,14 @@ public class BlueToothGUI extends Program{
 	}
 
 	private void generateNodes() throws NoSuchAlgorithmException, NoSuchProviderException {
-		SimulationNode n;
+		NetworkNode n;
 		this.g = this.canvas.getGraphics();
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 		for (int i = 0; i < this.numberOfNodes; i++) {
 			int randomX = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
 			int randomY = rand.nextInt(MAXSIZE - OFFSET) + OFFSET / 2;
-			n = new SimulationNode("Node" + nodeIDCounter);
+			n = new NetworkNode("Node" + nodeIDCounter);
 			n.setBlockChainDifficulty(this.difficulty);
 			n.setNodeValues(randomX, randomY, Color.BLUE, OFFSET);
 			n.start();
@@ -694,12 +694,12 @@ public class BlueToothGUI extends Program{
 
 	private void generateCommunicationLines() {
 		for (int i = 0; i < this.networkNodes.size(); i++) {
-			SimulationNode currentNode = this.networkNodes.get(i);
+			NetworkNode currentNode = this.networkNodes.get(i);
 			int xLoc = currentNode.getXCoord();
 			int yLoc = currentNode.getYCoord();
 			for (int j = 0; j < this.networkNodes.size(); j++) {
 				if (i != j) {
-					SimulationNode targetNode = this.networkNodes.get(j);
+					NetworkNode targetNode = this.networkNodes.get(j);
 					int targetXLoc = targetNode.getXCoord();
 					int targetYLoc = targetNode.getYCoord();
 					int euclidDistance = calculateDistance(xLoc, yLoc, targetXLoc, targetYLoc);
