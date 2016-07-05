@@ -61,7 +61,7 @@ public class BlockStore implements Serializable {
 	ArrayList<Message> getMessages() { // get all messages up the tree
 		TreeNode<Block> n = blockTree.getDeepestTreeNode();
 		ArrayList<Message> msgList = new ArrayList<Message>(n.getData().getMsgs());
-		while (n.getParent() != null) {
+		while ((n = n.getParent()) != null) {
 			msgList.addAll(n.getData().getMsgs());
 		}
 		return msgList;
