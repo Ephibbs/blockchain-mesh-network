@@ -280,7 +280,6 @@ public class BluetoothGUI extends Program{
 			thisNode.getResources().put("food", 300);
 			thisNode.getResources().put("blankets", 100);
 			thisNode.getResources().put("tents", 50);
-			
 		}
 	}
 
@@ -379,12 +378,12 @@ public class BluetoothGUI extends Program{
 							if (bidObject.getBidder().getNodeID().equals(this.networkNodes.get(o).getNodeID())) {
 								simNode.addAcceptedMessage(simNode.getMessages().get(k));
 								((NetworkNode) this.myNode).addAcceptedMessage(simNode.getMessages().get(k));
-								simNode.removeGlobalMessage(simNode.getMessages().get(k));
+								//simNode.removeGlobalMessage(simNode.getMessages().get(k));
 							}
 						}
 					}
 				}
-				((NetworkNode) this.myNode).removeGlobalMessage(currentMessage);
+				//((NetworkNode) this.myNode).removeGlobalMessage(currentMessage);
 				globalView();
 			}
 		}
@@ -490,7 +489,7 @@ public class BluetoothGUI extends Program{
 		Message currentMessage = null;
 		nodeRequesting.setNodeValues(nodeRequesting.getXCoord(), nodeRequesting.getYCoord(), Color.RED,
 				nodeRequesting.getWidth());
-		nodeRequesting.Draw(g);
+		//nodeRequesting.Draw(g);
 		currentMessage = new ResourceRequest(newRequest, null);
 		nodeRequesting.createMessage(currentMessage);
 
@@ -503,7 +502,7 @@ public class BluetoothGUI extends Program{
 					if (!currentNode.equals(nodeRequesting)) {
 						currentNode.setNodeValues(currentNode.getXCoord(), currentNode.getYCoord(), Color.GREEN,
 								currentNode.getWidth());
-						currentNode.Draw(g);
+						//currentNode.Draw(g);
 					}
 				}
 
@@ -516,12 +515,13 @@ public class BluetoothGUI extends Program{
 	private void drawMessages() {
 		generateMessageBoard();
 		g.setColor(Color.WHITE);
-		for (int i = 0; i < this.myNode.getMessages().size(); i++) {
+		ArrayList<Message> availableMessages = this.myNode.getOpenRequests();
+		for (int i = 0; i < availableMessages.size(); i++) {
 			String messageNumber = ""
-					+ ((Resource) this.myNode.getMessages().get(i).getMessageData()).getMessageNumber();
-			String resourceRequested = ((Resource) this.myNode.getMessages().get(i).getMessageData()).type;
-			String resourceAmount = "" + ((Resource) this.myNode.getMessages().get(i).getMessageData()).getAmount();
-			String originator = ((Resource) this.myNode.getMessages().get(i).getMessageData()).getOwnerName();
+					+ ((Resource) availableMessages.get(i).getMessageData()).getMessageNumber();
+			String resourceRequested = ((Resource) availableMessages.get(i).getMessageData()).type;
+			String resourceAmount = "" + ((Resource) availableMessages.get(i).getMessageData()).getAmount();
+			String originator = ((Resource) availableMessages.get(i).getMessageData()).getOwnerName();
 			g.drawString(messageNumber,  5, 40 + i * 20);
 			g.drawString(resourceRequested, 5 + MAXSIZE / 4, 40 + i * 20);
 			g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
@@ -537,7 +537,7 @@ public class BluetoothGUI extends Program{
 				((NetworkNode) this.myNode).setNodeValues(((NetworkNode) this.myNode).getXCoord(),
 						((NetworkNode) this.myNode).getYCoord(), Color.CYAN,
 						((NetworkNode) this.myNode).getWidth());
-				((NetworkNode) this.myNode).Draw(g);
+				//((NetworkNode) this.myNode).Draw(g);
 			}
 		}
 		globalView();
@@ -670,7 +670,7 @@ public class BluetoothGUI extends Program{
 
 	private void generateLineToFriends() {
 		for (int i = 0; i < this.networkNodes.size(); i++) {
-			this.networkNodes.get(i).drawLinesToFriends(this.g);
+			//this.networkNodes.get(i).drawLinesToFriends(this.g);
 		}
 	}
 
