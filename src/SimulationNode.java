@@ -44,6 +44,24 @@ public class SimulationNode extends Node implements Serializable {
 	public SimulationNode(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
 		super(id);
 	}
+	
+	public void sendDirectMessage(Node node1, Message message) throws NoSuchAlgorithmException, NoSuchProviderException{
+		System.out.println(this.getNodeID());
+		Node nodeToSendTo = routeTable.get(node1);
+		System.out.println(node1.getNodeID());
+		if(this.getNodeID().equals(node1.getNodeID())){
+			this.setNodeValues(this.getXCoord(), this.getYCoord(), Color.ORANGE,
+					this.getWidth());
+			System.out.println("The message made it to me");
+			directMessages.add(message);
+			return;
+		}
+		else {
+			this.setNodeValues(this.getXCoord(), this.getYCoord(), Color.MAGENTA,
+					this.getWidth());
+			nodeToSendTo.sendDirectMessage(node1, message);
+		}
+	}
 
 	// Accessors
 	public Color getColor() {

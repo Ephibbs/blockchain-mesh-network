@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.io.Serializable;
 import java.security.*;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class Node implements Serializable {
 	public PublicKey pubKey = null;
 	public byte[] byteArray = new byte[1024];
 	public Blockchain blockChain;
-	public Hashtable<Node, Node> routeTable = new Hashtable<Node, Node>();
+	public HashMap<Node, Node> routeTable = new HashMap<Node, Node>();
 	public Random rand = new Random();
 	private Ping ping;
 	public ArrayList<String> blockRequestIDs = new ArrayList<String>();
@@ -217,6 +218,10 @@ public class Node implements Serializable {
 	public void setBlockChainDifficulty(int difficulty) {
 		blockChain.setDifficulty(difficulty);
 	}
+	
+	public HashMap<Node, Node> getRouteTable(){
+		return this.routeTable;
+	}
 
 	public void createPing() {
 		this.ping = new Ping(this);
@@ -273,7 +278,7 @@ public class Node implements Serializable {
 		}
 	}
 	
-	public void sendDirectMessage(Node node1, Message message){
+	public void sendDirectMessage(Node node1, Message message) throws NoSuchAlgorithmException, NoSuchProviderException{
 		System.out.println(this.getNodeID());
 		Node nodeToSendTo = routeTable.get(node1);
 		if(this.getNodeID().equals(node1.getNodeID())){

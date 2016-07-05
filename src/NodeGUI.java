@@ -151,6 +151,8 @@ public class NodeGUI extends Program{
 		this.shortestPathTo = new JTextField(TEXT_FIELD_SIZE);
 		add(this.shortestPathTo, NORTH);
 		add(new JButton("Show Fastest Path"), NORTH);
+		
+		add(new JButton("Ping Everybody"), WEST);
 	}
 
 	/**
@@ -206,14 +208,51 @@ public class NodeGUI extends Program{
 			putInitResources();
 		} else if (e.getActionCommand().equals("Receive Resource")) {
 			receiveResource();
-		} else if (e.getActionCommand().equals("Receive Resource")) {
-			showFastestPath();
+		} 
+		else if (e.getActionCommand().equals("Show Fastest Path")) {
+			try {
+				showFastestPath();
+			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} 
+		else if (e.getActionCommand().equals("Ping Everybody")) {
+			pingEverybody();
 		}
 	}
-
 	
-	private void showFastestPath() {
-			
+	private void pingEverybody() {
+		for(int i = 0; i < this.networkNodes.size();i++){
+			this.networkNodes.get(i).createPing();
+		}
+		System.out.println("Everyone created a ping");
+		for(int i = 0; i < this.networkNodes.size();i++){
+			this.networkNodes.get(i).updateRouteTable();
+		}
+		System.out.println("Every updated routing tables");
+	}
+
+	private void showFastestPath() throws NoSuchAlgorithmException, NoSuchProviderException {
+		String nodeToGetTo = this.shortestPathTo.getText();
+		SimulationNode nodeToSendTo = null;
+		for(int j = 0; j < this.networkNodes.size();j++){
+			if(nodeToGetTo.equals(this.networkNodes.get(j).getNodeID())) {
+				nodeToSendTo = this.networkNodes.get(j);
+			}
+		}
+
+		Message text = new TextMessage("help", this.myNode, nodeToSendTo);
+		((SimulationNode) this.myNode).sendDirectMessage(nodeToSendTo, text);
+		
+		((SimulationNode) this.myNode).setNodeValues(((SimulationNode) this.myNode).getXCoord(), 
+				((SimulationNode) this.myNode).getYCoord(), Color.CYAN,
+				((SimulationNode) this.myNode).getWidth());
+		
+		for(int i = 0; i < this.networkNodes.size();i++){
+			this.networkNodes.get(i).Draw(g);
+		}
+		System.out.println("I tried");
 	}
 
 	private void receiveResource() {
@@ -490,6 +529,7 @@ public class NodeGUI extends Program{
 	}
 
 	private void setMyNode() throws NoSuchAlgorithmException, NoSuchProviderException {
+		this.recolorNodes();
 		for (int i = 0; i < this.networkNodes.size(); i++) {
 			if (this.networkNodes.get(i).getNodeID().toString().equals(this.setMyNode.getText())) {
 				this.myNode = this.networkNodes.get(i);
