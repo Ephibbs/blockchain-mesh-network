@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.io.IOException;
 import java.io.Serializable;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;

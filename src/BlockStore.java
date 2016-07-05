@@ -180,4 +180,13 @@ public class BlockStore implements Serializable {
 	TreeNode<Block> getBlock(String hash) {
 		return blockMap.get(hash);
 	}
+	
+	ArrayList<Message> getMessages() {
+		TreeNode<Block> n = blockTree.getDeepestTreeNode();
+		ArrayList<Message> msgList = new ArrayList<Message>(n.getData().getMsgs());
+		while((n = n.getParent()) != null) {
+			msgList += n.getData().getMsgs();
+		}
+		return msgList;
+	}
  }

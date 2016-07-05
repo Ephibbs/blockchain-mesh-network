@@ -154,4 +154,7 @@ public class Blockchain implements Runnable, Serializable {
     public void setDifficulty(int difficulty) {
     	this.difficulty = difficulty;
     }
+    ArrayList<Message> getMessages() {
+    	return blockStore.getMessages();
+    }
 }

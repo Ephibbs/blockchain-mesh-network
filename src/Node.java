@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.Serializable;
@@ -16,7 +17,6 @@ import java.util.Set;
  * class to provide structure for the nodes in a network
  */
 public class Node implements Serializable {
-
 	// Variables
 	public String nodeID = null;
 	public ArrayList<Node> networkNodes = new ArrayList<Node>();
@@ -68,7 +68,6 @@ public class Node implements Serializable {
 		this.privKey = pair.getPrivate();
 		this.pubKey = pair.getPublic();
 		this.blockChain = new Blockchain(this);
-		// this.blockChain.makeVerbose();
 	}
 
 	public void addResource(String type, int amount) {
@@ -526,21 +525,6 @@ public class Node implements Serializable {
 		}
 	}
 	
-	public void removeGlobalMessage(Message text) {
-		if (this.localMSG.contains(text)) {
-			this.localMSG.remove(text);
-			for (int i = 0; i < networkNodes.size(); i++) { // distribute
-															// message to
-				// friend nodes (they
-				// will propagate to
-				// their friends)
-				((SimulationNode) networkNodes.get(i)).removeGlobalMessage(text);
-			}
-		} else {
-			// do nothing
-		}
-	}
-	
 	public void addBid(Message bid){
 		System.out.println("submitted Bids Length: " + this.submittedBids.size());
 		((Bid) bid.getMessageData()).setBidNumber(this.BidNumber);
@@ -551,21 +535,6 @@ public class Node implements Serializable {
 	
 	public ArrayList<Message> getBids(){
 		return this.submittedBids;
-	}
-
-	// Utility
-	public void Draw(Graphics g) {
-		g.setColor(this.color);
-		g.fillOval(this.xCoordinate, this.yCoordinate, this.WIDTH, this.WIDTH);
-	}
-
-	public void drawLinesToFriends(Graphics g) {
-		g.setColor(Color.BLACK);
-		for (int i = 0; i < this.networkNodes.size(); i++) {
-			SimulationNode friend = (SimulationNode) networkNodes.get(i);
-			g.drawLine(this.xCoordinate + this.WIDTH / 2, this.yCoordinate + this.WIDTH / 2,
-					friend.getXCoord() + this.WIDTH / 2, friend.getYCoord() + this.WIDTH / 2);
-		}
 	}
 
 	public void removeBid(Message currentMessage) {
