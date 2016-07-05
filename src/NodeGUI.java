@@ -37,6 +37,7 @@ public class NodeGUI extends Program{
 	public JTextField viewResources;
 	public JTextField sentResource;
 	public JTextField receiveResource;
+	public JTextField shortestPathTo;
 
 	public ArrayList<SimulationNode> networkNodes = new ArrayList<SimulationNode>();
 
@@ -146,6 +147,10 @@ public class NodeGUI extends Program{
 		this.receiveResource = new JTextField(TEXT_FIELD_SIZE);
 		add(this.receiveResource, NORTH);
 		add(new JButton("Receive Resource"), NORTH);
+		
+		this.shortestPathTo = new JTextField(TEXT_FIELD_SIZE);
+		add(this.shortestPathTo, NORTH);
+		add(new JButton("Show Fastest Path"), NORTH);
 	}
 
 	/**
@@ -201,10 +206,16 @@ public class NodeGUI extends Program{
 			putInitResources();
 		} else if (e.getActionCommand().equals("Receive Resource")) {
 			receiveResource();
+		} else if (e.getActionCommand().equals("Receive Resource")) {
+			showFastestPath();
 		}
 	}
 
 	
+	private void showFastestPath() {
+			
+	}
+
 	private void receiveResource() {
 		int sendResourceNumber = Integer.parseInt(this.sentResource.getText());
 		SimulationNode thisNode = (SimulationNode) this.myNode;

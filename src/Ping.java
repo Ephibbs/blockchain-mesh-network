@@ -9,6 +9,11 @@ public class Ping {
 		originator = node;
 		relayer = node;
 	}
+	public Ping(Node orig, Node relay, int c){
+		this.originator = orig;
+		this.relayer = relay;
+		this.count = c;
+	}
 	public void setRelayer(Node node) {
 		this.relayer = node;
 	}

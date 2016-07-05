@@ -13,6 +13,7 @@ import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Random;
 
@@ -37,6 +38,7 @@ public class SimulationNode extends Node implements Serializable {
 	public int BidNumber = 1;
 	public ArrayList<Message> acceptedMessages = new ArrayList<Message>();
 	public ArrayList<Message> submittedBids = new ArrayList<Message>();
+	public ArrayList<Ping> pingsReceived = new ArrayList<Ping>();
 
 	// Constructor
 	public SimulationNode(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
