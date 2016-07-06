@@ -1,0 +1,8 @@
+
+public class ResourceRequest extends Message{
+	Resource messageData;
+	public ResourceRequest(String auth, String reci) {
+		super(auth, reci);
+		this.messageType = "ResourceRequest";
+	}
+}

@@ -1,0 +1,12 @@
+
+
+
+public class ResourceAgreement extends Message {
+	String resourceBidID;
+	public ResourceAgreement(String auth, String rec) {
+		super(auth, rec);
+		this.messageType = "ResourceAgreement";
+		
+
+	}
+}

@@ -1,0 +1,19 @@
+import javax.tools.DocumentationTool.Location;
+
+new ResourceRequestBid(messageNum, eta,
+		amount, myNode.getNodeID(), Utils.getRandID());
+
+public class ResourceRequestBid extends Message {
+	public String type;
+	public int amount;
+	public int eta;
+	public String requestID;
+	public ResourceRequestBid(String requestID, int eta, int amount, String auth, String id) {
+		super(auth, id);
+		this.requestID = requestID;
+		this.eta = eta;
+		this.amount = amount;
+		this.messageType = "ResourceRequestBid";
+	}
+	
+}

@@ -1,0 +1,168 @@
+import java.io.IOException;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.io.Serializable;
+import java.security.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Random;
+import java.util.Set;
+
+/**
+ * Created by 585728 on 6/28/2016.
+ */
+
+/*
+ * class to provide structure for the nodes in a network
+ */
+Interface Node {
+	// Variables
+	public String nodeID = null;
+	public Random rand = new Random();
+	public HashMap<String, Integer> myResources = new HashMap<String, Integer>();
+	
+	//Encryption Set
+	public ArrayList<PublicKey> publicKeySet = new ArrayList<PublicKey>();
+	public KeyPairGenerator keyGen = null;
+	public SecureRandom random = null;
+	public Signature dsa = null;
+	public KeyPair pair = null;
+	public PrivateKey privKey = null;
+	public PublicKey pubKey = null;
+	public byte[] byteArray = new byte[1024];
+	
+	//Blockchain
+	public Blockchain blockChain;
+	public ArrayList<String> blockRequestIDs = new ArrayList<String>();
+	
+	//Pinging Protocol
+	//public HashMap<Node, Node> routeTable = new HashMap<Node, Node>();
+	//private Ping ping;
+	//public ArrayList<Ping> pingsReceived = new ArrayList<Ping>();
+	//public HashMap<String, ArrayList<Ping>> pingHash = new HashMap<String, ArrayList<Ping>>();
+	//public ArrayList<Message> directMessages = new ArrayList<Message>(); //%TODO like text messages?
+	//public HashMap<Node, Integer> countHash = new HashMap<Node, Integer>(); //%TODO WHAT IS THIS?
+	
+	//keep track of messages
+	public ArrayList<Message> openRequests = new ArrayList<Message>();
+	public ArrayList<Message> bidsToMyRequests = new ArrayList<Message>();
+	public ArrayList<Message> myResourceAgreements = new ArrayList<Message>();
+	public ArrayList<Message> myResourceSents = new ArrayList<Message>();
+	public ArrayList<Message> myResourceReceives = new ArrayList<Message>();
+	public ArrayList<TextMessage> myTextMsgs = new ArrayList<TextMessage>();
+	public ArrayList<String> allMsgIDs = new ArrayList<String>();
+	public HashMap<String, Message> msgMap = new HashMap<String, Message>();
+
+	// Constructor
+	public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
+
+		this.nodeID = id;
+		this.keyGen = KeyPairGenerator.getInstance("DSA", "SUN"); // create key generator object
+		this.random = SecureRandom.getInstance("SHA1PRNG", "SUN"); // random var for random generation
+		this.dsa = Signature.getInstance("SHA1withDSA", "SUN"); // create signature object
+		keyGen.initialize(1024, random); // initialize and generate random key pair
+		this.pair = keyGen.generateKeyPair();
+		this.privKey = pair.getPrivate();
+		this.pubKey = pair.getPublic();
+		this.blockChain = new Blockchain(this);
+	}
+
+	public void addResource(String type, int amount) {
+		String resourceType = type.toLowerCase();
+		if (myResources.containsKey(resourceType)) {
+			myResources.replace(resourceType, amount + myResources.get(resourceType));
+		} else {
+			myResources.put(resourceType, amount);
+		}
+	}
+
+	public HashMap<String, Integer> getResources() {
+		return this.myResources;
+	}
+
+	// Accessors
+	public String getNodeID() {
+		return nodeID;
+	}
+
+	public PublicKey getPublicKey() {
+		return this.pubKey;
+	}
+
+	// Mutators
+	public void addMessage(Message msg) {
+		// if message is unique, add and
+		// distribute
+		// do nothing
+		if (msg != null && !this.msgMap.containsKey(msg)) {
+			this.blockChain.add(msg);
+			switch(msg.getMessageType()) {
+				case "ResourceRequest":
+					openRequests.add(msg);
+					break;
+				case "ResourceRequestBid":
+					bidsToMyRequests.add(msg);
+					break;
+				case "ResourceAgreement":
+					myResourceAgreements.add(msg);
+					break;
+				case "ResourceSent":
+					myResourceSents.add(msg);
+					break;
+				case "ResourceReceived":
+					myResourceReceives.add(msg);
+					break;
+			}
+			msgMap.put(msg.getID(), msg);
+			distributeMessage(msg);
+		}
+	}
+
+	public void setBlockChainDifficulty(int difficulty) {
+		blockChain.setDifficulty(difficulty);
+	}
+
+
+	//Block Request Protocol
+	
+	public void receiveBlock(Block b) {
+		if (blockRequestIDs.contains(b.getMyHash() + nodeID)) {
+			blockRequestIDs.remove(b.getMyHash() + nodeID);
+			if (nodeID == this.nodeID) {
+				blockChain.add(b);
+			} else {
+				broadcastBlock(b, nodeID);
+			}
+		}
+	}
+
+	public void requestBlock(String hash);
+	
+	public void makeBlockRequest(String hash);
+
+	public void broadcastBlock(Block b) {
+	}
+
+	// Utility
+	public void start() {
+		blockChain.start();
+	}
+
+	public boolean isOnline() {
+		return true;
+	}
+
+	public void addBlock(Block b) {
+		blockChain.add(b);
+	}
+
+	// Accessors
+	public ArrayList<Message> getOpenRequests() {
+		return openRequests;
+	}
+	
+	public ArrayList<Message> getBids(){
+		return this.bidsToMyRequests;
+	}
+}

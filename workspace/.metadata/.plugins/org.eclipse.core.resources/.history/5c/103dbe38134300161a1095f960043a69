@@ -1,0 +1,11 @@
+
+public class ResourceAgreement extends Message {
+	
+	public ResourceAgreement(String auth, String rec) {
+		super();
+		// TODO Auto-generated constructor stub
+		this.messageType = "ResourceAgreement";
+		
+
+	}
+}

@@ -1,0 +1,7 @@
+
+public class BlockRequest extends Message {
+	public String hash;
+	BlockRequest(String hash) {
+		this.hash = hash;
+	}
+}

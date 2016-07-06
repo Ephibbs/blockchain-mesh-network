@@ -1,0 +1,8 @@
+
+public class BlockDelivery extends Message {
+	public Block block;
+	BlockDelivery(Block block) {
+		super(auth)
+		this.block = block;
+	}
+}

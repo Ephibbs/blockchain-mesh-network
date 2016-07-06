@@ -1,0 +1,7 @@
+
+public class BlockRequest implements {
+	public String hash;
+	BlockRequest() {
+		
+	}
+}

@@ -1,0 +1,7 @@
+
+public class BlockDelivery extends Message {
+	public Block block;
+	BlockRequest(Block block) {
+		this.block = block;
+	}
+}

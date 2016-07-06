@@ -1,0 +1,342 @@
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.io.IOException;
+import java.io.Serializable;
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Random;
+
+/*
+ * Subclass of Node, simulation specific
+ * Parameters: ID string
+ */
+
+/* TODO
+ * When I am sending a message, I should try and verify the header of the message
+ * but I am not sure if that would work or not because then someone could
+ * possible alter the contents of it without having to alter the signature.
+ */
+
+public class SimulationNode extends Node implements Serializable {
+
+	// Variables
+	public int xCoordinate = 0;
+	public int yCoordinate = 0;
+	public Color color = Color.BLUE;
+	public int WIDTH = 0;
+	public int BidNumber = 1;
+	public ArrayList<Message> acceptedMessages = new ArrayList<Message>();
+	public ArrayList<Message> submittedBids = new ArrayList<Message>();
+	public ArrayList<SimulationNode> simulationNetworkNodes = new ArrayList<SimulationNode>();
+
+	// Constructor
+	public SimulationNode(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
+		super(id);
+	}
+	
+	public void createMessageWithSignature(String data)
+			throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, NoSuchProviderException {
+
+		distributePublicKey(this.getPublicKey());
+		// System.out.println("I distributed my public key");
+
+		Random rand = new Random(); // create a message with a random friend
+		// node as the recipient
+		int receiverNum = rand.nextInt(simulationNetworkNodes.size());
+		TextMessage text = new TextMessage(data, this.getNodeID(), simulationNetworkNodes.get(receiverNum).getNodeID());
+
+		byteArray = text.toString().getBytes(); // convert
+		// message
+		// to series
+		// of bytes
+		byte[] realSig = new byte[1024];
+
+		dsa.initSign(this.privKey); // sign message with private key
+		dsa.update(byteArray);
+		realSig = dsa.sign();
+
+		myTextMsgs.add(text);
+		this.distributeSignedMessage(realSig, byteArray, text); // distribute
+		// message to
+		// friend nodes
+		// (they will
+		// propagate to
+		// their
+		// friends)
+	}
+	// Accessors
+	public Color getColor() {
+		return this.color;
+	}
+
+	public int getXCoord() {
+		return this.xCoordinate;
+	}
+
+	public int getYCoord() {
+		return this.yCoordinate;
+	}
+
+	public int getWidth() {
+		return this.WIDTH;
+	}
+
+	public void setNodeValues(int xVal, int yVal, Color myColor, int width)
+			throws NoSuchAlgorithmException, NoSuchProviderException {
+		this.xCoordinate = xVal;
+		this.yCoordinate = yVal;
+		this.color = myColor;
+		this.WIDTH = width;
+	}
+
+	public void setColor(Color myColor) {
+		this.color = myColor;
+	}
+
+	public void moveNode(int maxSize, int offset, int movement, Graphics g) {
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillOval(this.xCoordinate, this.yCoordinate, this.WIDTH, this.WIDTH);
+
+		int randomX = rand.nextInt(movement);
+		int randomY = rand.nextInt(movement);
+		int direction = rand.nextInt(4);
+		int maxChecker = maxSize - offset;
+		if ((this.xCoordinate + randomX) > maxChecker) {
+			this.xCoordinate = this.xCoordinate - 40;
+			// System.out.println("I got here");
+			// this.xCoordinate = this.xCoordinate +
+			// (randomX-(maxChecker-this.xCoordinate));
+		}
+		if ((this.xCoordinate - randomX) < 20) {
+			this.xCoordinate = this.xCoordinate + 25;
+			// System.out.println("I got here");
+			// this.xCoordinate = this.xCoordinate - (randomX-(this.xCoordinate
+			// - offset));
+		}
+		if ((this.yCoordinate + randomY) > maxChecker) {
+			// System.out.println("I got here");
+			this.yCoordinate = this.yCoordinate - 40;
+			// this.yCoordinate = this.yCoordinate +
+			// (randomY-(maxChecker-this.yCoordinate));
+		}
+		if ((this.yCoordinate + randomY) < 100) {
+			// System.out.println("I got here");
+			this.yCoordinate = this.yCoordinate + 25;
+			// this.yCoordinate = this.yCoordinate - (randomY-(this.yCoordinate
+			// - offset));
+		} else {
+			if (direction == 0) {
+				this.xCoordinate = this.xCoordinate + randomX;
+				this.yCoordinate = this.yCoordinate + randomY;
+			} else if (direction == 1) {
+				this.xCoordinate = this.xCoordinate - randomX;
+				this.yCoordinate = this.yCoordinate + randomY;
+			} else if (direction == 2) {
+				this.xCoordinate = this.xCoordinate + randomX;
+				this.yCoordinate = this.yCoordinate - randomY;
+			} else {
+				this.xCoordinate = this.xCoordinate - randomX;
+				this.yCoordinate = this.yCoordinate - randomY;
+			}
+		}
+	}
+
+	public void addSimulationNode(SimulationNode node) {
+		simulationNetworkNodes.add(node);
+	}
+
+	public void addAcceptedMessage(Message msg) {
+		this.acceptedMessages.add(msg);
+	}
+
+	public ArrayList<Message> getAcceptedMessages() {
+		return this.acceptedMessages;
+	}
+	
+	public void createTextMessage(String data) {
+
+		distributePublicKey(this.getPublicKey()); // distribute public key to
+		// friend nodes (they will
+		// propagate it to their
+		// friends)
+		// System.out.println("I distributed my public key");
+
+		Random rand = new Random(); // create a message with a random friend
+		// node as the recipient
+		if (simulationNetworkNodes.size() > 0) {
+			int nodesSize = simulationNetworkNodes.size();
+			int receiverNum = rand.nextInt(nodesSize);
+			TextMessage text = new TextMessage(data, this.getNodeID(), simulationNetworkNodes.get(receiverNum).getNodeID());
+
+			this.blockChain.add(text);
+
+			myTextMsgs.add(text);
+			this.distributeMessage(text); // distribute message to friend nodes
+		} // (they will propagate to their
+			// friends)
+	}
+	public void addBid(Message bid){
+		this.submittedBids.add(bid);
+		System.out.println("submitted Bids Length: " + this.submittedBids.size());
+	}
+	
+	public ArrayList<Message> getBids(){
+		return this.submittedBids;
+	}
+	
+	
+	// Utility
+	public void Draw(Graphics g) {
+		g.setColor(this.color);
+		g.fillOval(this.xCoordinate, this.yCoordinate, this.WIDTH, this.WIDTH);
+	}
+
+	public void drawLinesToFriends(Graphics g) {
+		g.setColor(Color.BLACK);
+		for (int i = 0; i < this.simulationNetworkNodes.size(); i++) {
+			SimulationNode friend = simulationNetworkNodes.get(i);
+			g.drawLine(this.xCoordinate + this.WIDTH / 2, this.yCoordinate + this.WIDTH / 2,
+					friend.getXCoord() + this.WIDTH / 2, friend.getYCoord() + this.WIDTH / 2);
+		}
+	}
+
+	public void removeBid(Message currentMessage) {
+		// TODO Auto-generated method stub
+		this.submittedBids.remove(currentMessage);
+	}
+
+	public void removeAcceptedMessage(Message message) {
+		// TODO Auto-generated method stub
+		this.acceptedMessages.remove(message);
+	}
+	public void addNodes(ArrayList<SimulationNode> newNodes) { // add a group of friend
+		// nodes
+		for (int i = 0; i < newNodes.size(); i++) {
+			simulationNetworkNodes.add(newNodes.get(i));
+		}
+	}
+	
+	public void makeBlockRequest(String hash, String id) {
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // distribute
+			// blockrequest to
+			// friend nodes (they
+			// will propagate to
+			// their friends if they
+			// cannot resolve)
+			simulationNetworkNodes.get(i).requestBlock(hash, id);
+		}
+	}
+
+	public void broadcastBlock(Block b, String nodeID) {
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // distribute
+			// blockrequest to
+			// friend nodes (they
+			// will propagate to
+			// their friends if they
+			// cannot resolve)
+			simulationNetworkNodes.get(i).receiveBlock(b, nodeID);
+		}
+	}
+	
+	public String randomMessageNumberGenerator(){
+		String messageNum = "";
+		ArrayList<String> charPossibilities = new ArrayList<String>();
+		charPossibilities.add("a");
+		charPossibilities.add("b");
+		charPossibilities.add("c");
+		charPossibilities.add("d");
+		charPossibilities.add("e");
+		charPossibilities.add("f");
+		charPossibilities.add("g");
+		charPossibilities.add("h");
+		charPossibilities.add("i");
+		charPossibilities.add("j");
+		charPossibilities.add("k");
+		charPossibilities.add("l");
+		charPossibilities.add("m");
+		charPossibilities.add("n");
+		charPossibilities.add("o");
+		charPossibilities.add("p");
+		charPossibilities.add("q");
+		charPossibilities.add("r");
+		charPossibilities.add("s");
+		charPossibilities.add("t");
+		charPossibilities.add("u");		
+		charPossibilities.add("v");
+		charPossibilities.add("w");
+		charPossibilities.add("x");
+		charPossibilities.add("y");
+		charPossibilities.add("z");
+		charPossibilities.add("0");
+		charPossibilities.add("1");
+		charPossibilities.add("2");
+		charPossibilities.add("3");
+		charPossibilities.add("4");
+		charPossibilities.add("5");
+		charPossibilities.add("6");
+		charPossibilities.add("7");
+		charPossibilities.add("8");
+		charPossibilities.add("9");
+		
+		for(int i = 0; i < 10;i++){
+			int ranNum = rand.nextInt(charPossibilities.size());
+			messageNum = messageNum + charPossibilities.get(i);
+		}
+		//System.out.println(messageNum);
+		return messageNum;
+	}
+	public void printNodes() {
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // print out friend
+			// nodes
+			System.out.println(simulationNetworkNodes.get(i).getNodeID());
+		}
+	}
+	
+	public void distributeMessage(Message text) {
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // distribute message to
+			// friend nodes (they
+			// will propagate to
+			// their friends)
+			simulationNetworkNodes.get(i).addMessage(text);
+		}
+	}
+
+	public void distributeSignedMessage(byte[] realSig, byte[] byteArray2, Message text)
+			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // give each friend node
+			// the signed message,
+			// saved in their
+			// localMSG
+			simulationNetworkNodes.get(i).addSignedMessage(realSig, byteArray2, text);
+		}
+	}
+
+	public void distributePublicKey(PublicKey publicKey) {
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // add public key to all
+			// friend nodes (they
+			// will propagate to
+			// their friends)
+			simulationNetworkNodes.get(i).addPublicKey(publicKey);
+		}
+	}
+
+	public void distributeBlock(Block b) {
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // add block to friend
+			// node's blockchain
+			simulationNetworkNodes.get(i).blockChain.add(b);
+		}
+	}
+}

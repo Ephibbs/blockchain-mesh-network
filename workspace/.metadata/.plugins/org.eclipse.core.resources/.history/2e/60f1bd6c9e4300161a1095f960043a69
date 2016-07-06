@@ -1,0 +1,13 @@
+import javax.tools.DocumentationTool.Location;
+
+ResourceRequest(Integer.parseInt(this.resourceAmount.getText()), 
+		this.resourceType.getText(), myNode.getNodeID(), rand.nextInt(100000000));
+
+public class ResourceRequest extends Message{
+	public String type;
+	public int amount;
+	public ResourceRequest(int amount, String type, String auth, String id) {
+		super(auth);
+		this.messageType = "ResourceRequest";
+	}
+}

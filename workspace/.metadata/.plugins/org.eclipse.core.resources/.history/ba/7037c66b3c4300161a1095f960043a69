@@ -1,0 +1,9 @@
+
+public class ResourceRequestBid extends Message {
+	Bid messageData;
+	public ResourceRequestBid(String auth, String rec) {
+		super(auth, rec);
+		this.messageType = "ResourceRequestBid";
+	}
+	
+}
