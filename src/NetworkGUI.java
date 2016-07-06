@@ -270,8 +270,8 @@ public class NetworkGUI extends Program {
 //					receiverNode.setNodeValues(receiverNode.getXCoord(), receiverNode.getYCoord(), Color.YELLOW,
 //							receiverNode.getWidth());
 //					receiverNode.Draw(g);
-					currentMessage = new TextMessage(message, senderNode, receiverNode);
-					senderNode.createMessage(currentMessage);
+					currentMessage = new TextMessage(message, senderNode.getNodeID(), receiverNode.getNodeID());
+					senderNode.createTextMessage(currentMessage);
 				}
 			}
 		}
