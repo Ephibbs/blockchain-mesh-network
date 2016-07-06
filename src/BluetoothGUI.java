@@ -259,6 +259,9 @@ public class BluetoothGUI extends Program{
 	private void receiveResource() {
 		int sendResourceNumber = Integer.parseInt(this.sentResource.getText());
 		NetworkNode thisNode = (NetworkNode) this.myNode;
+
+		myNode.addMessage(new ResourceReceived(sendResourceNumber)); // I don't know if I'm doing this right
+
 		if(((NetworkNode) this.myNode).getAcceptedMessages() != null){
 			for(int i = 0; i < thisNode.getAcceptedMessages().size(); i++){
 				Resource thisResource = (Resource) thisNode.getAcceptedMessages().get(i).getMessageData();
@@ -269,7 +272,7 @@ public class BluetoothGUI extends Program{
 			}
 		}
 		viewNodesResources(thisNode.getNodeID());
-		
+
 	}
 
 	private void putInitResources() {
@@ -286,12 +289,15 @@ public class BluetoothGUI extends Program{
 	private void sendResource() {
 		int sendResourceNumber = Integer.parseInt(this.sentResource.getText());
 		NetworkNode thisNode = (NetworkNode) this.myNode;
+
+//		myNode.addMessage(new ResourceSent(sendResourceNumber, )); Need help
+
 		if(((NetworkNode) this.myNode).getAcceptedMessages() != null){
 			for(int i = 0; i < thisNode.getAcceptedMessages().size(); i++){
 				Resource thisResource = (Resource) thisNode.getAcceptedMessages().get(i).getMessageData();
 				if(thisResource.getMessageNumber() == sendResourceNumber){
 					thisNode.removeAcceptedMessage(thisNode.getAcceptedMessages().get(i));
-					thisNode.addResource(thisResource.getType(), (-1*thisResource.getAmount()));					
+					thisNode.addResource(thisResource.getType(), (-1*thisResource.getAmount()));
 				}
 			}
 		}
@@ -484,6 +490,9 @@ public class BluetoothGUI extends Program{
 		Resource newRequest = new Resource(Integer.parseInt(this.resourceAmount.getText()), this.resourceType.getText(),
 				(double) nodeRequesting.getXCoord(), (double) nodeRequesting.getYCoord(),
 				this.resourceCategory.getText(), nodeRequesting.getNodeID(), this.messageNumber);
+
+		myNode.addMessage(new ResourceReceived(sendResourceNumber)); // I don't know if I'm doing this right
+
 
 		recolorNodes();
 		Message currentMessage = null;

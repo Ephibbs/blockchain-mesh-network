@@ -255,6 +255,8 @@ public class NetworkGUI extends Program {
 		NetworkNode senderNode = null;
 		NetworkNode receiverNode = null;
 		Message currentMessage = null;
+
+
 		for (int i = 0; i < networkNodes.size(); i++) {
 			for (int j = 0; j < networkNodes.size(); j++) {
 				String nodeNameSend = "Node" + networkNodes.get(i).nodeID;
