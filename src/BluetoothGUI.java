@@ -50,7 +50,7 @@ public class BluetoothGUI extends Program{
 	 */
 	@Override
 	public void init() {
-		this.setSize(new Dimension(1800, 850));
+		this.setSize(new Dimension(1000, 850));
 		generateWestFrame();
 		addActionListeners();
 		addListeners();
