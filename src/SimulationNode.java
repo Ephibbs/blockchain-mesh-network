@@ -31,43 +31,43 @@ import java.util.Random;
 
 public class SimulationNode implements Node {
 	// Variables
-		public int xCoordinate = 0;
-		public int yCoordinate = 0;
-		public Color color = Color.BLUE;
-		public int WIDTH = 0;
-		public String nodeID = null;
-		public Random rand = new Random();
-		public HashMap<String, Integer> myResources = new HashMap<String, Integer>();
-		
-		//Encryption Set
-		public ArrayList<PublicKey> publicKeySet = new ArrayList<PublicKey>();
-		public KeyPairGenerator keyGen = null;
-		public SecureRandom random = null;
-		public Signature dsa = null;
-		public KeyPair pair = null;
-		public PrivateKey privKey = null;
-		public PublicKey pubKey = null;
-		public byte[] byteArray = new byte[1024];
-		
-		//Blockchain
-		public Blockchain blockChain;
-		public ArrayList<String> blockRequestIDs = new ArrayList<String>();
-		
-		//keep track of messages
-		public ArrayList<Message> openRequests = new ArrayList<Message>();
-		public ArrayList<Message> bidsToMyRequests = new ArrayList<Message>();
-		public ArrayList<Message> myResourceAgreements = new ArrayList<Message>();
-		public ArrayList<Message> myResourceSents = new ArrayList<Message>();
-		public ArrayList<Message> myResourceReceives = new ArrayList<Message>();
-		public ArrayList<TextMessage> myTextMsgs = new ArrayList<TextMessage>();
-		public ArrayList<String> allMsgIDs = new ArrayList<String>();
-		public HashMap<String, Message> msgMap = new HashMap<String, Message>();
-		
+	public int xCoordinate = 0;
+	public int yCoordinate = 0;
+	public Color color = Color.BLUE;
+	public int WIDTH = 0;
+	public String nodeID = null;
+	public Random rand = new Random();
+	public HashMap<String, Integer> myResources = new HashMap<String, Integer>();
+
+	// Encryption Set
+	public ArrayList<PublicKey> publicKeySet = new ArrayList<PublicKey>();
+	public KeyPairGenerator keyGen = null;
+	public SecureRandom random = null;
+	public Signature dsa = null;
+	public KeyPair pair = null;
+	public PrivateKey privKey = null;
+	public PublicKey pubKey = null;
+	public byte[] byteArray = new byte[1024];
+
+	// Blockchain
+	public Blockchain blockChain;
+	public ArrayList<String> blockRequestIDs = new ArrayList<String>();
+
+	// keep track of messages
+	public ArrayList<Message> openRequests = new ArrayList<Message>();
+	public ArrayList<Message> bidsToMyRequests = new ArrayList<Message>();
+	public ArrayList<Message> myResourceAgreements = new ArrayList<Message>();
+	public ArrayList<Message> myResourceSents = new ArrayList<Message>();
+	public ArrayList<Message> myResourceReceives = new ArrayList<Message>();
+	public ArrayList<TextMessage> myTextMsgs = new ArrayList<TextMessage>();
+	public ArrayList<String> allMsgIDs = new ArrayList<String>();
+	public HashMap<String, Message> msgMap = new HashMap<String, Message>();
+
 	public ArrayList<SimulationNode> simulationNetworkNodes = new ArrayList<SimulationNode>();
 
 	// Constructor
 	public SimulationNode(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
-		
+
 	}
 
 	// Accessors
@@ -150,8 +150,7 @@ public class SimulationNode implements Node {
 	public void addSimulationNode(SimulationNode node) {
 		simulationNetworkNodes.add(node);
 	}
-	
-	
+
 	// Utility
 	public void Draw(Graphics g) {
 		g.setColor(this.color);
@@ -166,69 +165,71 @@ public class SimulationNode implements Node {
 					friend.getXCoord() + this.WIDTH / 2, friend.getYCoord() + this.WIDTH / 2);
 		}
 	}
-	public void addNodes(ArrayList<SimulationNode> newNodes) { // add a group of friend
+
+	public void addNodes(ArrayList<SimulationNode> newNodes) { // add a group of
+																// friend
 		// nodes
 		for (int i = 0; i < newNodes.size(); i++) {
 			simulationNetworkNodes.add(newNodes.get(i));
 		}
 	}
-	
-	//Block Request Protocol
-	
-	public void receiveBlock(BlockDelivery bd) {
-		String hash = bd.getHash();
-		Block b = bd.block;
-		String nodeID = bd.getAuthor();
-		if (blockRequestIDs.contains(hash + nodeID)) {
-			blockRequestIDs.remove(hash + nodeID);
-			if (nodeID == this.nodeID) {
-				blockChain.add(b);
-			} else {
-				broadcastBlock(bd);
-			}
-		}
-	}
-	
-	public void makeBlockRequest(BlockRequest br) {
-		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // distribute
-			// blockrequest to
-			// friend nodes (they
-			// will propagate to
-			// their friends if they
-			// cannot resolve)
-			simulationNetworkNodes.get(i).requestBlock(br);
-		}
-	}
 
-	public void broadcastBlock(BlockDelivery bd) {
-		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // distribute
-			// blockrequest to
-			// friend nodes (they
-			// will propagate to
-			// their friends if they
-			// cannot resolve)
-			simulationNetworkNodes.get(i).receiveBlock(bd);
-		}
-	}
-	
-	public void requestBlock(BlockRequest br) {
-		String hash = br.getHash();
-		String id = br.getAuthor();
-		if (!blockRequestIDs.contains(hash + id)) {
-			blockRequestIDs.add(hash + id);
-			Block b = blockChain.getBlock(hash);
-			if (b != null) {
-				BlockDelivery bd = new BlockDelivery(b, id);
-				broadcastBlock(bd);
-			} else {
-				makeBlockRequest(br);
-			}
-		}
-	}
-	
-	//Utils
-	
-	public String randomMessageNumberGenerator(){
+	// Block Request Protocol
+
+//	public void receiveBlock(BlockDelivery bd) {
+//		String hash = bd.getHash();
+//		Block b = bd.block;
+//		String nodeID = bd.getAuthor();
+//		if (blockRequestIDs.contains(hash + nodeID)) {
+//			blockRequestIDs.remove(hash + nodeID);
+//			if (nodeID == this.nodeID) {
+//				blockChain.add(b);
+//			} else {
+//				broadcastBlock(bd);
+//			}
+//		}
+//	}
+//
+//	public void makeBlockRequest(BlockRequest br) {
+//		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // distribute
+//			// blockrequest to
+//			// friend nodes (they
+//			// will propagate to
+//			// their friends if they
+//			// cannot resolve)
+//			simulationNetworkNodes.get(i).requestBlock(br);
+//		}
+//	}
+//
+//	public void broadcastBlock(BlockDelivery bd) {
+//		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // distribute
+//			// blockrequest to
+//			// friend nodes (they
+//			// will propagate to
+//			// their friends if they
+//			// cannot resolve)
+//			simulationNetworkNodes.get(i).receiveBlock(bd);
+//		}
+//	}
+//
+//	public void requestBlock(BlockRequest br) {
+//		String hash = br.getHash();
+//		String id = br.getAuthor();
+//		if (!blockRequestIDs.contains(hash + id)) {
+//			blockRequestIDs.add(hash + id);
+//			Block b = blockChain.getBlock(hash);
+//			if (b != null) {
+//				BlockDelivery bd = new BlockDelivery(b, id);
+//				broadcastBlock(bd);
+//			} else {
+//				makeBlockRequest(br);
+//			}
+//		}
+//	}
+
+	// Utils
+
+	public String randomMessageNumberGenerator() {
 		String messageNum = "";
 		ArrayList<String> charPossibilities = new ArrayList<String>();
 		charPossibilities.add("a");
@@ -251,7 +252,7 @@ public class SimulationNode implements Node {
 		charPossibilities.add("r");
 		charPossibilities.add("s");
 		charPossibilities.add("t");
-		charPossibilities.add("u");		
+		charPossibilities.add("u");
 		charPossibilities.add("v");
 		charPossibilities.add("w");
 		charPossibilities.add("x");
@@ -267,23 +268,27 @@ public class SimulationNode implements Node {
 		charPossibilities.add("7");
 		charPossibilities.add("8");
 		charPossibilities.add("9");
-		
-		for(int i = 0; i < 10;i++){
+
+		for (int i = 0; i < 10; i++) {
 			int ranNum = rand.nextInt(charPossibilities.size());
 			messageNum = messageNum + charPossibilities.get(i);
 		}
-		//System.out.println(messageNum);
+		// System.out.println(messageNum);
 		return messageNum;
 	}
+
 	public void printNodes() {
-		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // print out friend
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // print out
+																	// friend
 			// nodes
 			System.out.println(simulationNetworkNodes.get(i).getNodeID());
 		}
 	}
-	
+
 	public void distributeMessage(Message text) {
-		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // distribute message to
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // distribute
+																	// message
+																	// to
 			// friend nodes (they
 			// will propagate to
 			// their friends)
@@ -294,7 +299,9 @@ public class SimulationNode implements Node {
 	public void distributeSignedMessage(byte[] realSig, byte[] byteArray2, TextMessage text)
 			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException {
 		// TODO Auto-generated method stub
-		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // give each friend node
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // give each
+																	// friend
+																	// node
 			// the signed message,
 			// saved in their
 			// localMSG
@@ -303,7 +310,9 @@ public class SimulationNode implements Node {
 	}
 
 	public void distributePublicKey(PublicKey publicKey) {
-		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // add public key to all
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // add public
+																	// key to
+																	// all
 			// friend nodes (they
 			// will propagate to
 			// their friends)
@@ -343,13 +352,15 @@ public class SimulationNode implements Node {
 			this.distributePublicKey(publicKey);
 		}
 	}
-	
+
 	public void distributeBlock(Block b) {
-		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // add block to friend
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // add block
+																	// to friend
 			// node's blockchain
 			simulationNetworkNodes.get(i).blockChain.add(b);
 		}
 	}
+
 	public void addResource(String type, int amount) {
 		String resourceType = type.toLowerCase();
 		if (myResources.containsKey(resourceType)) {
@@ -379,22 +390,22 @@ public class SimulationNode implements Node {
 		// do nothing
 		if (msg != null && !this.msgMap.containsKey(msg)) {
 			this.blockChain.add(msg);
-			switch(msg.getMessageType()) {
-				case "ResourceRequest":
-					openRequests.add(msg);
-					break;
-				case "ResourceRequestBid":
-					bidsToMyRequests.add(msg);
-					break;
-				case "ResourceAgreement":
-					myResourceAgreements.add(msg);
-					break;
-				case "ResourceSent":
-					myResourceSents.add(msg);
-					break;
-				case "ResourceReceived":
-					myResourceReceives.add(msg);
-					break;
+			switch (msg.getMessageType()) {
+			case "ResourceRequest":
+				openRequests.add(msg);
+				break;
+			case "ResourceRequestBid":
+				bidsToMyRequests.add(msg);
+				break;
+			case "ResourceAgreement":
+				myResourceAgreements.add(msg);
+				break;
+			case "ResourceSent":
+				myResourceSents.add(msg);
+				break;
+			case "ResourceReceived":
+				myResourceReceives.add(msg);
+				break;
 			}
 			msgMap.put(msg.getID(), msg);
 			distributeMessage(msg);
@@ -422,8 +433,8 @@ public class SimulationNode implements Node {
 	public ArrayList<Message> getOpenRequests() {
 		return openRequests;
 	}
-	
-	public ArrayList<Message> getBids(){
+
+	public ArrayList<Message> getBids() {
 		return this.bidsToMyRequests;
 	}
 
@@ -454,24 +465,24 @@ public class SimulationNode implements Node {
 	@Override
 	public void receiveBlock(Block b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void requestBlock(String hash) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void makeBlockRequest(String hash) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void broadcastBlock(Block b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
