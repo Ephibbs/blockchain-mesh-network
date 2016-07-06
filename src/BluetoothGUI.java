@@ -247,9 +247,6 @@ public class BluetoothGUI extends Program{
 		myNode.addMessage(rr);
 	}
 
-	
-	//Generate GUI
-
 	private void checkBids() {
 		generateBidMessageBoard();
 		g.setColor(Color.WHITE);
@@ -314,37 +311,38 @@ public class BluetoothGUI extends Program{
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 
 		g.setColor(Color.WHITE);
-		g.drawRect(0 + 0, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(2 * MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(3 * MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
+		
+		g.drawRect(0, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(2 * MAXSIZE / 4 , 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(3 * MAXSIZE / 4 , 0, MAXSIZE / 4, MAXSIZE);
 
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g.setColor(Color.WHITE);
-		g.drawString("Bid Number", MAXSIZE + 5, 20);
-		g.drawString("Time of Arrival", MAXSIZE + 5 + MAXSIZE / 4, 20);
-		g.drawString("Amount Can Send", MAXSIZE + 5 + 2 * MAXSIZE / 4, 20);
-		g.drawString("Bidder", MAXSIZE + 5 + 3 * MAXSIZE / 4, 20);
-		g.drawLine(MAXSIZE, 25, 2 * MAXSIZE, 25);
+		g.drawString("Bid Number",  5, 20);
+		g.drawString("Time of Arrival", 5 + MAXSIZE / 4, 20);
+		g.drawString("Amount Can Send", 5 + 2 * MAXSIZE / 4, 20);
+		g.drawString("Bidder", 5 + 3 * MAXSIZE / 4, 20);
+		g.drawLine(0, 25, 1 * MAXSIZE, 25);
 	}
 
 	private void generateAcceptedMessageBoard() {
 		g.setColor(Color.DARK_GRAY);
-		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
+		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 
 		g.setColor(Color.WHITE);
-		g.drawRect(0 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(2 * MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(3 * MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(0, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(2 * MAXSIZE / 4 , 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(3 * MAXSIZE / 4 , 0, MAXSIZE / 4, MAXSIZE);
 
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g.setColor(Color.WHITE);
-		g.drawString("Message Number", MAXSIZE + 5, 20);
-		g.drawString("Resource Requested", MAXSIZE + 5 + MAXSIZE / 4, 20);
-		g.drawString("Amount Requested", MAXSIZE + 5 + 2 * MAXSIZE / 4, 20);
-		g.drawString("Destination", MAXSIZE + 5 + 3 * MAXSIZE / 4, 20);
-		g.drawLine(MAXSIZE, 25, 2 * MAXSIZE, 25);
+		g.drawString("Message Number", 5, 20);
+		g.drawString("Resource Requested", 5 + MAXSIZE / 4, 20);
+		g.drawString("Amount Requested", 5 + 2 * MAXSIZE / 4, 20);
+		g.drawString("Destination", 5 + 3 * MAXSIZE / 4, 20);
+		g.drawLine(0, 25, 1 * MAXSIZE, 25);
 	}
 
 	private void generateNodesResourcesBoard() {
@@ -370,10 +368,10 @@ public class BluetoothGUI extends Program{
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 
 		g.setColor(Color.WHITE);
-		g.drawRect(0 + 0, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(0 , 0, MAXSIZE / 4, MAXSIZE);
 		g.drawRect(MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(2 * MAXSIZE / 4 + 0, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(3 * MAXSIZE / 4 + 0, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(2 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(3 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
 
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g.setColor(Color.WHITE); // Here
