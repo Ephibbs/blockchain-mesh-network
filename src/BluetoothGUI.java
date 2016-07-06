@@ -247,6 +247,7 @@ public class BluetoothGUI extends Program{
 		myNode.addMessage(rr);
 	}
 
+	//GUI generation
 	private void checkBids() {
 		generateBidMessageBoard();
 		g.setColor(Color.WHITE);
