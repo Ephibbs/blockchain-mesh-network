@@ -21,7 +21,7 @@ public abstract class Message extends Sendable implements Serializable {
 	public String messageType;
 	public String author = null;
 	public String recipient = null;
-	public int id=0;
+	public String id;
 	public final long serialVersionUID = 2L;
 
 	// Constructors
@@ -29,12 +29,12 @@ public abstract class Message extends Sendable implements Serializable {
 		super("Message");
 		this.author = auth;
 		this.recipient = rec;
-		id = Utils.getRandID(1000000000);
+		id = "" + Utils.getRandID(1000000000);
 	}
 	
 	public Message() {
 		super("Message");
-		id = Utils.getRandID(1000000000);
+		id = "" + Utils.getRandID(1000000000);
 	}
 	
 	/**
@@ -53,7 +53,7 @@ public abstract class Message extends Sendable implements Serializable {
 	}
 	public String getHash() {
 		try {
-			return Utils.sha256(author + recipient + Integer.toString(id));
+			return Utils.sha256(author + recipient + id);
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,7 +61,7 @@ public abstract class Message extends Sendable implements Serializable {
 		return "";
 	}
 	
-	public int getID() {
+	public String getID() {
 		return id;
 	}
 

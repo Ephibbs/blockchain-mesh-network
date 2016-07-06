@@ -201,8 +201,7 @@ public class BluetoothGUI extends Program{
 		g.setColor(Color.WHITE);
 		if (myNode.getBids() != null) {
 			for (int i = 0; i < myNode.getBids().size(); i++) {
-				String bidNumber = ""
-						+ ((Bid) (myNode.getBids().get(i)).getMessageData()).getBidNumber();
+				String bidNumber = "" + 
 				String eta = "" + ((Bid) (myNode.getBids().get(i)).getMessageData()).getETA();
 				String resourceAmount = ""
 						+ ((Bid) (myNode.getBids().get(i)).getMessageData()).getAmount();

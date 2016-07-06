@@ -56,7 +56,7 @@ public class Blockchain implements Runnable, Serializable {
 	}
 	public void add(Block b) { // block is added to incomingBlocks ArrayList, awaiting verification and addition to the blockchain
 		if(blockStore.getBlock(b.getPrevHash()) == null) {
-			node.makeBlockRequest(b.getPrevHash(), node.getNodeID());
+			node.makeBlockRequest(b.getPrevHash());
 		}
 		incBlks.add(b);
 	}

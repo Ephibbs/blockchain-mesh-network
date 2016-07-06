@@ -72,7 +72,7 @@ public class Simulation {
 			// it goes through and makes sure you dont give the same node more then 2 friends
 			for(int j = 0; j < maxFriends-1; j++) {
 				int randomFriend = rand.nextInt(possibleFriends.size());
-				nodeToGiveFriends.addFriend(possibleFriends.get(randomFriend));
+				nodeToGiveFriends.addSimulationNode(possibleFriends.get(randomFriend));
 				possibleFriends.remove(randomFriend);
 			}
 		}
@@ -82,7 +82,7 @@ public class Simulation {
 		for(SimulationNode n : networkNodes) {
 			n.start();
 		}
-		this.networkNodes.get(0).createMessage("help");
+		//this.networkNodes.get(0).add();
 	}
 
 	/*
@@ -95,13 +95,13 @@ public class Simulation {
 		System.out.println("Size of node 5 public keyset = " + this.networkNodes.get(4).publicKeySet.size());
 		
 		//System.out.println("A list of all of node 1's friends");
-		for(int i = 0; i < this.networkNodes.get(0).networkNodes.size();i++){
+		for(int i = 0; i < this.networkNodes.get(0).simulationNetworkNodes.size();i++){
 			//System.out.println("Friend" + (1+i) + " is: " + node1.networkNodes.get(i).getNodeID());
 		}
 		
 		System.out.println("A list of who all has a message: ");
 		for(int j = 0; j < this.networkNodes.size();j++) {
-			if(this.networkNodes.get(j).localMSG.size()>0) {
+			if(this.networkNodes.get(j).msgMap.size()>0) {
 				System.out.println("I have a message: " + this.networkNodes.get(j).getNodeID());
 			}
 		}

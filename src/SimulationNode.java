@@ -29,40 +29,45 @@ import java.util.Random;
  * possible alter the contents of it without having to alter the signature.
  */
 
-public class SimulationNode extends Node implements Serializable {
-
+public class SimulationNode implements Node {
 	// Variables
-	public int xCoordinate = 0;
-	public int yCoordinate = 0;
-	public Color color = Color.BLUE;
-	public int WIDTH = 0;
-	public int BidNumber = 1;
-	public ArrayList<Message> acceptedMessages = new ArrayList<Message>();
-	public ArrayList<Message> submittedBids = new ArrayList<Message>();
-	public ArrayList<Ping> pingsReceived = new ArrayList<Ping>();
-	public ArrayList<SimulationNode> networkNodes = new ArrayList<SimulationNode>();
+		public int xCoordinate = 0;
+		public int yCoordinate = 0;
+		public Color color = Color.BLUE;
+		public int WIDTH = 0;
+		public String nodeID = null;
+		public Random rand = new Random();
+		public HashMap<String, Integer> myResources = new HashMap<String, Integer>();
+		
+		//Encryption Set
+		public ArrayList<PublicKey> publicKeySet = new ArrayList<PublicKey>();
+		public KeyPairGenerator keyGen = null;
+		public SecureRandom random = null;
+		public Signature dsa = null;
+		public KeyPair pair = null;
+		public PrivateKey privKey = null;
+		public PublicKey pubKey = null;
+		public byte[] byteArray = new byte[1024];
+		
+		//Blockchain
+		public Blockchain blockChain;
+		public ArrayList<String> blockRequestIDs = new ArrayList<String>();
+		
+		//keep track of messages
+		public ArrayList<Message> openRequests = new ArrayList<Message>();
+		public ArrayList<Message> bidsToMyRequests = new ArrayList<Message>();
+		public ArrayList<Message> myResourceAgreements = new ArrayList<Message>();
+		public ArrayList<Message> myResourceSents = new ArrayList<Message>();
+		public ArrayList<Message> myResourceReceives = new ArrayList<Message>();
+		public ArrayList<TextMessage> myTextMsgs = new ArrayList<TextMessage>();
+		public ArrayList<String> allMsgIDs = new ArrayList<String>();
+		public HashMap<String, Message> msgMap = new HashMap<String, Message>();
+		
+	public ArrayList<SimulationNode> simulationNetworkNodes = new ArrayList<SimulationNode>();
 
 	// Constructor
 	public SimulationNode(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
-		super(id);
-	}
-	
-	public void sendDirectMessage(Node node1, Message message) throws NoSuchAlgorithmException, NoSuchProviderException{
-		System.out.println(this.getNodeID());
-		Node nodeToSendTo = routeTable.get(node1);
-		System.out.println(node1.getNodeID());
-		if(this.getNodeID().equals(node1.getNodeID())){
-			this.setNodeValues(this.getXCoord(), this.getYCoord(), Color.ORANGE,
-					this.getWidth());
-			System.out.println("The message made it to me");
-			directMessages.add(message);
-			return;
-		}
-		else {
-			this.setNodeValues(this.getXCoord(), this.getYCoord(), Color.MAGENTA,
-					this.getWidth());
-			nodeToSendTo.sendDirectMessage(node1, message);
-		}
+		
 	}
 
 	// Accessors
@@ -142,65 +147,8 @@ public class SimulationNode extends Node implements Serializable {
 		}
 	}
 
-	public void addNetworkNode(SimulationNode node) {
-		networkNodes.add(node);
-	}
-
-	public void addAcceptedMessage(Message msg) {
-		this.acceptedMessages.add(msg);
-	}
-
-	public ArrayList<Message> getAcceptedMessages() {
-		return this.acceptedMessages;
-	}
-	
-	public void createTextMessage(String data) {
-
-		distributePublicKey(this.getPublicKey()); // distribute public key to
-		// friend nodes (they will
-		// propagate it to their
-		// friends)
-		// System.out.println("I distributed my public key");
-
-		Random rand = new Random(); // create a message with a random friend
-		// node as the recipient
-		if (networkNodes.size() > 0) {
-			int nodesSize = networkNodes.size();
-			int receiverNum = rand.nextInt(nodesSize);
-			Message text = new TextMessage(data, this.getNodeID(), networkNodes.get(receiverNum).getNodeID());
-
-			this.blockChain.add(text);
-
-			localMSG.add(text);
-			this.distributeMessage(text); // distribute message to friend nodes
-		} // (they will propagate to their
-			// friends)
-	}
-	public void removeGlobalMessage(Message text) {
-		if (this.localMSG.contains(text)) {
-			this.localMSG.remove(text);
-			for (int i = 0; i < networkNodes.size(); i++) { // distribute
-															// message to
-				// friend nodes (they
-				// will propagate to
-				// their friends)
-				((SimulationNode) networkNodes.get(i)).removeGlobalMessage(text);
-			}
-		} else {
-			// do nothing
-		}
-	}
-	
-	public void addBid(Message bid){
-		System.out.println("submitted Bids Length: " + this.submittedBids.size());
-		((Bid) bid.getMessageData()).setBidNumber(this.BidNumber);
-		this.BidNumber++;
-		this.submittedBids.add(bid);
-		System.out.println("submitted Bids Length after: " + this.submittedBids.size());
-	}
-	
-	public ArrayList<Message> getBids(){
-		return this.submittedBids;
+	public void addSimulationNode(SimulationNode node) {
+		simulationNetworkNodes.add(node);
 	}
 	
 	
@@ -212,28 +160,55 @@ public class SimulationNode extends Node implements Serializable {
 
 	public void drawLinesToFriends(Graphics g) {
 		g.setColor(Color.BLACK);
-		for (int i = 0; i < this.networkNodes.size(); i++) {
-			SimulationNode friend = (SimulationNode) networkNodes.get(i);
+		for (int i = 0; i < this.simulationNetworkNodes.size(); i++) {
+			SimulationNode friend = simulationNetworkNodes.get(i);
 			g.drawLine(this.xCoordinate + this.WIDTH / 2, this.yCoordinate + this.WIDTH / 2,
 					friend.getXCoord() + this.WIDTH / 2, friend.getYCoord() + this.WIDTH / 2);
 		}
 	}
-
-	public void removeBid(Message currentMessage) {
-		// TODO Auto-generated method stub
-		this.submittedBids.remove(currentMessage);
-	}
-
-	public void removeAcceptedMessage(Message message) {
-		// TODO Auto-generated method stub
-		this.acceptedMessages.remove(message);
-	}
-	public void addNodes(ArrayList<Node> newNodes) { // add a group of friend
+	public void addNodes(ArrayList<SimulationNode> newNodes) { // add a group of friend
 		// nodes
 		for (int i = 0; i < newNodes.size(); i++) {
-			networkNodes.add(newNodes.get(i));
+			simulationNetworkNodes.add(newNodes.get(i));
 		}
 	}
+	
+	public void makeBlockRequest(String hash, String id) {
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // distribute
+			// blockrequest to
+			// friend nodes (they
+			// will propagate to
+			// their friends if they
+			// cannot resolve)
+			simulationNetworkNodes.get(i).requestBlock(hash, id);
+		}
+	}
+
+	public void broadcastBlock(Block b, String nodeID) {
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // distribute
+			// blockrequest to
+			// friend nodes (they
+			// will propagate to
+			// their friends if they
+			// cannot resolve)
+			simulationNetworkNodes.get(i).receiveBlock(b, nodeID);
+		}
+	}
+	
+	public void requestBlock(BlockRequest br) {
+		String hash = br.getHash();
+		String id = br.getAuthor();
+		if (!blockRequestIDs.contains(hash + id)) {
+			blockRequestIDs.add(hash + id);
+			Block b = blockChain.getBlock(hash);
+			if (b != null) {
+				broadcastBlock(b, id);
+			} else {
+				makeBlockRequest(hash, id);
+			}
+		}
+	}
+	
 	public String randomMessageNumberGenerator(){
 		String messageNum = "";
 		ArrayList<String> charPossibilities = new ArrayList<String>();
@@ -274,11 +249,186 @@ public class SimulationNode extends Node implements Serializable {
 		charPossibilities.add("8");
 		charPossibilities.add("9");
 		
-		for(int i = 0; i < LENGTH;i++){
+		for(int i = 0; i < 10;i++){
 			int ranNum = rand.nextInt(charPossibilities.size());
 			messageNum = messageNum + charPossibilities.get(i);
 		}
 		//System.out.println(messageNum);
 		return messageNum;
+	}
+	public void printNodes() {
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // print out friend
+			// nodes
+			System.out.println(simulationNetworkNodes.get(i).getNodeID());
+		}
+	}
+	
+	public void distributeMessage(Message text) {
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // distribute message to
+			// friend nodes (they
+			// will propagate to
+			// their friends)
+			simulationNetworkNodes.get(i).addMessage(text);
+		}
+	}
+
+	public void distributeSignedMessage(byte[] realSig, byte[] byteArray2, TextMessage text)
+			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // give each friend node
+			// the signed message,
+			// saved in their
+			// localMSG
+			simulationNetworkNodes.get(i).addSignedMessage(realSig, byteArray2, text);
+		}
+	}
+
+	public void distributePublicKey(PublicKey publicKey) {
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // add public key to all
+			// friend nodes (they
+			// will propagate to
+			// their friends)
+			simulationNetworkNodes.get(i).addPublicKey(publicKey);
+		}
+	}
+
+	public void addSignedMessage(byte[] realSig, byte[] byteArray2, TextMessage text)
+			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException {
+		Signature sig = Signature.getInstance("SHA1withDSA", "SUN");
+		for (int i = 0; i < publicKeySet.size(); i++) { // find public key that
+			// can verify message
+			sig.initVerify(publicKeySet.get(i));
+			sig.update(byteArray2);
+			boolean verifies = sig.verify(realSig);
+
+			if (verifies == true) { // if verified and unique, add to localMSG
+				// and distribute friend nodes
+				if (!myTextMsgs.contains(text)) {
+					myTextMsgs.add(text);
+					this.distributeSignedMessage(realSig, byteArray2, text);
+					return;
+				}
+			} else {
+			}
+		}
+	}
+
+	public void addPublicKey(PublicKey publicKey) {
+		// TODO Auto-generated method stub
+		if (this.publicKeySet.contains(publicKey)) { // if public key is unique,
+			// add and distribute to
+			// friend nodes
+			// do nothing
+		} else {
+			this.publicKeySet.add(publicKey);
+			this.distributePublicKey(publicKey);
+		}
+	}
+	
+	public void distributeBlock(Block b) {
+		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // add block to friend
+			// node's blockchain
+			simulationNetworkNodes.get(i).blockChain.add(b);
+		}
+	}
+	public void addResource(String type, int amount) {
+		String resourceType = type.toLowerCase();
+		if (myResources.containsKey(resourceType)) {
+			myResources.replace(resourceType, amount + myResources.get(resourceType));
+		} else {
+			myResources.put(resourceType, amount);
+		}
+	}
+
+	public HashMap<String, Integer> getResources() {
+		return this.myResources;
+	}
+
+	// Accessors
+	public String getNodeID() {
+		return nodeID;
+	}
+
+	public PublicKey getPublicKey() {
+		return this.pubKey;
+	}
+
+	// Mutators
+	public void addMessage(Message msg) {
+		// if message is unique, add and
+		// distribute
+		// do nothing
+		if (msg != null && !this.msgMap.containsKey(msg)) {
+			this.blockChain.add(msg);
+			switch(msg.getMessageType()) {
+				case "ResourceRequest":
+					openRequests.add(msg);
+					break;
+				case "ResourceRequestBid":
+					bidsToMyRequests.add(msg);
+					break;
+				case "ResourceAgreement":
+					myResourceAgreements.add(msg);
+					break;
+				case "ResourceSent":
+					myResourceSents.add(msg);
+					break;
+				case "ResourceReceived":
+					myResourceReceives.add(msg);
+					break;
+			}
+			msgMap.put(msg.getID(), msg);
+			distributeMessage(msg);
+		}
+	}
+
+	public void setBlockChainDifficulty(int difficulty) {
+		blockChain.setDifficulty(difficulty);
+	}
+
+
+	//Block Request Protocol
+	
+	public void receiveBlock(Block b) {
+		if (blockRequestIDs.contains(b.getMyHash() + nodeID)) {
+			blockRequestIDs.remove(b.getMyHash() + nodeID);
+			if (nodeID == this.nodeID) {
+				blockChain.add(b);
+			} else {
+				broadcastBlock(b, nodeID);
+			}
+		}
+	}
+
+	public void broadcastBlock(Block b) {
+		
+	}
+
+	// Utility
+	public void start() {
+		blockChain.start();
+	}
+
+	public boolean isOnline() {
+		return true;
+	}
+
+	public void addBlock(Block b) {
+		blockChain.add(b);
+	}
+
+	// Accessors
+	public ArrayList<Message> getOpenRequests() {
+		return openRequests;
+	}
+	
+	public ArrayList<Message> getBids(){
+		return this.bidsToMyRequests;
+	}
+
+	@Override
+	public ArrayList<Message> getBidsToMyRequests() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
