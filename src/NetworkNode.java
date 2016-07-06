@@ -159,12 +159,15 @@ public class NetworkNode implements Node {
 					bidsToMyRequests.add(msg);
 					break;
 				case "ResourceAgreement":
+					System.out.println("received resource agreement");
 					myResourceAgreements.add(msg);
 					break;
 				case "ResourceSent":
+					System.out.println("received resource sent");
 					myResourceSents.add(msg);
 					break;
 				case "ResourceReceived":
+					System.out.println("received resource receives");
 					myResourceReceives.add(msg);
 					break;
 			}

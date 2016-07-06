@@ -249,6 +249,7 @@ public class BluetoothGUI extends Program{
 
 	
 	//Generate GUI
+
 	private void checkBids() {
 		generateBidMessageBoard();
 		g.setColor(Color.WHITE);

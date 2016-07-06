@@ -177,7 +177,7 @@ public class SimulationNode implements Node {
 	
 	public void receiveBlock(BlockDelivery bd) {
 		String hash = bd.getHash();
-		Block b = bd.getBlock();
+		Block b = bd.block;
 		String nodeID = bd.getAuthor();
 		if (blockRequestIDs.contains(hash + nodeID)) {
 			blockRequestIDs.remove(hash + nodeID);
@@ -431,5 +431,47 @@ public class SimulationNode implements Node {
 	public ArrayList<Message> getBidsToMyRequests() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public ArrayList<Message> getMyResourceAgreements() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<Message> getMyResourceSents() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<Message> getMyResourceReceives() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void receiveBlock(Block b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void requestBlock(String hash) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void makeBlockRequest(String hash) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void broadcastBlock(Block b) {
+		// TODO Auto-generated method stub
+		
 	}
 }
