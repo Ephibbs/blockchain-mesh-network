@@ -13,14 +13,18 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /*
- * Class to store blocks, each node has its own copy of the blockchain
+ * This class manages the order of messages that travel through the network, each node has its own copy of the blockchain
+ * Blockchain has two threads: 
+ * 		PuzzleSolver - to solve for the next block in the chain
+ * 		BlockChecker - to verify that incoming blocks are valid, and adding to blockchain
+ * 
  * Parameters: Node node
  */
 
 public class Blockchain implements Runnable, Serializable {
 
 	// Variables
-	private BlockStore blockStore = new BlockStore();
+	private Blockstore blockStore = new Blockstore();
 	private ArrayList<Block> incBlks = new ArrayList<Block>();
 	private Node node;
 	private int difficulty;
@@ -153,8 +157,5 @@ public class Blockchain implements Runnable, Serializable {
     }
     public void setDifficulty(int difficulty) {
     	this.difficulty = difficulty;
-    }
-    ArrayList<Message> getMessages() {
-    	return blockStore.getMessages();
     }
 }

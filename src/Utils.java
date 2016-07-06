@@ -1,7 +1,9 @@
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 public class Utils {
+	static Random rand = new Random();
 	public static boolean checkHash(Block b, int difficulty) {
 		int diff = b.getDifficulty();
     	if (diff < 1) {
@@ -40,4 +42,7 @@ public class Utils {
          
         return sb.toString();
     }
+	public static int getRandID(int n) {
+		return rand.nextInt(n);
+	}
 }

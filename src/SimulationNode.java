@@ -40,6 +40,7 @@ public class SimulationNode extends Node implements Serializable {
 	public ArrayList<Message> acceptedMessages = new ArrayList<Message>();
 	public ArrayList<Message> submittedBids = new ArrayList<Message>();
 	public ArrayList<Ping> pingsReceived = new ArrayList<Ping>();
+	public ArrayList<SimulationNode> networkNodes = new ArrayList<SimulationNode>();
 
 	// Constructor
 	public SimulationNode(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -141,9 +142,8 @@ public class SimulationNode extends Node implements Serializable {
 		}
 	}
 
-	@Override
-	public void addFriend(Node node) {
-		super.addFriend(node);
+	public void addNetworkNode(SimulationNode node) {
+		networkNodes.add(node);
 	}
 
 	public void addAcceptedMessage(Message msg) {
@@ -153,16 +153,29 @@ public class SimulationNode extends Node implements Serializable {
 	public ArrayList<Message> getAcceptedMessages() {
 		return this.acceptedMessages;
 	}
-
-	public void removeMessage(Message text) {
-		if (this.localMSG.contains(text)) {
-			this.localMSG.remove(text);
-			
-		} else {
-			// do nothing
-		}
-	}
 	
+	public void createTextMessage(String data) {
+
+		distributePublicKey(this.getPublicKey()); // distribute public key to
+		// friend nodes (they will
+		// propagate it to their
+		// friends)
+		// System.out.println("I distributed my public key");
+
+		Random rand = new Random(); // create a message with a random friend
+		// node as the recipient
+		if (networkNodes.size() > 0) {
+			int nodesSize = networkNodes.size();
+			int receiverNum = rand.nextInt(nodesSize);
+			Message text = new TextMessage(data, this.getNodeID(), networkNodes.get(receiverNum).getNodeID());
+
+			this.blockChain.add(text);
+
+			localMSG.add(text);
+			this.distributeMessage(text); // distribute message to friend nodes
+		} // (they will propagate to their
+			// friends)
+	}
 	public void removeGlobalMessage(Message text) {
 		if (this.localMSG.contains(text)) {
 			this.localMSG.remove(text);
@@ -189,7 +202,8 @@ public class SimulationNode extends Node implements Serializable {
 	public ArrayList<Message> getBids(){
 		return this.submittedBids;
 	}
-
+	
+	
 	// Utility
 	public void Draw(Graphics g) {
 		g.setColor(this.color);
@@ -213,5 +227,58 @@ public class SimulationNode extends Node implements Serializable {
 	public void removeAcceptedMessage(Message message) {
 		// TODO Auto-generated method stub
 		this.acceptedMessages.remove(message);
+	}
+	public void addNodes(ArrayList<Node> newNodes) { // add a group of friend
+		// nodes
+		for (int i = 0; i < newNodes.size(); i++) {
+			networkNodes.add(newNodes.get(i));
+		}
+	}
+	public String randomMessageNumberGenerator(){
+		String messageNum = "";
+		ArrayList<String> charPossibilities = new ArrayList<String>();
+		charPossibilities.add("a");
+		charPossibilities.add("b");
+		charPossibilities.add("c");
+		charPossibilities.add("d");
+		charPossibilities.add("e");
+		charPossibilities.add("f");
+		charPossibilities.add("g");
+		charPossibilities.add("h");
+		charPossibilities.add("i");
+		charPossibilities.add("j");
+		charPossibilities.add("k");
+		charPossibilities.add("l");
+		charPossibilities.add("m");
+		charPossibilities.add("n");
+		charPossibilities.add("o");
+		charPossibilities.add("p");
+		charPossibilities.add("q");
+		charPossibilities.add("r");
+		charPossibilities.add("s");
+		charPossibilities.add("t");
+		charPossibilities.add("u");		
+		charPossibilities.add("v");
+		charPossibilities.add("w");
+		charPossibilities.add("x");
+		charPossibilities.add("y");
+		charPossibilities.add("z");
+		charPossibilities.add("0");
+		charPossibilities.add("1");
+		charPossibilities.add("2");
+		charPossibilities.add("3");
+		charPossibilities.add("4");
+		charPossibilities.add("5");
+		charPossibilities.add("6");
+		charPossibilities.add("7");
+		charPossibilities.add("8");
+		charPossibilities.add("9");
+		
+		for(int i = 0; i < LENGTH;i++){
+			int ranNum = rand.nextInt(charPossibilities.size());
+			messageNum = messageNum + charPossibilities.get(i);
+		}
+		//System.out.println(messageNum);
+		return messageNum;
 	}
 }

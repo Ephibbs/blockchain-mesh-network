@@ -19,27 +19,22 @@ public abstract class Message extends Sendable implements Serializable {
 //	public Node recipient = new Node(null);
 	
 	public String messageType;
-	public Node author = null;
-	public Node recipient = null;
-	public Object messageData = new Object();
+	public String author = null;
+	public String recipient = null;
 	public int id=0;
 	public final long serialVersionUID = 2L;
 
 	// Constructors
-	public Message(Object data, Node auth, Node rec) {
+	public Message(String auth, String rec) {
 		super("Message");
-		this.messageData = data;
 		this.author = auth;
 		this.recipient = rec;
+		id = Utils.getRandID(1000000000);
 	}
-	public Message(Object data, Node auth) {
+	
+	public Message() {
 		super("Message");
-		this.messageData = data;
-		this.author = auth;
-	}
-	public Message(Object data) {
-		super("Message");
-		this.messageData = data;
+		id = Utils.getRandID(1000000000);
 	}
 	
 	/**
@@ -50,27 +45,28 @@ public abstract class Message extends Sendable implements Serializable {
 	public String getMessageType() {
 		return messageType;
 	}
-	public Object getMessageData() {
-		return messageData;
-	}
-	public Node getAuthor() {
+	public String getAuthor() {
 		return author;
 	}
-	public Node getRecipient() {
+	public String getRecipient() {
 		return recipient;
 	}
 	public String getHash() {
 		try {
-			return Utils.sha256(messageData.toString() + Integer.toString(id));
+			return Utils.sha256(author + recipient + Integer.toString(id));
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "";
 	}
+	
+	public int getID() {
+		return id;
+	}
 
 	// Utility
 	public void printMessage() {
-		System.out.println("The message is: " + messageData.toString() + " from: " +this.author.getNodeID()+ " to: " + this.recipient.getNodeID());
+		System.out.println(" from: " + this.author + " to: " + this.recipient);
 	}
 }

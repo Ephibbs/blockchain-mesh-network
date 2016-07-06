@@ -13,6 +13,7 @@ import java.util.*;
 
 public class NetworkNode extends Node {
 	public BluetoothManager bm;
+	
 	NetworkNode(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
 		super(id);
 	}

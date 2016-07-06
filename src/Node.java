@@ -19,8 +19,10 @@ import java.util.Set;
 public class Node implements Serializable {
 	// Variables
 	public String nodeID = null;
-	public ArrayList<Node> networkNodes = new ArrayList<Node>();
-	public ArrayList<Message> localMSG = new ArrayList<Message>();
+	public Random rand = new Random();
+	public HashMap<String, Integer> myResources = new HashMap<String, Integer>();
+	
+	//Encryption Set
 	public ArrayList<PublicKey> publicKeySet = new ArrayList<PublicKey>();
 	public KeyPairGenerator keyGen = null;
 	public SecureRandom random = null;
@@ -29,25 +31,30 @@ public class Node implements Serializable {
 	public PrivateKey privKey = null;
 	public PublicKey pubKey = null;
 	public byte[] byteArray = new byte[1024];
-	public Blockchain blockChain;
-	public HashMap<Node, Node> routeTable = new HashMap<Node, Node>();
-	public Random rand = new Random();
-	private Ping ping;
-	public ArrayList<String> blockRequestIDs = new ArrayList<String>();
-	public HashMap<String, Integer> myResources = new HashMap<String, Integer>();
-	public HashMap<String, ArrayList<Ping>> pingHash = new HashMap<String, ArrayList<Ping>>();
-	public ArrayList<Message> directMessages = new ArrayList<Message>();
-	public HashMap<Node, Integer> countHash = new HashMap<Node, Integer>();
 	
-	public int xCoordinate = 0;
-	public int yCoordinate = 0;
-	public Color color = Color.BLUE;
-	public int WIDTH = 0;
-	public int BidNumber = 1;
-	public ArrayList<Message> acceptedMessages = new ArrayList<Message>();
-	public ArrayList<Message> submittedBids = new ArrayList<Message>();
+	//Blockchain
+	public Blockchain blockChain;
+	public ArrayList<String> blockRequestIDs = new ArrayList<String>();
+	
+	//Pinging Protocol
+	public HashMap<Node, Node> routeTable = new HashMap<Node, Node>();
+	private Ping ping;
 	public ArrayList<Ping> pingsReceived = new ArrayList<Ping>();
-	public int LENGTH = 10;
+	public HashMap<String, ArrayList<Ping>> pingHash = new HashMap<String, ArrayList<Ping>>();
+	public ArrayList<Message> directMessages = new ArrayList<Message>(); //%TODO like text messages?
+	public HashMap<Node, Integer> countHash = new HashMap<Node, Integer>(); //%TODO WHAT IS THIS?
+	
+	//keep track of messages
+	public ArrayList<Message> openRequests = new ArrayList<Message>();
+	public ArrayList<Message> myRequestBids = new ArrayList<Message>();
+	public ArrayList<Message> myRequestAgreements = new ArrayList<Message>();
+	public ArrayList<Message> myRequestSents = new ArrayList<Message>();
+	public ArrayList<Message> myRequestReceives = new ArrayList<Message>();
+	public ArrayList<String> allMsgIDs = new ArrayList<String>();
+	
+	//IDK
+	public int BidNumber = 1; //%TODO WHAT IS THIS
+	public int LENGTH = 10; //%TODO WHAT IS THIS
 
 	// Constructor
 	public Node(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -93,53 +100,7 @@ public class Node implements Serializable {
 		return this.pubKey;
 	}
 
-	public ArrayList<Node> getFriends() {
-		return this.networkNodes;
-	}
-
-	public ArrayList<Message> getMessages() {
-		// TODO Auto-generated method stub
-		return this.localMSG;
-	}
-
 	// Mutators
-	public void createMessage(Message text) {
-
-		distributePublicKey(this.getPublicKey()); // distribute public key to
-		// friend nodes (they will
-		// propagate it to their
-		// friends)
-
-		this.blockChain.add(text);
-
-		localMSG.add(text);
-		this.distributeMessage(text); // distribute message to friend nodes
-
-	}
-
-	public void createMessage(Object data) {
-
-		distributePublicKey(this.getPublicKey()); // distribute public key to
-		// friend nodes (they will
-		// propagate it to their
-		// friends)
-		// System.out.println("I distributed my public key");
-
-		Random rand = new Random(); // create a message with a random friend
-		// node as the recipient
-		if (networkNodes.size() > 0) {
-			int nodesSize = networkNodes.size();
-			int receiverNum = rand.nextInt(nodesSize);
-			Message text = new TextMessage(data, this, networkNodes.get(receiverNum));
-
-			this.blockChain.add(text);
-
-			localMSG.add(text);
-			this.distributeMessage(text); // distribute message to friend nodes
-		} // (they will propagate to their
-			// friends)
-	}
-
 	public void createMessageWithSignature(Object data)
 			throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, NoSuchProviderException {
 
@@ -171,23 +132,22 @@ public class Node implements Serializable {
 		// friends)
 	}
 
-	public void addNodes(ArrayList<Node> newNodes) { // add a group of friend
-		// nodes
-		for (int i = 0; i < newNodes.size(); i++) {
-			networkNodes.add(newNodes.get(i));
-		}
-	}
-
-	public void addFriend(Node node) { // add a single friend node
-		networkNodes.add(node);
-	}
-
-	public void addMessage(Message text) {
+	public void addMessage(Message msg) {
 		// if message is unique, add and
 		// distribute
 		// do nothing
-		if (text != null && !this.localMSG.contains(text)) {
-			this.blockChain.add(text);
+		if (msg != null && !this.allMsgIDs.contains(msg)) {
+			this.blockChain.add(msg);
+			switch(msg.getMessageType()) {
+				case "ResourceRequest":
+					openRequests.add(msg);
+					break;
+				case "ResourceRequestBid":
+					
+					if(openRequests.contains())
+						requestBids.add(msg);
+					break;
+			}
 			this.localMSG.add(text);
 			this.distributeMessage(text);
 		}
@@ -234,6 +194,8 @@ public class Node implements Serializable {
 		return this.routeTable;
 	}
 
+	//Ping Protocol Methods
+	
 	public void createPing() {
 		this.ping = new Ping(this);
 		distributePing(this.ping);
@@ -312,6 +274,8 @@ public class Node implements Serializable {
 		return this.directMessages;
 	}
 
+	//Block Request Protocol
+	
 	public void receiveBlock(Block b, String nodeID) {
 		if (blockRequestIDs.contains(b.getMyHash() + nodeID)) {
 			blockRequestIDs.remove(b.getMyHash() + nodeID);
@@ -432,83 +396,6 @@ public class Node implements Serializable {
 	}
 
 	// Accessors
-	public Color getColor() {
-		return this.color;
-	}
-
-	public int getXCoord() {
-		return this.xCoordinate;
-	}
-
-	public int getYCoord() {
-		return this.yCoordinate;
-	}
-
-	public int getWidth() {
-		return this.WIDTH;
-	}
-
-	public void setNodeValues(int xVal, int yVal, Color myColor, int width)
-			throws NoSuchAlgorithmException, NoSuchProviderException {
-		this.xCoordinate = xVal;
-		this.yCoordinate = yVal;
-		this.color = myColor;
-		this.WIDTH = width;
-	}
-
-	public void setColor(Color myColor) {
-		this.color = myColor;
-	}
-
-	public void moveNode(int maxSize, int offset, int movement, Graphics g) {
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillOval(this.xCoordinate, this.yCoordinate, this.WIDTH, this.WIDTH);
-
-		int randomX = rand.nextInt(movement);
-		int randomY = rand.nextInt(movement);
-		int direction = rand.nextInt(4);
-		int maxChecker = maxSize - offset;
-		if ((this.xCoordinate + randomX) > maxChecker) {
-			this.xCoordinate = this.xCoordinate - 40;
-			// System.out.println("I got here");
-			// this.xCoordinate = this.xCoordinate +
-			// (randomX-(maxChecker-this.xCoordinate));
-		}
-		if ((this.xCoordinate - randomX) < 20) {
-			this.xCoordinate = this.xCoordinate + 25;
-			// System.out.println("I got here");
-			// this.xCoordinate = this.xCoordinate - (randomX-(this.xCoordinate
-			// - offset));
-		}
-		if ((this.yCoordinate + randomY) > maxChecker) {
-			// System.out.println("I got here");
-			this.yCoordinate = this.yCoordinate - 40;
-			// this.yCoordinate = this.yCoordinate +
-			// (randomY-(maxChecker-this.yCoordinate));
-		}
-		if ((this.yCoordinate + randomY) < 100) {
-			// System.out.println("I got here");
-			this.yCoordinate = this.yCoordinate + 25;
-			// this.yCoordinate = this.yCoordinate - (randomY-(this.yCoordinate
-			// - offset));
-		} else {
-			if (direction == 0) {
-				this.xCoordinate = this.xCoordinate + randomX;
-				this.yCoordinate = this.yCoordinate + randomY;
-			} else if (direction == 1) {
-				this.xCoordinate = this.xCoordinate - randomX;
-				this.yCoordinate = this.yCoordinate + randomY;
-			} else if (direction == 2) {
-				this.xCoordinate = this.xCoordinate + randomX;
-				this.yCoordinate = this.yCoordinate - randomY;
-			} else {
-				this.xCoordinate = this.xCoordinate - randomX;
-				this.yCoordinate = this.yCoordinate - randomY;
-			}
-		}
-	}
-
-
 	public void addAcceptedMessage(Message msg) {
 		this.acceptedMessages.add(msg);
 	}
@@ -546,53 +433,5 @@ public class Node implements Serializable {
 	public void removeAcceptedMessage(Message message) {
 		// TODO Auto-generated method stub
 		this.acceptedMessages.remove(message);
-	}
-	
-	public String randomMessageNumberGenerator(){
-		String messageNum = "";
-		ArrayList<String> charPossibilities = new ArrayList<String>();
-		charPossibilities.add("a");
-		charPossibilities.add("b");
-		charPossibilities.add("c");
-		charPossibilities.add("d");
-		charPossibilities.add("e");
-		charPossibilities.add("f");
-		charPossibilities.add("g");
-		charPossibilities.add("h");
-		charPossibilities.add("i");
-		charPossibilities.add("j");
-		charPossibilities.add("k");
-		charPossibilities.add("l");
-		charPossibilities.add("m");
-		charPossibilities.add("n");
-		charPossibilities.add("o");
-		charPossibilities.add("p");
-		charPossibilities.add("q");
-		charPossibilities.add("r");
-		charPossibilities.add("s");
-		charPossibilities.add("t");
-		charPossibilities.add("u");		
-		charPossibilities.add("v");
-		charPossibilities.add("w");
-		charPossibilities.add("x");
-		charPossibilities.add("y");
-		charPossibilities.add("z");
-		charPossibilities.add("0");
-		charPossibilities.add("1");
-		charPossibilities.add("2");
-		charPossibilities.add("3");
-		charPossibilities.add("4");
-		charPossibilities.add("5");
-		charPossibilities.add("6");
-		charPossibilities.add("7");
-		charPossibilities.add("8");
-		charPossibilities.add("9");
-		
-		for(int i = 0; i < LENGTH;i++){
-			int ranNum = rand.nextInt(charPossibilities.size());
-			messageNum = messageNum + charPossibilities.get(i);
-		}
-		//System.out.println(messageNum);
-		return messageNum;
 	}
 }

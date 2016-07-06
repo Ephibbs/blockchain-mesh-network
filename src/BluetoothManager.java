@@ -73,8 +73,6 @@ public class BluetoothManager {
     public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException, IOException, ClassNotFoundException {
     	BluetoothManager bm = new BluetoothManager();
     	bm.start();
-    	//bm.broadcast("Hey there");
-    	//TextMessage b = new TextMessage("Hi", new Node("Evan"));
     	Block b = new Block();
     	bm.broadcast(b);
     }

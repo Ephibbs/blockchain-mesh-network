@@ -1,8 +1,10 @@
+import javax.tools.DocumentationTool.Location;
 
 public class ResourceRequest extends Message{
-	Resource messageData;
-	public ResourceRequest(Object data, Node auth) {
-		super(data, auth);
+	public String type;
+	public int amount;
+	public ResourceRequest(String auth, String rec) {
+		super(auth, rec);
 		this.messageType = "ResourceRequest";
 	}
 }

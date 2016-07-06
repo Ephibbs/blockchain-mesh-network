@@ -9,7 +9,7 @@ import java.util.HashMap;
  * BlockStore class to store the blocks, each blockchain has this
  */
 
-public class BlockStore implements Serializable {
+public class Blockstore implements Serializable {
 
 	// Variables
 	private TreeNode<Block> root = new TreeNode<Block>(new Block("1", new ArrayList<Message>()));
@@ -25,7 +25,7 @@ public class BlockStore implements Serializable {
 	private boolean verbose = false;
 	
 	// Constructor
-	BlockStore() {
+	Blockstore() {
 		treeBlockIDs.add(root.getData().getMyHash());
 		blockMap.put(root.getData().getMyHash(), root);
 	}

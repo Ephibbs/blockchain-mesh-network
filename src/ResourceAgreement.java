@@ -1,8 +1,9 @@
 
 public class ResourceAgreement extends Message {
-	Resource messageData;
-	public ResourceAgreement(Object data) {
-		super(data);
+	int resourceBidID;
+	int resourceRequestID;
+	public ResourceAgreement(String auth, String rec) {
+		super(auth, rec);
 		// TODO Auto-generated constructor stub
 		this.messageType = "ResourceAgreement";
 		

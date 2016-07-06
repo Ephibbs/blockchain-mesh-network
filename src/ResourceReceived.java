@@ -1,8 +1,8 @@
 
 public class ResourceReceived extends Message{
-	public Resource messageData;
-	public ResourceReceived(Object data) {
-		super(data);
+	int resourceSentID;
+	public ResourceReceived() {
+		super();
 		// TODO Auto-generated constructor stub
 		this.messageType = "ResourceReceived";
 	}
