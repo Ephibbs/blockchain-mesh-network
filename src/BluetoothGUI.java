@@ -311,10 +311,10 @@ public class BluetoothGUI extends Program{
 
 	private void generateBidMessageBoard() {
 		g.setColor(Color.DARK_GRAY);
-		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
+		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 
 		g.setColor(Color.WHITE);
-		g.drawRect(0 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(0 + 0, 0, MAXSIZE / 4, MAXSIZE);
 		g.drawRect(MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
 		g.drawRect(2 * MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
 		g.drawRect(3 * MAXSIZE / 4 + MAXSIZE, 0, MAXSIZE / 4, MAXSIZE);
