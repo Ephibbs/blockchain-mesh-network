@@ -41,6 +41,7 @@ public class BluetoothGUI extends Program{
 
 	public ArrayList<NetworkNode> networkNodes = new ArrayList<NetworkNode>();
 
+	public int sendResourceNumber = 0;
 	public int nodeIDCounter = 0;
 	public int difficulty = 5;
 	public int numberOfNodes = 1;
@@ -287,7 +288,7 @@ public class BluetoothGUI extends Program{
 	}
 
 	private void sendResource() {
-		int sendResourceNumber = Integer.parseInt(this.sentResource.getText());
+		this.sendResourceNumber = Integer.parseInt(this.sentResource.getText());
 		NetworkNode thisNode = (NetworkNode) this.myNode;
 
 //		myNode.addMessage(new ResourceSent(sendResourceNumber, )); Need help
