@@ -71,6 +71,7 @@ public class NetworkNode implements Node {
     }
 	
 	public void start() {
+		blockChain.start();
 		try {
 			bm.start();
 		} catch (IOException e) {
@@ -100,55 +101,61 @@ public class NetworkNode implements Node {
 	@Override
 	public HashMap<String, Integer> getResources() {
 		// TODO Auto-generated method stub
-		return null;
+		return myResources;
 	}
 	@Override
 	public String getNodeID() {
 		// TODO Auto-generated method stub
-		return null;
+		return nodeID;
 	}
 	@Override
 	public ArrayList<Message> getOpenRequests() {
 		// TODO Auto-generated method stub
-		return null;
+		return openRequests;
 	}
 	@Override
 	public ArrayList<Message> getBidsToMyRequests() {
 		// TODO Auto-generated method stub
-		return null;
+		return bidsToMyRequests;
 	}
 	@Override
 	public ArrayList<Message> getMyResourceAgreements() {
 		// TODO Auto-generated method stub
-		return null;
+		return myResourceAgreements;
 	}
 	@Override
 	public ArrayList<Message> getMyResourceSents() {
 		// TODO Auto-generated method stub
-		return null;
+		return myResourceSents;
 	}
 	@Override
 	public ArrayList<Message> getMyResourceReceives() {
 		// TODO Auto-generated method stub
-		return null;
+		return myResourceReceives;
 	}
 	@Override
 	public void addResource(String type, int amount) {
 		// TODO Auto-generated method stub
-		
+		//using Integer because myResources.get may return null;
+		Integer am = myResources.get(type);
+		if(am != null) {
+			myResources.put(type, amount + am);
+		}
 	}
 	@Override
 	public void addMessage(Message msg) {
 		// if message is unique, add and
 		// distribute
 		// do nothing
-		if (msg != null && !this.msgMap.containsKey(msg)) {
+		if (msg != null && !this.msgMap.containsKey(msg.getID())) {
 			blockChain.add(msg);
 			switch(msg.getMessageType()) {
 				case "ResourceRequest":
+					System.out.println("received resource request");
 					openRequests.add(msg);
 					break;
 				case "ResourceRequestBid":
+					System.out.println("received resource bid");
 					bidsToMyRequests.add(msg);
 					break;
 				case "ResourceAgreement":
@@ -183,11 +190,11 @@ public class NetworkNode implements Node {
 	@Override
 	public boolean isOnline() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	@Override
 	public void addBlock(Block b) {
 		// TODO Auto-generated method stub
-		
+		blockChain.add(b);
 	}
 }

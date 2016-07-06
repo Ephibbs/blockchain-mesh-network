@@ -61,7 +61,6 @@ public class BluetoothGUI extends Program{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		myNode.start();
 	}
 
 	// Don't worry about these
@@ -118,7 +117,7 @@ public class BluetoothGUI extends Program{
 		add(new JButton("Check Accepted"), WEST);
 		add(new JButton("Check Bids"), WEST);
 
-		add(new JButton("Global View"), WEST);
+		add(new JButton("Check Requests"), WEST);
 
 //		this.viewResources = new JTextField(TEXT_FIELD_SIZE);
 //		add(this.viewResources, WEST);
@@ -166,13 +165,17 @@ public class BluetoothGUI extends Program{
 			generateAcceptedMessages();
 		} else if (e.getActionCommand().equals("Check Bids")) {
 			checkBids();
+		} else if (e.getActionCommand().equals("Check Requests")) {
+			checkRequests();
 		} else if (e.getActionCommand().equals("View Resources")) {
 			viewNodesResources(this.viewResources.getText());
 		} else if (e.getActionCommand().equals("Send Resource")) {
 			sendResource();
 		} else if (e.getActionCommand().equals("Receive Resource")) {
 			receiveResource();
-		} 
+		} else if (e.getActionCommand().equals("Check Resources")) {
+			receiveResource();
+		}
 	}
 
 	private void putInitResources() {
@@ -210,7 +213,6 @@ public class BluetoothGUI extends Program{
 	private void generateResourceRequest() throws NoSuchAlgorithmException, NoSuchProviderException {
 		ResourceRequest newRequest = new ResourceRequest(Integer.parseInt(this.resourceAmount.getText()), 
 				this.resourceType.getText(), myNode.getNodeID());
-		
 		myNode.addMessage(newRequest);
 	}
 
@@ -247,7 +249,8 @@ public class BluetoothGUI extends Program{
 
 	
 	//Generate GUI
-	private void displayBids() {
+	private void checkBids() {
+		generateBidMessageBoard();
 		g.setColor(Color.WHITE);
 		if (myNode.getBidsToMyRequests() != null) {
 			for (int i = 0; i < myNode.getBidsToMyRequests().size(); i++) {
@@ -263,10 +266,22 @@ public class BluetoothGUI extends Program{
 			}
 		}
 	}
-
-	private void checkBids() {
-		generateBidMessageBoard();
-		displayBids();
+	
+	private void checkRequests() {
+		generateMessageBoard();
+		g.setColor(Color.WHITE);
+		ArrayList<Message> availableMessages = myNode.getOpenRequests();
+		for (int i = 0; i < availableMessages.size(); i++) {
+			ResourceRequest rr = (ResourceRequest) availableMessages.get(i);
+			String requestID = rr.id;
+			String resourceRequested = rr.type;
+			String resourceAmount = "" + rr.amount;
+			String originator = rr.getAuthor();
+			g.drawString(requestID,  5, 40 + i * 20);
+			g.drawString(resourceRequested, 5 + MAXSIZE / 4, 40 + i * 20);
+			g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
+			g.drawString(originator, 5 + 3 * MAXSIZE / 4, 40 + i * 20);
+		}
 	}
 	
 	private void generateAcceptedMessages() {
@@ -277,6 +292,10 @@ public class BluetoothGUI extends Program{
 			for (int i = 0; i < resourceAgreements.size(); i++) {
 				ResourceAgreement rrAgree = (ResourceAgreement) resourceAgreements.get(i);
 				ResourceRequestBid rrbid = (ResourceRequestBid) myNode.msgMap.get(rrAgree.resourceBidID);
+				if(rrbid == null) {
+					System.out.println("incorrect bid id");
+					return;
+				}
 				String messageNumber = rrAgree.resourceBidID;
 				String resourceRequested = rrbid.type;
 				String resourceAmount = "" + rrbid.amount;
@@ -382,7 +401,7 @@ public class BluetoothGUI extends Program{
 			String nodeNameRec = "Node" + networkNodes.get(i).nodeID;
 			if (networkNodes.get(i).nodeID.equals(receiver)) {
 				receiverNode = networkNodes.get(i);
-				currentMessage = new TextMessage(message, receiverNode.getNodeID());
+				//currentMessage = new TextMessage(message, receiverNode.getNodeID());
 				myNode.addMessage(currentMessage);
 			}
 		}

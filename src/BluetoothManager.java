@@ -27,12 +27,12 @@ public class BluetoothManager {
 	
 	void start() throws IOException {
 		server.start();
-		client.init();
+		client.start();
 	}
 	
 	void broadcast(Serializable b) throws IOException {
 		String s = toString(b);
-		client.broadcast(s);
+		client.addToOutQ(s);
 	}
 	
 	void send(String uuid, String s) throws IOException {

@@ -7,7 +7,7 @@ import java.util.*;
 /*
  * This class connects with node servers around it and sends text to them
  */
-public class BluetoothClient {
+public class BluetoothClient implements Runnable {
 
     private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC9";
     private ArrayList<UUID> SERVICE_UUIDS = new ArrayList<UUID>();
@@ -16,6 +16,8 @@ public class BluetoothClient {
 
     private LocalDevice localDevice;
     private DiscoveryAgent discoveryAgent;
+    private ArrayList<String> outQ = new ArrayList<String>();
+    private Thread t;
     
     BluetoothClient() {
        	/*
@@ -32,18 +34,43 @@ public class BluetoothClient {
     	 */
     	maxNumAttempts = 3;
     }
-
-    public void init() throws BluetoothStateException {
-        localDevice = LocalDevice.getLocalDevice();
-        discoveryAgent = localDevice.getDiscoveryAgent();
-    }
     
-    public void broadcast(String s) throws IOException {
+    public void addToOutQ(String s) throws IOException {
+    	outQ.add(s);
+    }
+    public void broadcast(String s) {
     	for(UUID uuid : SERVICE_UUIDS) {
-    		send(uuid, s);
+    		try {
+				send(uuid, s);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
     }
-    
+    public void start() {
+    	try {
+			localDevice = LocalDevice.getLocalDevice();
+		} catch (BluetoothStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        discoveryAgent = localDevice.getDiscoveryAgent();
+        
+        t = new Thread(this, "bluetooth client");
+		t.start();
+    }
+    public void run() {
+    	System.out.println("running client");
+    	while(true) {
+    		if(!outQ.isEmpty()) {
+    			for(String s : outQ) {
+    				broadcast(s);
+    				outQ.remove(s);
+    			}
+    		}
+    	}
+    }
     public void send(UUID uuid, String s) throws IOException {
     	for(int numAttempts = 0; numAttempts < maxNumAttempts; numAttempts++) {
     		System.out.println("attempt");

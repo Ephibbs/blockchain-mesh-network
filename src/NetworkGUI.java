@@ -208,7 +208,7 @@ public class NetworkGUI extends Program {
 	private void globalPingCreation() {
 		for (int i = 0; i < networkNodes.size(); i++) {
 			System.out.println("I created a pings");
-			this.networkNodes.get(i).createPing();
+			//this.networkNodes.get(i).createPing();
 		}
 	}
 
@@ -271,25 +271,25 @@ public class NetworkGUI extends Program {
 //							receiverNode.getWidth());
 //					receiverNode.Draw(g);
 					currentMessage = new TextMessage(message, senderNode.getNodeID(), receiverNode.getNodeID());
-					senderNode.createTextMessage(currentMessage);
+					//senderNode.createTextMessage(currentMessage);
 				}
 			}
 		}
 		for (int o = 0; o < this.networkNodes.size(); o++) {
 			NetworkNode currentNode = this.networkNodes.get(o);
-			for (int p = 0; p < currentNode.getMessages().size(); p++) {
-				if (currentNode.getMessages().get(p).getMessageData().toString()
-						.equals(currentMessage.getMessageData().toString())) {
-
-					if (!currentNode.equals(senderNode) && !currentNode.equals(receiverNode)) {
-//						currentNode.setNodeValues(currentNode.getXCoord(), currentNode.getYCoord(), Color.GREEN,
-//								currentNode.getWidth());
-//						System.out.println("I should be green now");
-//						currentNode.Draw(g);
-					}
-				}
-
-			}
+//			for (int p = 0; p < currentNode.getMessages().size(); p++) {
+//				if (currentNode.getMessages().get(p).getMessageData().toString()
+//						.equals(currentMessage.getMessageData().toString())) {
+//
+//					if (!currentNode.equals(senderNode) && !currentNode.equals(receiverNode)) {
+////						currentNode.setNodeValues(currentNode.getXCoord(), currentNode.getYCoord(), Color.GREEN,
+////								currentNode.getWidth());
+////						System.out.println("I should be green now");
+////						currentNode.Draw(g);
+//					}
+//				}
+//
+//			}
 		}
 	}
 //

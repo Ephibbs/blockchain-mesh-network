@@ -52,7 +52,7 @@ public class Blockchain implements Runnable, Serializable {
 	// Mutators
 	public void add(Message msg) { // assume message is already verified, added to arraylist msgs
 		blockStore.add(msg);
-		System.out.println("added message");
+		if(verbose) System.out.println("added message");
 	}
 	public void add(Block b) { // block is added to incomingBlocks ArrayList, awaiting verification and addition to the blockchain
 		if(blockStore.getBlock(b.getPrevHash()) == null) {
@@ -78,6 +78,7 @@ public class Blockchain implements Runnable, Serializable {
     		while(node.isOnline()) {
     			ArrayList<Message> msgs = blockStore.getOrphanMessages();
     			if(!msgs.isEmpty()) {
+    				if(verbose) System.out.println("solving for block");
 	    			Block b = new Block(blockStore.getLastBlock().getMyHash(), msgs);
 	    			String head = blockStore.getLastBlock().getMyHash();
 	    			long nonce = -1;
@@ -147,9 +148,9 @@ public class Blockchain implements Runnable, Serializable {
     	blockChecker = new BlockChecker();
     	
     	puzzleSolver.start();
-    	//System.out.println("running puzzleSolver");
+    	if(verbose) System.out.println("running puzzleSolver");
     	blockChecker.start();
-    	//System.out.println("running blockChecker");
+    	if(verbose) System.out.println("running blockChecker");
     }
     public void start() { // run each task independently
     	t= new Thread(this, "blockChain");

@@ -90,7 +90,7 @@ public class Simulation {
 	 */
 	public void run() throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, NoSuchProviderException {
 		
-		this.networkNodes.get(0).createMessageWithSignature("Colby and Dylan are watching snapchats");
+		//this.networkNodes.get(0).createMessageWithSignature("Colby and Dylan are watching snapchats");
 		
 		System.out.println("Size of node 5 public keyset = " + this.networkNodes.get(4).publicKeySet.size());
 		

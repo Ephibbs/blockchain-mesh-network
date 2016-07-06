@@ -19,8 +19,8 @@ public abstract class Message extends Sendable implements Serializable {
 //	public Node recipient = new Node(null);
 	
 	public String messageType;
-	public String author = null;
-	public String recipient = null;
+	public String author;
+	public String recipient;
 	public String id;
 	public final long serialVersionUID = 2L;
 
