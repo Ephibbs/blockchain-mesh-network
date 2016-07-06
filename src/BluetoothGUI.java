@@ -254,7 +254,7 @@ public class BluetoothGUI extends Program{
 		if (myNode.getBidsToMyRequests() != null) {
 			for (int i = 0; i < myNode.getBidsToMyRequests().size(); i++) {
 				ResourceRequestBid rrbid = (ResourceRequestBid) myNode.getBidsToMyRequests().get(i);
-				String bidID = rrbid.requestID;
+				String bidID = rrbid.getID();
 				String eta = "" + rrbid.eta;
 				String resourceAmount = "" + rrbid.amount;
 				String bidder = rrbid.author;
@@ -295,10 +295,11 @@ public class BluetoothGUI extends Program{
 					System.out.println("incorrect bid id");
 					return;
 				}
+				ResourceRequest rr = (ResourceRequest) myNode.msgMap.get(rrbid.requestID);
 				String messageNumber = rrAgree.resourceBidID;
-				String resourceRequested = rrbid.type;
-				String resourceAmount = "" + rrbid.amount;
-				String destination = rrbid.author;
+				String resourceRequested = rr.type;
+				String resourceAmount = "" + rr.amount;
+				String destination = rr.author;
 				g.drawString(messageNumber,  5, 40 + i * 20);
 				g.drawString(resourceRequested,  5 + MAXSIZE / 4, 40 + i * 20);
 				g.drawString(resourceAmount,  5 + 2 * MAXSIZE / 4, 40 + i * 20);
