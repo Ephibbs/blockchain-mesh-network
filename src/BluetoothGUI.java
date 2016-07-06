@@ -38,6 +38,16 @@ public class BluetoothGUI extends Program{
 
 	public ArrayList<NetworkNode> networkNodes = new ArrayList<NetworkNode>();
 
+<<<<<<< HEAD
+=======
+	public int sendResourceNumber = 0;
+	public int nodeIDCounter = 0;
+	public int difficulty = 5;
+	public int numberOfNodes = 1;
+	public int communicationRadius = 200;
+	public int OFFSET = 15;
+	public int messageNumber = 1;
+>>>>>>> 2a439cae3c985fa0af8fb58cd1d7c762e4f3de47
 	public Canvas canvas = new Canvas();
 	public Random rand = new Random();
 	public Graphics g = this.canvas.getGraphics();
@@ -177,7 +187,87 @@ public class BluetoothGUI extends Program{
 			receiveResource();
 		} 
 	}
-	
+	private void pingEverybody() {
+		for(int i = 0; i < this.networkNodes.size();i++){
+			this.networkNodes.get(i).createPing();
+		}
+		System.out.println("Everyone created a ping");
+		for(int i = 0; i < this.networkNodes.size();i++){
+			this.networkNodes.get(i).updateRouteTable();
+		}
+		System.out.println("Every updated routing tables");
+	}
+
+	private void showFastestPath() throws NoSuchAlgorithmException, NoSuchProviderException {
+		this.recolorNodes();
+		String nodeToGetTo = this.shortestPathTo.getText();
+		NetworkNode nodeToSendTo = null;
+		for(int j = 0; j < this.networkNodes.size();j++){
+			if(nodeToGetTo.equals(this.networkNodes.get(j).getNodeID())) {
+				nodeToSendTo = this.networkNodes.get(j);
+			}
+		}
+
+		Message text = new TextMessage("help", this.myNode, nodeToSendTo);
+		((NetworkNode) this.myNode).sendDirectMessage(nodeToSendTo, text);
+		
+		((NetworkNode) this.myNode).setNodeValues(((NetworkNode) this.myNode).getXCoord(), 
+				((NetworkNode) this.myNode).getYCoord(), Color.CYAN,
+				((NetworkNode) this.myNode).getWidth());
+		
+//		for(int i = 0; i < this.networkNodes.size();i++){
+//			this.networkNodes.get(i).Draw(g);
+//		}
+		System.out.println("I tried");
+	}
+
+	private void receiveResource() {
+		int sendResourceNumber = Integer.parseInt(this.sentResource.getText());
+		NetworkNode thisNode = (NetworkNode) this.myNode;
+
+		myNode.addMessage(new ResourceReceived(sendResourceNumber)); // I don't know if I'm doing this right
+
+		if(((NetworkNode) this.myNode).getAcceptedMessages() != null){
+			for(int i = 0; i < thisNode.getAcceptedMessages().size(); i++){
+				Resource thisResource = (Resource) thisNode.getAcceptedMessages().get(i).getMessageData();
+				if(thisResource.getMessageNumber() == sendResourceNumber){
+					thisNode.removeAcceptedMessage(thisNode.getAcceptedMessages().get(i));
+					thisNode.addResource(thisResource.getType(), (+1*thisResource.getAmount()));
+				}
+			}
+		}
+		viewNodesResources(thisNode.getNodeID());
+
+	}
+
+	private void putInitResources() {
+		for(int i = 0; i < this.networkNodes.size();i++){
+			NetworkNode thisNode = (NetworkNode) this.networkNodes.get(i);
+			thisNode.getResources().put("water", 500);
+			thisNode.getResources().put("medical supplies", 20);
+			thisNode.getResources().put("food", 300);
+			thisNode.getResources().put("blankets", 100);
+			thisNode.getResources().put("tents", 50);
+		}
+	}
+
+	private void sendResource() {
+		this.sendResourceNumber = Integer.parseInt(this.sentResource.getText());
+		NetworkNode thisNode = (NetworkNode) this.myNode;
+
+//		myNode.addMessage(new ResourceSent(sendResourceNumber, )); Need help
+
+		if(((NetworkNode) this.myNode).getAcceptedMessages() != null){
+			for(int i = 0; i < thisNode.getAcceptedMessages().size(); i++){
+				Resource thisResource = (Resource) thisNode.getAcceptedMessages().get(i).getMessageData();
+				if(thisResource.getMessageNumber() == sendResourceNumber){
+					thisNode.removeAcceptedMessage(thisNode.getAcceptedMessages().get(i));
+					thisNode.addResource(thisResource.getType(), (-1*thisResource.getAmount()));
+				}
+			}
+		}
+		viewNodesResources(thisNode.getNodeID());		
+	}
 	private void viewNodesResources(String nodeName) {
 		generateNodesResourcesBoard();
 		for (int i = 0; i < this.networkNodes.size(); i++) {
