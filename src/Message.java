@@ -29,12 +29,13 @@ public abstract class Message extends Sendable implements Serializable {
 		super("Message");
 		this.author = auth;
 		this.recipient = rec;
-		id = "" + Utils.getRandID(1000000000);
+		id = Utils.getRandID();
 	}
 	
-	public Message() {
+	public Message(String auth) {
 		super("Message");
-		id = "" + Utils.getRandID(1000000000);
+		author = auth;
+		id = Utils.getRandID();
 	}
 	
 	/**

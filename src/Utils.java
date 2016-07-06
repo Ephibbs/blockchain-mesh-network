@@ -42,7 +42,7 @@ public class Utils {
          
         return sb.toString();
     }
-	public static int getRandID(int n) {
-		return rand.nextInt(n);
+	public static String getRandID() {
+		return Integer.toString(rand.nextInt(1000000000));
 	}
 }

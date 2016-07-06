@@ -38,16 +38,6 @@ public class BluetoothGUI extends Program{
 
 	public ArrayList<NetworkNode> networkNodes = new ArrayList<NetworkNode>();
 
-<<<<<<< HEAD
-=======
-	public int sendResourceNumber = 0;
-	public int nodeIDCounter = 0;
-	public int difficulty = 5;
-	public int numberOfNodes = 1;
-	public int communicationRadius = 200;
-	public int OFFSET = 15;
-	public int messageNumber = 1;
->>>>>>> 2a439cae3c985fa0af8fb58cd1d7c762e4f3de47
 	public Canvas canvas = new Canvas();
 	public Random rand = new Random();
 	public Graphics g = this.canvas.getGraphics();
@@ -71,6 +61,7 @@ public class BluetoothGUI extends Program{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		myNode.start();
 	}
 
 	// Don't worry about these
@@ -154,11 +145,8 @@ public class BluetoothGUI extends Program{
 		add(new JButton("Ping Everybody"), WEST);
 	}
 
-	/**
-	 * This class is responsible for detecting when the buttons are clicked or
-	 * interactors are used, so you will have to add code to respond to these
-	 * actions.
-	 */
+	
+	//initialize
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Start My Node")) {
@@ -172,7 +160,6 @@ public class BluetoothGUI extends Program{
 			}
 		} else if (e.getActionCommand().equals("Generate Bid")) {
 			generateBid();
-
 		} else if (e.getActionCommand().equals("Accept Bid")) {
 			acceptBid();
 		} else if (e.getActionCommand().equals("Check Accepted")) {
@@ -187,58 +174,6 @@ public class BluetoothGUI extends Program{
 			receiveResource();
 		} 
 	}
-	private void pingEverybody() {
-		for(int i = 0; i < this.networkNodes.size();i++){
-			this.networkNodes.get(i).createPing();
-		}
-		System.out.println("Everyone created a ping");
-		for(int i = 0; i < this.networkNodes.size();i++){
-			this.networkNodes.get(i).updateRouteTable();
-		}
-		System.out.println("Every updated routing tables");
-	}
-
-	private void showFastestPath() throws NoSuchAlgorithmException, NoSuchProviderException {
-		this.recolorNodes();
-		String nodeToGetTo = this.shortestPathTo.getText();
-		NetworkNode nodeToSendTo = null;
-		for(int j = 0; j < this.networkNodes.size();j++){
-			if(nodeToGetTo.equals(this.networkNodes.get(j).getNodeID())) {
-				nodeToSendTo = this.networkNodes.get(j);
-			}
-		}
-
-		Message text = new TextMessage("help", this.myNode, nodeToSendTo);
-		((NetworkNode) this.myNode).sendDirectMessage(nodeToSendTo, text);
-		
-		((NetworkNode) this.myNode).setNodeValues(((NetworkNode) this.myNode).getXCoord(), 
-				((NetworkNode) this.myNode).getYCoord(), Color.CYAN,
-				((NetworkNode) this.myNode).getWidth());
-		
-//		for(int i = 0; i < this.networkNodes.size();i++){
-//			this.networkNodes.get(i).Draw(g);
-//		}
-		System.out.println("I tried");
-	}
-
-	private void receiveResource() {
-		int sendResourceNumber = Integer.parseInt(this.sentResource.getText());
-		NetworkNode thisNode = (NetworkNode) this.myNode;
-
-		myNode.addMessage(new ResourceReceived(sendResourceNumber)); // I don't know if I'm doing this right
-
-		if(((NetworkNode) this.myNode).getAcceptedMessages() != null){
-			for(int i = 0; i < thisNode.getAcceptedMessages().size(); i++){
-				Resource thisResource = (Resource) thisNode.getAcceptedMessages().get(i).getMessageData();
-				if(thisResource.getMessageNumber() == sendResourceNumber){
-					thisNode.removeAcceptedMessage(thisNode.getAcceptedMessages().get(i));
-					thisNode.addResource(thisResource.getType(), (+1*thisResource.getAmount()));
-				}
-			}
-		}
-		viewNodesResources(thisNode.getNodeID());
-
-	}
 
 	private void putInitResources() {
 		for(int i = 0; i < this.networkNodes.size();i++){
@@ -251,23 +186,6 @@ public class BluetoothGUI extends Program{
 		}
 	}
 
-	private void sendResource() {
-		this.sendResourceNumber = Integer.parseInt(this.sentResource.getText());
-		NetworkNode thisNode = (NetworkNode) this.myNode;
-
-//		myNode.addMessage(new ResourceSent(sendResourceNumber, )); Need help
-
-		if(((NetworkNode) this.myNode).getAcceptedMessages() != null){
-			for(int i = 0; i < thisNode.getAcceptedMessages().size(); i++){
-				Resource thisResource = (Resource) thisNode.getAcceptedMessages().get(i).getMessageData();
-				if(thisResource.getMessageNumber() == sendResourceNumber){
-					thisNode.removeAcceptedMessage(thisNode.getAcceptedMessages().get(i));
-					thisNode.addResource(thisResource.getType(), (-1*thisResource.getAmount()));
-				}
-			}
-		}
-		viewNodesResources(thisNode.getNodeID());		
-	}
 	private void viewNodesResources(String nodeName) {
 		generateNodesResourcesBoard();
 		for (int i = 0; i < this.networkNodes.size(); i++) {
@@ -287,17 +205,58 @@ public class BluetoothGUI extends Program{
 		}
 	}
 
+
+	//Message Generation
+	private void generateResourceRequest() throws NoSuchAlgorithmException, NoSuchProviderException {
+		ResourceRequest newRequest = new ResourceRequest(Integer.parseInt(this.resourceAmount.getText()), 
+				this.resourceType.getText(), myNode.getNodeID());
+		
+		myNode.addMessage(newRequest);
+	}
+
+	private void generateBid() {
+		String messageID = this.acceptNumber.getText();
+		int eta =  Integer.parseInt(this.eta.getText());
+		int amount = Integer.parseInt(this.amount.getText());
+		ResourceRequestBid newBid = new ResourceRequestBid(messageID, eta, 
+				amount, myNode.getNodeID());
+		
+		myNode.addMessage(newBid);
+	}
+
+	private void acceptBid() {
+		String bidID = this.bidNumber.getText();
+		ResourceAgreement ra = new ResourceAgreement(bidID, myNode.getNodeID());
+		myNode.addMessage(ra);
+	}
+
+	private void sendResource() {
+		String sendResourceID = this.sentResource.getText();
+		NetworkNode thisNode = (NetworkNode) this.myNode;
+
+		ResourceSent rs = new ResourceSent(sendResourceID, myNode.getNodeID());
+		
+		myNode.addMessage(rs);
+	}
+
+	private void receiveResource() {
+		String sendID = this.sentResource.getText();
+		ResourceReceived rr = new ResourceReceived(sendID, myNode.getNodeID());
+		myNode.addMessage(rr);
+	}
+
+	
+	//Generate GUI
 	private void displayBids() {
 		g.setColor(Color.WHITE);
-		if (myNode.getBids() != null) {
-			for (int i = 0; i < myNode.getBids().size(); i++) {
-				String bidNumber = "" + 
-				String eta = "" + ((Bid) (myNode.getBids().get(i)).getMessageData()).getETA();
-				String resourceAmount = ""
-						+ ((Bid) (myNode.getBids().get(i)).getMessageData()).getAmount();
-				String bidder = ((Bid) (myNode.getBids().get(i)).getMessageData()).getBidder()
-						.getNodeID();
-				g.drawString(bidNumber,  5, 40 + i * 20);
+		if (myNode.getBidsToMyRequests() != null) {
+			for (int i = 0; i < myNode.getBidsToMyRequests().size(); i++) {
+				ResourceRequestBid rrbid = (ResourceRequestBid) myNode.getBidsToMyRequests().get(i);
+				String bidID = rrbid.requestID;
+				String eta = "" + rrbid.eta;
+				String resourceAmount = "" + rrbid.amount;
+				String bidder = rrbid.author;
+				g.drawString(bidID,  5, 40 + i * 20);
 				g.drawString(eta,  5 + MAXSIZE / 4, 40 + i * 20);
 				g.drawString(resourceAmount,  5 + 2 * MAXSIZE / 4, 40 + i * 20);
 				g.drawString(bidder, 5 + 3 * MAXSIZE / 4, 40 + i * 20);
@@ -309,80 +268,19 @@ public class BluetoothGUI extends Program{
 		generateBidMessageBoard();
 		displayBids();
 	}
-
-	private void receiveResource() {
-		int sendResourceNumber = Integer.parseInt(this.sentResource.getText());
-		if(myNode.getAcceptedMessages() != null){
-			for(int i = 0; i < myNode.getAcceptedMessages().size(); i++){
-				Resource thisResource = (Resource) myNode.getAcceptedMessages().get(i).getMessageData();
-				if(thisResource.getMessageNumber() == sendResourceNumber){
-					myNode.removeAcceptedMessage(myNode.getAcceptedMessages().get(i));
-					myNode.addResource(thisResource.getType(), (+1*thisResource.getAmount()));
-				}
-			}
-		}
-		viewNodesResources(myNode.getNodeID());
-		
-	}
-
-	private void sendResource() {
-		int sendResourceNumber = Integer.parseInt(this.sentResource.getText());
-		NetworkNode thisNode = (NetworkNode) this.myNode;
-		if(myNode.getAcceptedMessages() != null){
-			for(int i = 0; i < thisNode.getAcceptedMessages().size(); i++){
-				Resource thisResource = (Resource) thisNode.getAcceptedMessages().get(i).getMessageData();
-				if(thisResource.getMessageNumber() == sendResourceNumber){
-					thisNode.removeAcceptedMessage(thisNode.getAcceptedMessages().get(i));
-					thisNode.addResource(thisResource.getType(), (-1*thisResource.getAmount()));					
-				}
-			}
-		}
-		viewNodesResources(thisNode.getNodeID());		
-	}
 	
-	private void acceptBid() {
-		int messageNum = Integer.parseInt(this.bidNumber.getText());
-		for (int i = 0; i < myNode.getBids().size(); i++) {
-			Message currentMessage = myNode.getBids().get(i);
-			Bid bidObject = ((Bid) currentMessage.getMessageData());
-			if (((Bid) currentMessage.getMessageData()).getBidNumber() == messageNum) {
-				myNode.removeBid(currentMessage);
-				String bidder = ((Bid) currentMessage.getMessageData()).getBidder().getNodeID();
-				int messNum = ((Bid) currentMessage.getMessageData()).getMessageNumber();
-				Message acceptedMessage = null;
-				for (int o = 0; o < this.networkNodes.size(); o++) {
-					for (int k = 0; k < this.networkNodes.get(o).getMessages().size(); k++) {
-						Resource mess = ((Resource) ((NetworkNode) this.networkNodes.get(o)).getMessages().get(k)
-								.getMessageData());
-						NetworkNode simNode = ((NetworkNode) this.networkNodes.get(o));
-						if (mess.getMessageNumber() == messNum) {
-							if (bidObject.getBidder().getNodeID().equals(this.networkNodes.get(o).getNodeID())) {
-								simNode.addAcceptedMessage(simNode.getMessages().get(k));
-								myNode.addAcceptedMessage(simNode.getMessages().get(k));
-								//simNode.removeGlobalMessage(simNode.getMessages().get(k));
-							}
-						}
-					}
-				}
-				//myNode.removeGlobalMessage(currentMessage);
-			}
-		}
-	}
-
 	private void generateAcceptedMessages() {
 		generateAcceptedMessageBoard();
 		g.setColor(Color.WHITE);
-		if (myNode.getAcceptedMessages() != null) {
-			for (int i = 0; i < myNode.getAcceptedMessages().size(); i++) {
-				String messageNumber = "" + ((Resource) (myNode.getAcceptedMessages().get(i))
-						.getMessageData()).messageNumber;
-				String resourceRequested = ((Resource) (myNode.getAcceptedMessages().get(i))
-						.getMessageData()).type;
-				String resourceAmount = ""
-						+ ((Resource) (myNode.getAcceptedMessages().get(0)).getMessageData())
-								.getAmount();
-				String destination = ((Resource) (myNode.getAcceptedMessages().get(i))
-						.getMessageData()).getOwnerName();
+		if (myNode.getMyResourceAgreements() != null) {
+			ArrayList<Message> resourceAgreements = new ArrayList<Message>(myNode.getMyResourceAgreements());
+			for (int i = 0; i < resourceAgreements.size(); i++) {
+				ResourceAgreement rrAgree = (ResourceAgreement) resourceAgreements.get(i);
+				ResourceRequestBid rrbid = (ResourceRequestBid) myNode.msgMap.get(rrAgree.resourceBidID);
+				String messageNumber = rrAgree.resourceBidID;
+				String resourceRequested = rrbid.type;
+				String resourceAmount = "" + rrbid.amount;
+				String destination = rrbid.author;
 				g.drawString(messageNumber,  5, 40 + i * 20);
 				g.drawString(resourceRequested,  5 + MAXSIZE / 4, 40 + i * 20);
 				g.drawString(resourceAmount,  5 + 2 * MAXSIZE / 4, 40 + i * 20);
@@ -427,60 +325,6 @@ public class BluetoothGUI extends Program{
 		g.drawString("Amount Requested", MAXSIZE + 5 + 2 * MAXSIZE / 4, 20);
 		g.drawString("Destination", MAXSIZE + 5 + 3 * MAXSIZE / 4, 20);
 		g.drawLine(MAXSIZE, 25, 2 * MAXSIZE, 25);
-	}
-
-	private void generateBid() {
-		int messageNum = Integer.parseInt(this.acceptNumber.getText());
-		for (int i = 0; i < this.myNode.getMessages().size(); i++) {
-			Message currentMessage = this.myNode.getMessages().get(i);
-			if (((Resource) currentMessage.getMessageData()).getMessageNumber() == messageNum) {
-				String ownerName = ((Resource) currentMessage.getMessageData()).getOwnerName();
-				for (int j = 0; j < this.networkNodes.size(); j++) {
-					if (this.networkNodes.get(j).getNodeID().equals(ownerName)) {
-						NetworkNode requestingNode = this.networkNodes.get(j);
-						Resource oldResource = ((Resource) currentMessage.getMessageData());
-						Bid newBid = new Bid(this.myNode, requestingNode, Integer.parseInt(this.eta.getText()),
-								Integer.parseInt(this.amount.getText()), oldResource.getMessageNumber());
-						ResourceRequestBid newRequestBid = new ResourceRequestBid(newBid, this.myNode);
-						requestingNode.addBid(newRequestBid);
-					}
-				}
-			}
-		}
-	}
-
-	private void generateResourceRequest() throws NoSuchAlgorithmException, NoSuchProviderException {
-		NetworkNode nodeRequesting = null;
-		for (int i = 0; i < this.networkNodes.size(); i++) {
-			if (this.networkNodes.get(i).getNodeID().toString().equals(myNode.getNodeID())) {
-				nodeRequesting = this.networkNodes.get(i);
-			}
-		}
-		Resource newRequest = new Resource(Integer.parseInt(this.resourceAmount.getText()), this.resourceType.getText(),
-				(double) nodeRequesting.getXCoord(), (double) nodeRequesting.getYCoord(),
-				this.resourceCategory.getText(), nodeRequesting.getNodeID(), rand.nextInt(100000000));
-		
-		Message currentMessage = null;
-		nodeRequesting.setNodeValues(nodeRequesting.getXCoord(), nodeRequesting.getYCoord(), Color.RED,
-				nodeRequesting.getWidth());
-		//nodeRequesting.Draw(g);
-		currentMessage = new ResourceRequest(newRequest, null);
-		nodeRequesting.createMessage(currentMessage);
-
-		for (int o = 0; o < this.networkNodes.size(); o++) {
-			NetworkNode currentNode = this.networkNodes.get(o);
-			for (int p = 0; p < currentNode.getMessages().size(); p++) {
-				if (currentNode.getMessages().get(p).getMessageData().toString()
-						.equals(currentMessage.getMessageData().toString())) {
-
-					if (!currentNode.equals(nodeRequesting)) {
-						currentNode.setNodeValues(currentNode.getXCoord(), currentNode.getYCoord(), Color.GREEN,
-								currentNode.getWidth());
-					}
-				}
-
-			}
-		}
 	}
 
 	private void generateNodesResourcesBoard() {
@@ -538,7 +382,7 @@ public class BluetoothGUI extends Program{
 			String nodeNameRec = "Node" + networkNodes.get(i).nodeID;
 			if (networkNodes.get(i).nodeID.equals(receiver)) {
 				receiverNode = networkNodes.get(i);
-				currentMessage = new TextMessage(message, receiverNode);
+				currentMessage = new TextMessage(message, receiverNode.getNodeID());
 				myNode.addMessage(currentMessage);
 			}
 		}

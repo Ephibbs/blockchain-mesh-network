@@ -173,25 +173,41 @@ public class SimulationNode implements Node {
 		}
 	}
 	
-	public void makeBlockRequest(String hash, String id) {
+	//Block Request Protocol
+	
+	public void receiveBlock(BlockDelivery bd) {
+		String hash = bd.getHash();
+		Block b = bd.getBlock();
+		String nodeID = bd.getAuthor();
+		if (blockRequestIDs.contains(hash + nodeID)) {
+			blockRequestIDs.remove(hash + nodeID);
+			if (nodeID == this.nodeID) {
+				blockChain.add(b);
+			} else {
+				broadcastBlock(bd);
+			}
+		}
+	}
+	
+	public void makeBlockRequest(BlockRequest br) {
 		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // distribute
 			// blockrequest to
 			// friend nodes (they
 			// will propagate to
 			// their friends if they
 			// cannot resolve)
-			simulationNetworkNodes.get(i).requestBlock(hash, id);
+			simulationNetworkNodes.get(i).requestBlock(br);
 		}
 	}
 
-	public void broadcastBlock(Block b, String nodeID) {
+	public void broadcastBlock(BlockDelivery bd) {
 		for (int i = 0; i < simulationNetworkNodes.size(); i++) { // distribute
 			// blockrequest to
 			// friend nodes (they
 			// will propagate to
 			// their friends if they
 			// cannot resolve)
-			simulationNetworkNodes.get(i).receiveBlock(b, nodeID);
+			simulationNetworkNodes.get(i).receiveBlock(bd);
 		}
 	}
 	
@@ -202,12 +218,15 @@ public class SimulationNode implements Node {
 			blockRequestIDs.add(hash + id);
 			Block b = blockChain.getBlock(hash);
 			if (b != null) {
-				broadcastBlock(b, id);
+				BlockDelivery bd = new BlockDelivery(b, id);
+				broadcastBlock(bd);
 			} else {
-				makeBlockRequest(hash, id);
+				makeBlockRequest(br);
 			}
 		}
 	}
+	
+	//Utils
 	
 	public String randomMessageNumberGenerator(){
 		String messageNum = "";
@@ -384,24 +403,6 @@ public class SimulationNode implements Node {
 
 	public void setBlockChainDifficulty(int difficulty) {
 		blockChain.setDifficulty(difficulty);
-	}
-
-
-	//Block Request Protocol
-	
-	public void receiveBlock(Block b) {
-		if (blockRequestIDs.contains(b.getMyHash() + nodeID)) {
-			blockRequestIDs.remove(b.getMyHash() + nodeID);
-			if (nodeID == this.nodeID) {
-				blockChain.add(b);
-			} else {
-				broadcastBlock(b, nodeID);
-			}
-		}
-	}
-
-	public void broadcastBlock(Block b) {
-		
 	}
 
 	// Utility

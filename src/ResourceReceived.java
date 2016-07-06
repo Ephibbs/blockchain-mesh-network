@@ -1,8 +1,9 @@
 
 public class ResourceReceived extends Message{
-	int resourceSentID;
-	public ResourceReceived() {
-		super();
+	String resourceSentID;
+	public ResourceReceived(String sentID, String auth) {
+		super(auth);
+		resourceSentID = sentID;
 		// TODO Auto-generated constructor stub
 		this.messageType = "ResourceReceived";
 	}

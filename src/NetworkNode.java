@@ -51,6 +51,8 @@ public class NetworkNode implements Node {
 	
 	NetworkNode(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
 		nodeID = id;
+		blockChain = new Blockchain(this);
+		this.bm = new BluetoothManager(this);
 	}
 	public void distributeMessage(Message text) {
 		try {
@@ -69,7 +71,6 @@ public class NetworkNode implements Node {
     }
 	
 	public void start() {
-		this.bm = new BluetoothManager(this);
 		try {
 			bm.start();
 		} catch (IOException e) {
@@ -78,7 +79,7 @@ public class NetworkNode implements Node {
 	}
 	
 	public void makeBlockRequest(String hash) {
-		BlockRequest br = new BlockRequest(hash);
+		BlockRequest br = new BlockRequest(hash, nodeID);
 		try {
 			bm.broadcast(br);
 		} catch (IOException e) {
@@ -117,19 +118,57 @@ public class NetworkNode implements Node {
 		return null;
 	}
 	@Override
+	public ArrayList<Message> getMyResourceAgreements() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<Message> getMyResourceSents() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<Message> getMyResourceReceives() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
 	public void addResource(String type, int amount) {
 		// TODO Auto-generated method stub
 		
 	}
 	@Override
 	public void addMessage(Message msg) {
-		// TODO Auto-generated method stub
-		
+		// if message is unique, add and
+		// distribute
+		// do nothing
+		if (msg != null && !this.msgMap.containsKey(msg)) {
+			blockChain.add(msg);
+			switch(msg.getMessageType()) {
+				case "ResourceRequest":
+					openRequests.add(msg);
+					break;
+				case "ResourceRequestBid":
+					bidsToMyRequests.add(msg);
+					break;
+				case "ResourceAgreement":
+					myResourceAgreements.add(msg);
+					break;
+				case "ResourceSent":
+					myResourceSents.add(msg);
+					break;
+				case "ResourceReceived":
+					myResourceReceives.add(msg);
+					break;
+			}
+			msgMap.put(msg.getID(), msg);
+			distributeMessage(msg);
+		}
 	}
 	@Override
 	public void setBlockChainDifficulty(int difficulty) {
 		// TODO Auto-generated method stub
-		
+		blockChain.setDifficulty(difficulty);
 	}
 	@Override
 	public void receiveBlock(Block b) {

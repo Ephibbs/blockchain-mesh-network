@@ -1,8 +1,9 @@
 
 public class ResourceSent extends Message {
-	int resourceAgreementID;
-	public ResourceSent(String auth, String rec) {
-		super(auth, rec);
+	String resourceAgreementID;
+	public ResourceSent(String agreeID, String auth) {
+		super(auth);
+		resourceAgreementID = agreeID;
 		this.messageType = "ResourceSent";
 	}
 }

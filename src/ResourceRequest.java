@@ -3,8 +3,10 @@ import javax.tools.DocumentationTool.Location;
 public class ResourceRequest extends Message{
 	public String type;
 	public int amount;
-	public ResourceRequest(String auth, String rec) {
-		super(auth, rec);
+	public ResourceRequest(int amount, String type, String auth) {
+		super(auth);
+		this.amount = amount;
+		this.type = type;
 		this.messageType = "ResourceRequest";
 	}
 }

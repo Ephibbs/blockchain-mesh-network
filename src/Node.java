@@ -23,6 +23,9 @@ interface Node {
 	public String getNodeID();
 	public ArrayList<Message> getOpenRequests();
 	public ArrayList<Message> getBidsToMyRequests();
+	public ArrayList<Message> getMyResourceAgreements();
+	public ArrayList<Message> getMyResourceSents();
+	public ArrayList<Message> getMyResourceReceives();
 
 	// Mutators
 	public void addResource(String type, int amount);
