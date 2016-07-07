@@ -162,7 +162,7 @@ public class BluetoothGUI extends Program{
 		} else if (e.getActionCommand().equals("Accept Bid")) {
 			acceptBid();
 		} else if (e.getActionCommand().equals("Check Accepted")) {
-			generateAcceptedMessages();
+			checkAccepts();
 		} else if (e.getActionCommand().equals("Check Bids")) {
 			checkBids();
 		} else if (e.getActionCommand().equals("Check Requests")) {
@@ -214,6 +214,7 @@ public class BluetoothGUI extends Program{
 		ResourceRequest newRequest = new ResourceRequest(Integer.parseInt(this.resourceAmount.getText()), 
 				this.resourceType.getText(), myNode.getNodeID());
 		myNode.addMessage(newRequest);
+		checkRequests();
 	}
 
 	private void generateBid() {
@@ -224,12 +225,14 @@ public class BluetoothGUI extends Program{
 				amount, myNode.getNodeID());
 		
 		myNode.addMessage(newBid);
+		checkBids();
 	}
 
 	private void acceptBid() {
 		String bidID = this.bidNumber.getText();
 		ResourceAgreement ra = new ResourceAgreement(bidID, myNode.getNodeID());
 		myNode.addMessage(ra);
+		
 	}
 
 	private void sendResource() {
@@ -283,7 +286,7 @@ public class BluetoothGUI extends Program{
 		}
 	}
 	
-	private void generateAcceptedMessages() {
+	private void checkAccepts() {
 		generateAcceptedMessageBoard();
 		g.setColor(Color.WHITE);
 		if (myNode.getMyResourceAgreements() != null) {

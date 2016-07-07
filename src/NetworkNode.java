@@ -80,13 +80,13 @@ public class NetworkNode implements Node {
 	}
 	
 	public void makeBlockRequest(String hash) {
-		BlockRequest br = new BlockRequest(hash, nodeID);
-		try {
-			bm.broadcast(br);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		BlockRequest br = new BlockRequest(hash, nodeID);
+//		try {
+//			bm.broadcast(br);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	public void broadcastBlock(Block b) {
