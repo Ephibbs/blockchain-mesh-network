@@ -13,7 +13,6 @@ public class BluetoothClient implements Runnable {
     private ArrayList<UUID> SERVICE_UUIDS = new ArrayList<UUID>();
     private UUID SERVICE_UUID = new UUID(SERVICE_UUID_STRING, false);
     private int maxNumAttempts;
-    private ArrayList<String> delQ;
 
     private LocalDevice localDevice;
     private DiscoveryAgent discoveryAgent;
@@ -65,21 +64,10 @@ public class BluetoothClient implements Runnable {
     	System.out.println("running client");
     	while(true) {
     		System.out.println(outQ);
-    		delQ = new ArrayList<String>();
-    		if(!outQ.isEmpty()) {
-				for(String s : outQ) {
-					broadcast(s);
-					delQ.add(s);
-				}
-				for(String s : delQ) {
-					outQ.remove(s);
-				}
-    		}
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			for(String s : outQ) {
+				
+				broadcast(s);
+				outQ.remove(s);
 			}
     	}
     }
