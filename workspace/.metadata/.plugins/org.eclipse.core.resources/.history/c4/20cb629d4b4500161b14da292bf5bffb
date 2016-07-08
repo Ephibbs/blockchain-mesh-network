@@ -3,7 +3,6 @@ public class Ping {
 	
 	public Node originator = null;
 	public Node relayer= null;
-	
 	public int count = 0;
 	
 	public Ping(Node node) {

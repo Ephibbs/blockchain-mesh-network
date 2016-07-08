@@ -24,7 +24,6 @@ public class BluetoothGUI extends Program{
 	public static final int MAXSIZE = 800;
 	public static final int MAXSIZEW = 800;
 
-	public JTextField nodeName
 	public JTextField resourceAmount;
 	public JTextField resourceType;
 	public JTextField resourceCategory;
@@ -145,7 +144,7 @@ public class BluetoothGUI extends Program{
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Start My Node")) {
 			try {
-				myNode = new NetworkNode();
+				myNode = new NetworkNode("Me");
 			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

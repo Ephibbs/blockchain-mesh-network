@@ -77,10 +77,11 @@ public class LANChat extends Frame implements Runnable {
                     // remove socket, continue to any next if exception occurs
                     // (socket closed)
                     ex.printStackTrace();
-                    toRemove.add(s);
+                    continue;
+                    
                 }
             }
-            sockets.removeAll(toRemove);
+            sockets.removeAll(toRemove)
         }
     }
 

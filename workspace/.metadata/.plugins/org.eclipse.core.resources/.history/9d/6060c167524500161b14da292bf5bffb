@@ -13,8 +13,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import acmx.export.java.util.List;
-
 public class LANChat extends Frame implements Runnable {
     // text output of all connections
     private final TextArea textArea;
@@ -65,7 +63,6 @@ public class LANChat extends Frame implements Runnable {
     // method called by key listener
     public void keyTyped(KeyEvent ke) {
         int i;
-        ArrayList<Socket> toRemove = new ArrayList<>();
         synchronized (sockets) {
             // iterate through all sockets, and flush character through
             for (Socket s : sockets) {
@@ -77,10 +74,10 @@ public class LANChat extends Frame implements Runnable {
                     // remove socket, continue to any next if exception occurs
                     // (socket closed)
                     ex.printStackTrace();
-                    toRemove.add(s);
+                    sockets.remove(i);
+                    continue;
                 }
             }
-            sockets.removeAll(toRemove);
         }
     }
 

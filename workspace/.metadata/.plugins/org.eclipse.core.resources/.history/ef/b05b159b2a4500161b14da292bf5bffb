@@ -585,7 +585,7 @@ public class SimulationNode implements Node {
 			if (verifies == true) { // if verified and unique, add to localMSG
 				// and distribute friend nodes
 				if (!this.msgMap.containsKey(text)) {
-					msgMap.put(text.getID(), text);
+					msgMap.put(text);
 					this.distributeSignedMessage(realSig, byteArray2, text);
 					return;
 				}

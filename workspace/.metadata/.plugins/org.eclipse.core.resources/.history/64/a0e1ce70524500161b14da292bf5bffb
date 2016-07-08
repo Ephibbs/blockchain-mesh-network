@@ -65,7 +65,7 @@ public class LANChat extends Frame implements Runnable {
     // method called by key listener
     public void keyTyped(KeyEvent ke) {
         int i;
-        ArrayList<Socket> toRemove = new ArrayList<>();
+        ListArray<Socket> toRemove = new ListArray<>();
         synchronized (sockets) {
             // iterate through all sockets, and flush character through
             for (Socket s : sockets) {
@@ -77,10 +77,11 @@ public class LANChat extends Frame implements Runnable {
                     // remove socket, continue to any next if exception occurs
                     // (socket closed)
                     ex.printStackTrace();
-                    toRemove.add(s);
+                    continue;
+                    
                 }
             }
-            sockets.removeAll(toRemove);
+            sockets.removeAll(toRemove)
         }
     }
 

@@ -80,7 +80,7 @@ public class LANChat extends Frame implements Runnable {
                     toRemove.add(s);
                 }
             }
-            sockets.removeAll(toRemove);
+            sockets.removeAll(toRemove)
         }
     }
 
