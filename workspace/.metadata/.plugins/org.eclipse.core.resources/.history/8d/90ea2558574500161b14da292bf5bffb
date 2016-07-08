@@ -111,6 +111,7 @@ public class LANChat extends Frame implements Runnable {
             Socket s;
             try {
                 s = new Socket(address.getHostAddress(), Globals.TCPPORT);
+                System.out.println("got address");
             } catch (IOException ex) {
                 return;
             }

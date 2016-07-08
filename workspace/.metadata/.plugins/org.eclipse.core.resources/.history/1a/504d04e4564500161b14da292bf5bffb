@@ -136,7 +136,6 @@ public class LANChat extends Frame implements Runnable {
                 while (run && s.isConnected()) {
                     try {
                         if (br.ready())
-                        	System.out.println("got char");
                             putChar(br.read());
                     } catch (IOException ex) {
                         return;
