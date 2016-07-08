@@ -49,7 +49,13 @@ public class NetworkNode implements Node {
 	
 	public Location myLocation = new Location().createRandomLocation();
 	
+	// ping stuff
 	public ArrayList<String> localConnections = new ArrayList<String>();
+	public Hashtable<String, String> routeTable = new Hashtable<String, String>();
+	public Hashtable<String, ArrayList<Ping>> pingHash = new Hashtable<String, ArrayList<Ping>>();
+	public HashMap<String, Integer> countHash = new HashMap<String, Integer>();
+	
+	public ArrayList<NetworkNode> tempNodes = new ArrayList<NetworkNode>();
 	
 	public BluetoothManager bm;
 	
@@ -180,42 +186,94 @@ public class NetworkNode implements Node {
 					myResourceReceives.add(msg);
 					break;
 				case "Ping":
-					System.out.println("received a ping");
+					//System.out.println("received a ping");
 					//do stuff with the ping
+					receivePing((Ping) msg);
+					//updateRouteTable();
 					break;
 			}
 			msgMap.put(msg.getID(), msg);
 			distributeMessage(msg);
 		}
 	}
+	private void receivePing(Ping msg) {
+		if(msg.getOriginator().equals(this.getNodeID())){
+			return;
+		}
+		else if (this.pingHash.containsKey(msg.getOriginator())) {
+			if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
+				// do nothing
+			} else {
+				this.pingHash.get(msg.getOriginator()).add(msg);
+			}
+		} else {
+			ArrayList<Ping> newArrayList = new ArrayList<Ping>();
+			newArrayList.add(msg);
+			this.pingHash.put(msg.getOriginator(), newArrayList);
+		}
+		updateRouteTable();
+		sendToTempNodes(msg);
+	}
+	private void updateRouteTable() {
+		Set<String> pingSet = pingHash.keySet();
+		System.out.println("My node is: " + this.getNodeID());
+		for(String key:pingSet){
+			ArrayList<Ping> nodePings = pingHash.get(key);
+			int min = 1000000;
+			Node nodeToRouteTo = null;
+			for(int i = 0; i < nodePings.size(); i++){
+				String originator = nodePings.get(i).getOriginator();
+				String relayer = nodePings.get(i).getRelayer();
+				System.out.println("The relayer was: " + relayer);
+				if(i ==0){
+					min = nodePings.get(i).getCount();
+					this.routeTable.put(originator, relayer);
+					this.countHash.put(originator, min);
+					//System.out.println("I should have put something in: " + relayer);
+				}
+				else if(nodePings.get(i).getCount() < min){
+					min = nodePings.get(i).getCount();
+					if(this.countHash.get(originator) < min) {
+						this.routeTable.remove(originator);
+						this.routeTable.put(originator, relayer);
+					}
+				}
+				else{
+				}
+			}
+		}
+		System.out.println("before calling again");
+	}
+	public Hashtable<String, String> getRouteTable(){
+		return this.routeTable;
+	}
 	@Override
 	public void setBlockChainDifficulty(int difficulty) {
-		// TODO Auto-generated method stub
 		blockChain.setDifficulty(difficulty);
 	}
 	@Override
 	public void receiveBlock(Block b) {
-		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public void requestBlock(String hash) {
-		// TODO Auto-generated method stub
 	}
 	@Override
 	public boolean isOnline() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 	@Override
 	public void addBlock(Block b) {
-		// TODO Auto-generated method stub
 		blockChain.add(b);
 	}
 	public void createPing(){
-		Ping newPing = new Ping(this.getNodeID(),this.getNodeID());
-		//System.out.println("I created a ping");
-		distributePing(newPing);
+		Ping newPing = new Ping(this.getNodeID(), this.getNodeID());
+		sendToTempNodes(newPing);
+	}
+	public void sendToTempNodes(Ping newPing){
+		for(int i = 0; i < this.tempNodes.size();i++){
+			newPing.setRelayer(this.getNodeID());
+			this.tempNodes.get(i).addMessage(newPing);
+		}
 	}
 	public Location getLocation(){
 		return this.myLocation;
@@ -223,10 +281,7 @@ public class NetworkNode implements Node {
 	public void receiveConnection(String newConnectionID){
 		this.localConnections.add(newConnectionID);
 	}
-	public void distributePing(Ping newPing){
-		for(int i = 0; i < this.localConnections.size();i++){
-			// do whatever needs to happen so that you can send stuff to a particular node
-			
-		}
+	public void addNode(NetworkNode newNode){
+		this.tempNodes.add(newNode);
 	}
 }

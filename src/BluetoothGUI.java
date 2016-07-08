@@ -24,7 +24,7 @@ public class BluetoothGUI extends Program{
 	public static final int MAXSIZE = 800;
 	public static final int MAXSIZEW = 800;
 
-	public JTextField nodeName
+	public JTextField nodeName;
 	public JTextField resourceAmount;
 	public JTextField resourceType;
 	public JTextField resourceCategory;
@@ -72,6 +72,9 @@ public class BluetoothGUI extends Program{
 
 	// Just the window, don't worry about it
 	private void generateWestFrame() {
+		add(new JLabel("Enter your Node Name"), WEST);
+		this.nodeName = new JTextField(TEXT_FIELD_SIZE);
+		add(this.nodeName, WEST);
 		add(new JButton("Start My Node"), WEST);
 
 		add(new JLabel("Enter resource Requester"), WEST);
@@ -113,10 +116,6 @@ public class BluetoothGUI extends Program{
 		add(new JButton("Check Bids"), WEST);
 
 		add(new JButton("Check Requests"), WEST);
-
-//		this.viewResources = new JTextField(TEXT_FIELD_SIZE);
-//		add(this.viewResources, WEST);
-//		add(new JButton("View Resources"), WEST);
 		
 		add(new JButton("Put Initial Resources"), NORTH);
 		
@@ -145,9 +144,8 @@ public class BluetoothGUI extends Program{
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Start My Node")) {
 			try {
-				myNode = new NetworkNode();
+				myNode = new NetworkNode(this.nodeName.getText());
 			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			beginSimulation();

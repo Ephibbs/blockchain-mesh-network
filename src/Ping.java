@@ -13,8 +13,16 @@ public class Ping extends Message {
 	public Ping(String sender, String receiver){
 		super(sender, receiver);
 		this.messageType = "Ping";
+		this.originatorString = sender;
+		this.relayerString = receiver;
 	}
 	
+//	public Ping(String nodeID, String nodeID2) {
+//		// TODO Auto-generated constructor stub
+//		super(nodeID, nodeID2);
+//		this.messageType = "Ping";
+//	}
+
 	public void setRelayer(String relayer) {
 		this.relayerString = relayer;
 	}

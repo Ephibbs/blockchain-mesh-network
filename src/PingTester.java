@@ -54,22 +54,20 @@ public class PingTester {
 		NetworkNode node4 = new NetworkNode("node4");
 		NetworkNode node5 = new NetworkNode("node5");
 		
-		node1.getLocation().printLocation();
-		node2.getLocation().printLocation();
-		node3.getLocation().printLocation();
-		node4.getLocation().printLocation();
-		node5.getLocation().printLocation();
+		node1.addNode(node2);
+		node1.addNode(node3);
+		node2.addNode(node4);
+		node3.addNode(node5);
 		
 		node1.createPing();
-		node2.createPing();
-		node3.createPing();
-		node4.createPing();
-		node5.createPing();
-		
-		//Ping ping1 = new Ping(node1.getNodeID(), node2.getNodeID());
-		//Ping ping2 = new Ping(node1.getNodeID(), node2.getNodeID());
-		
-		
+		System.out.println(node2.getRouteTable().get("node1"));
+		System.out.println(node3.getRouteTable().get("node1"));
+		System.out.println(node4.getRouteTable().get("node1"));
+		System.out.println(node5.getRouteTable().get("node1"));
+//		node2.createPing();
+//		node3.createPing();
+//		node4.createPing();
+//		node5.createPing();
 		
 //		node1.addFriend(node2);
 //		node2.addFriend(node3);
