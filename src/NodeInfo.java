@@ -13,5 +13,13 @@ public class NodeInfo {
     private Location myLocation = null;
     private ArrayList<Message> resourceList = new ArrayList<Message>();
     private Time lastPingTime = null;
-    
+
+    // Constructor
+    public NodeInfo(String nodeID, PublicKey pubKey, Location myLocation, ArrayList<Message> resourceList, Time latPingTime) {
+        this.nodeID = nodeID;
+        this.pubKey = pubKey;
+        this.myLocation = myLocation;
+        this.resourceList = resourceList;
+        this.lastPingTime = lastPingTime;
+    }
 }
