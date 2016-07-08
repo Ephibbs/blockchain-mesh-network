@@ -47,12 +47,21 @@ public class NetworkNode implements Node {
 	public ArrayList<String> allMsgIDs = new ArrayList<String>();
 	public HashMap<String, Message> msgMap = new HashMap<String, Message>();
 	
+	public Location myLocation = new Location().createRandomLocation();
+	
+	public ArrayList<String> localConnections = new ArrayList<String>();
+	
 	public BluetoothManager bm;
 	
 	NetworkNode(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
 		nodeID = id;
 		blockChain = new Blockchain(this);
 		this.bm = new BluetoothManager(this);
+		//this.myLocation = this.myLocation.createRandomLocation();
+	}
+	private Location generateRandomLocation() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	public void distributeMessage(Message text) {
 		try {
@@ -170,6 +179,10 @@ public class NetworkNode implements Node {
 					System.out.println("received resource receives");
 					myResourceReceives.add(msg);
 					break;
+				case "Ping":
+					System.out.println("received a ping");
+					//do stuff with the ping
+					break;
 			}
 			msgMap.put(msg.getID(), msg);
 			distributeMessage(msg);
@@ -188,7 +201,6 @@ public class NetworkNode implements Node {
 	@Override
 	public void requestBlock(String hash) {
 		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public boolean isOnline() {
@@ -199,5 +211,22 @@ public class NetworkNode implements Node {
 	public void addBlock(Block b) {
 		// TODO Auto-generated method stub
 		blockChain.add(b);
+	}
+	public void createPing(){
+		Ping newPing = new Ping(this.getNodeID(),this.getNodeID());
+		//System.out.println("I created a ping");
+		distributePing(newPing);
+	}
+	public Location getLocation(){
+		return this.myLocation;
+	}
+	public void receiveConnection(String newConnectionID){
+		this.localConnections.add(newConnectionID);
+	}
+	public void distributePing(Ping newPing){
+		for(int i = 0; i < this.localConnections.size();i++){
+			// do whatever needs to happen so that you can send stuff to a particular node
+			
+		}
 	}
 }

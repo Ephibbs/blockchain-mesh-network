@@ -1,34 +1,40 @@
 
-public class Ping {
+public class Ping extends Message {
 	
 	public Node originator = null;
 	public Node relayer= null;
 	
 	public int count = 0;
 	
-	public Ping(Node node) {
-		originator = node;
-		relayer = node;
+	public String originatorString = null;
+	public String relayerString = null;
+	public Location currentLocation = null;
+	
+	public Ping(String sender, String receiver){
+		super(sender, receiver);
+		this.messageType = "Ping";
 	}
-	public Ping(Node orig, Node relay, int c){
-		this.originator = orig;
-		this.relayer = relay;
-		this.count = c;
+	
+	public void setRelayer(String relayer) {
+		this.relayerString = relayer;
 	}
-	public void setRelayer(Node node) {
-		this.relayer = node;
+	public String getOriginator(){
+		return this.originatorString;
 	}
-	public Node getOriginator(){
-		return this.originator;
-	}
-	public Node getRelayer() {
-		return this.relayer;
+	public String getRelayer() {
+		return this.relayerString;
 	}
 	public void addCount(){
 		this.count++;
 	}
 	public int getCount(){
 		return this.count;
+	}
+	public void setLocation(Location newLocation){
+		this.currentLocation = newLocation;
+	}
+	public Location getLocation(){
+		return this.currentLocation;
 	}
 
 }
