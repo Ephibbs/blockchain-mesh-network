@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="fcfa82b1-1669-45d8-8553-7810013261f2" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/BluetoothGUI.java" afterPath="$PROJECT_DIR$/src/BluetoothGUI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NetworkGUI.java" afterPath="$PROJECT_DIR$/src/NetworkGUI.java" />
     </list>
     <ignored path="blockchain-mesh-network.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,137 +24,47 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="BluetoothGUI.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/BluetoothGUI.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="292" column="76" selection-start-line="292" selection-start-column="76" selection-end-line="292" selection-end-column="76" />
-              <folding>
-                <element signature="docComment;method#init#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#init#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#addListeners#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#generateWestFrame#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="e#3765#3819#0" expanded="false" />
-                <element signature="e#4068#4125#0" expanded="false" />
-                <element signature="docComment;method#actionPerformed#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#actionPerformed#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#pingEverybody#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#showFastestPath#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="e#8208#8261#0" expanded="false" />
-                <element signature="method#putInitResources#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#viewNodesResources#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#generateNodesResourcesBoard#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#checkBids#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#displayBids#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#acceptBid#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#generateAcceptedMessages#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#generateBidMessageBoard#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#generateAcceptedMessageBoard#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#generateBid#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#drawMessages#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#setMyNode#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#beginSimulation#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="e#20602#20635#0" expanded="false" />
-                <element signature="method#generateMessageBoard#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#removeNode#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#resetNodesCommunicationLines#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="e#21906#21939#0" expanded="false" />
-                <element signature="method#moveNodes#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="e#22186#22242#0" expanded="false" />
-                <element signature="method#sendMessage#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#recolorNodes#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="e#24209#24260#0" expanded="false" />
-                <element signature="method#generateNodes#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#generateLineToFriends#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#checkFriends#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#generateCommunicationLines#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#calculateDistance#0;class#BluetoothGUI#0" expanded="false" />
-                <element signature="method#generateNodeNetwork#0;class#BluetoothGUI#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ResourceReceived.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ResourceReceived.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="29" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Resource.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Resource.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Node.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Node.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="515" column="30" selection-start-line="515" selection-start-column="30" selection-end-line="515" selection-end-column="30" />
+            <state relative-caret-position="187">
+              <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="method#Node#0;class#Node#0" expanded="false" />
-                <element signature="method#getMessages#0;class#Node#0" expanded="false" />
-                <element signature="method#createMessage#0;class#Node#0" expanded="false" />
-                <element signature="method#createMessage#1;class#Node#0" expanded="false" />
-                <element signature="method#createMessageWithSignature#0;class#Node#0" expanded="false" />
-                <element signature="method#addMessage#0;class#Node#0" expanded="false" />
-                <element signature="method#addSignedMessage#0;class#Node#0" expanded="false" />
-                <element signature="method#addPublicKey#0;class#Node#0" expanded="false" />
-                <element signature="method#createPing#0;class#Node#0" expanded="false" />
-                <element signature="method#distributePing#0;class#Node#0" expanded="false" />
-                <element signature="method#receivePing#0;class#Node#0" expanded="false" />
-                <element signature="method#receiveBlock#0;class#Node#0" expanded="false" />
-                <element signature="method#requestBlock#0;class#Node#0" expanded="false" />
-                <element signature="method#makeBlockRequest#0;class#Node#0" expanded="false" />
-                <element signature="method#broadcastBlock#0;class#Node#0" expanded="false" />
-                <element signature="method#printNodes#0;class#Node#0" expanded="false" />
-                <element signature="method#distributeMessage#0;class#Node#0" expanded="false" />
-                <element signature="method#distributeSignedMessage#0;class#Node#0" expanded="false" />
-                <element signature="method#distributePublicKey#0;class#Node#0" expanded="false" />
-                <element signature="method#distributeBlock#0;class#Node#0" expanded="false" />
-                <element signature="e#14979#14980#0" expanded="true" />
-                <element signature="e#15014#15015#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ResourceRequest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ResourceRequest.java">
+      <file leaf-file-name="NodeGUI.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/NodeGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="40" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
+            <state relative-caret-position="34">
+              <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ResourceRequestBid.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ResourceRequestBid.java">
+      <file leaf-file-name="NetworkNode.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/NetworkNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
+            <state relative-caret-position="238">
+              <caret line="50" column="4" selection-start-line="50" selection-start-column="4" selection-end-line="50" selection-end-column="4" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ResourceSent.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ResourceSent.java">
+      <file leaf-file-name="NodeInfo.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/NodeInfo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="48" selection-start-line="3" selection-start-column="48" selection-end-line="3" selection-end-column="48" />
-              <folding />
+            <state relative-caret-position="255">
+              <caret line="15" column="4" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="4" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#337#346#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -164,21 +72,11 @@
       <file leaf-file-name="NetworkGUI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/NetworkGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1173">
+            <state relative-caret-position="4097">
               <caret line="264" column="53" selection-start-line="264" selection-start-column="53" selection-end-line="264" selection-end-column="53" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Message.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Message.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-85">
-              <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -214,7 +112,6 @@
         <option value="$PROJECT_DIR$/src/BlockChainTestingHandler.java" />
         <option value="$PROJECT_DIR$/src/TreeNode.java" />
         <option value="$PROJECT_DIR$/src/Tree.java" />
-        <option value="$PROJECT_DIR$/src/NetworkNode.java" />
         <option value="$PROJECT_DIR$/src/BlockStore.java" />
         <option value="$PROJECT_DIR$/src/BlockChainTesting.java" />
         <option value="$PROJECT_DIR$/src/Blockchain.java" />
@@ -225,6 +122,8 @@
         <option value="$PROJECT_DIR$/src/SimulationNode.java" />
         <option value="$PROJECT_DIR$/src/NetworkGUI.java" />
         <option value="$PROJECT_DIR$/src/BluetoothGUI.java" />
+        <option value="$PROJECT_DIR$/src/NetworkNode.java" />
+        <option value="$PROJECT_DIR$/src/NodeInfo.java" />
       </list>
     </option>
   </component>
@@ -266,9 +165,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -303,6 +199,9 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -599,6 +498,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1890625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32875264" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -610,7 +510,6 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3280899" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32921347" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -662,14 +561,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/BlockChainTestingHandler.java" />
-    <entry file="file://$PROJECT_DIR$/src/TextMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Ping.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -677,13 +568,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/BlockStore.java">
+    <entry file="file://$PROJECT_DIR$/src/Blockstore.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="28" column="6" selection-start-line="28" selection-start-column="6" selection-end-line="28" selection-end-column="6" />
-          <folding>
-            <element signature="method#add#1;class#BlockStore#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -738,13 +626,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/BlockStore.java">
+    <entry file="file://$PROJECT_DIR$/src/Blockstore.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="28" column="6" selection-start-line="28" selection-start-column="6" selection-end-line="28" selection-end-column="6" />
-          <folding>
-            <element signature="method#add#1;class#BlockStore#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -801,12 +686,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="method#Block#0;class#Block#0" expanded="false" />
-            <element signature="method#Block#1;class#Block#0" expanded="false" />
-            <element signature="method#getMyHash#0;class#Block#0" expanded="false" />
-            <element signature="method#toString#0;class#Block#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -865,12 +744,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="646">
           <caret line="80" column="1" selection-start-line="80" selection-start-column="1" selection-end-line="80" selection-end-column="1" />
-          <folding>
-            <element signature="method#Block#0;class#Block#0" expanded="false" />
-            <element signature="method#Block#1;class#Block#0" expanded="false" />
-            <element signature="method#getMyHash#0;class#Block#0" expanded="false" />
-            <element signature="method#toString#0;class#Block#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -892,22 +765,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" column="5" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
-          <folding>
-            <element signature="e#309#310#0" expanded="true" />
-            <element signature="e#338#339#0" expanded="true" />
-            <element signature="e#384#385#0" expanded="true" />
-            <element signature="e#408#409#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/BlockStore.java">
+    <entry file="file://$PROJECT_DIR$/src/Blockstore.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="23" column="17" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
-          <folding>
-            <element signature="method#add#1;class#BlockStore#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -928,9 +793,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1292">
           <caret line="81" column="12" selection-start-line="81" selection-start-column="12" selection-end-line="81" selection-end-column="12" />
-          <folding>
-            <element signature="e#558#574#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -955,50 +817,68 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/NetworkNode.java">
+    <entry file="file://$PROJECT_DIR$/src/Resource.java" />
+    <entry file="file://$PROJECT_DIR$/src/ResourceSent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="24" column="9" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
+        <state relative-caret-position="51">
+          <caret line="3" column="48" selection-start-line="3" selection-start-column="48" selection-end-line="3" selection-end-column="48" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Node.java">
+    <entry file="file://$PROJECT_DIR$/src/ResourceRequestBid.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="515" column="30" selection-start-line="515" selection-start-column="30" selection-end-line="515" selection-end-column="30" />
+        <state relative-caret-position="17">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/BluetoothGUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="306" column="16" selection-start-line="306" selection-start-column="16" selection-end-line="306" selection-end-column="16" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#Node#0;class#Node#0" expanded="false" />
-            <element signature="method#getMessages#0;class#Node#0" expanded="false" />
-            <element signature="method#createMessage#0;class#Node#0" expanded="false" />
-            <element signature="method#createMessage#1;class#Node#0" expanded="false" />
-            <element signature="method#createMessageWithSignature#0;class#Node#0" expanded="false" />
-            <element signature="method#addMessage#0;class#Node#0" expanded="false" />
-            <element signature="method#addSignedMessage#0;class#Node#0" expanded="false" />
-            <element signature="method#addPublicKey#0;class#Node#0" expanded="false" />
-            <element signature="method#createPing#0;class#Node#0" expanded="false" />
-            <element signature="method#distributePing#0;class#Node#0" expanded="false" />
-            <element signature="method#receivePing#0;class#Node#0" expanded="false" />
-            <element signature="method#receiveBlock#0;class#Node#0" expanded="false" />
-            <element signature="method#requestBlock#0;class#Node#0" expanded="false" />
-            <element signature="method#makeBlockRequest#0;class#Node#0" expanded="false" />
-            <element signature="method#broadcastBlock#0;class#Node#0" expanded="false" />
-            <element signature="method#printNodes#0;class#Node#0" expanded="false" />
-            <element signature="method#distributeMessage#0;class#Node#0" expanded="false" />
-            <element signature="method#distributeSignedMessage#0;class#Node#0" expanded="false" />
-            <element signature="method#distributePublicKey#0;class#Node#0" expanded="false" />
-            <element signature="method#distributeBlock#0;class#Node#0" expanded="false" />
-            <element signature="e#14979#14980#0" expanded="true" />
-            <element signature="e#15014#15015#0" expanded="true" />
+            <element signature="docComment;method#init#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#init#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#addListeners#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#generateWestFrame#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#actionPerformed#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#putInitResources#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#viewNodesResources#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#generateBid#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#acceptBid#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#checkBids#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#generateBidMessageBoard#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#generateAcceptedMessageBoard#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#generateNodesResourcesBoard#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#generateMessageBoard#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#beginSimulation#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="method#sendMessage#0;class#BluetoothGUI#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Resource.java">
+    <entry file="file://$PROJECT_DIR$/src/ResourceRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Message.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/NodeGUI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -1011,41 +891,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ResourceSent.java">
+    <entry file="file://$PROJECT_DIR$/src/Node.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="48" selection-start-line="3" selection-start-column="48" selection-end-line="3" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ResourceRequestBid.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ResourceRequest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="40" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Message.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-85">
-          <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
-          <folding />
+        <state relative-caret-position="187">
+          <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/NetworkGUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1173">
+        <state relative-caret-position="4097">
           <caret line="264" column="53" selection-start-line="264" selection-start-column="53" selection-end-line="264" selection-end-column="53" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1053,51 +911,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/BluetoothGUI.java">
+    <entry file="file://$PROJECT_DIR$/src/NetworkNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="292" column="76" selection-start-line="292" selection-start-column="76" selection-end-line="292" selection-end-column="76" />
+        <state relative-caret-position="238">
+          <caret line="50" column="4" selection-start-line="50" selection-start-column="4" selection-end-line="50" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/NodeInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="4" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="4" />
           <folding>
-            <element signature="docComment;method#init#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#init#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#addListeners#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#generateWestFrame#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="e#3765#3819#0" expanded="false" />
-            <element signature="e#4068#4125#0" expanded="false" />
-            <element signature="docComment;method#actionPerformed#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#actionPerformed#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#pingEverybody#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#showFastestPath#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="e#8208#8261#0" expanded="false" />
-            <element signature="method#putInitResources#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#viewNodesResources#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#generateNodesResourcesBoard#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#checkBids#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#displayBids#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#acceptBid#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#generateAcceptedMessages#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#generateBidMessageBoard#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#generateAcceptedMessageBoard#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#generateBid#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#drawMessages#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#setMyNode#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#beginSimulation#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="e#20602#20635#0" expanded="false" />
-            <element signature="method#generateMessageBoard#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#removeNode#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#resetNodesCommunicationLines#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="e#21906#21939#0" expanded="false" />
-            <element signature="method#moveNodes#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="e#22186#22242#0" expanded="false" />
-            <element signature="method#sendMessage#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#recolorNodes#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="e#24209#24260#0" expanded="false" />
-            <element signature="method#generateNodes#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#generateLineToFriends#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#checkFriends#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#generateCommunicationLines#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#calculateDistance#0;class#BluetoothGUI#0" expanded="false" />
-            <element signature="method#generateNodeNetwork#0;class#BluetoothGUI#0" expanded="false" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#337#346#0" expanded="true" />
           </folding>
         </state>
       </provider>
