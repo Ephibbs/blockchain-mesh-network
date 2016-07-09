@@ -23,6 +23,8 @@ public class BluetoothGUI extends Program{
 	public static final int MAXMOVE = 50;
 	public static final int MAXSIZE = 800;
 	public static final int MAXSIZEW = 800;
+	public static final int WIDTH = 10;
+	public static final int HEIGHT = 10;
 
 	public JTextField nodeName;
 	public JTextField resourceAmount;
@@ -51,7 +53,7 @@ public class BluetoothGUI extends Program{
 	 */
 	@Override
 	public void init() {
-		this.setSize(new Dimension(1000, 850));
+		this.setSize(new Dimension(1900, 850));
 		generateWestFrame();
 		addActionListeners();
 		addListeners();
@@ -206,7 +208,6 @@ public class BluetoothGUI extends Program{
 			}
 		}
 	}
-
 
 	//Message Generation
 	private void generateResourceRequest() throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -391,8 +392,32 @@ public class BluetoothGUI extends Program{
 //		g.setColor(Color.LIGHT_GRAY);
 //		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 		g.setColor(Color.BLACK);
+		
+		generateNodeMap();
+		//drawNodes();
 
 		generateMessageBoard();
+	}
+
+	private void drawNodes() {
+		// TODO Auto-generated method stub
+		
+		g.setColor(Color.BLACK);
+		//g.fillOval(MAXSIZE + this.myNode.getLocation().getX(), this.myNode.getLocation().getY(), WIDTH, HEIGHT);
+		
+//		g.setColor(Color.BLACK);
+		this.myNode.drawNodes(this.g, MAXSIZE, WIDTH, HEIGHT);
+//		g.fillOval(MAXSIZE + this.myNode.getLocation().getX(),this.myNode.getLocation().getY(), WIDTH, HEIGHT);
+	}
+
+	private void generateNodeMap() {
+		this.g = this.canvas.getGraphics();
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
+
+		drawNodes();
+//		g.setColor(Color.BLACK);
+//		g.fillOval(MAXSIZE + this.myNode.getLocation().getX(), this.myNode.getLocation().getY(), WIDTH, HEIGHT);
 	}
 
 	private void sendMessage(String message, String sender, String receiver)

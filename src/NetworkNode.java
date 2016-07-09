@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Graphics;
 import java.io.IOException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -283,5 +285,11 @@ public class NetworkNode implements Node {
 	}
 	public void addNode(NetworkNode newNode){
 		this.tempNodes.add(newNode);
+	}
+	public void drawNodes(Graphics g, int MAXSIZE, int width, int height) {
+		// TODO Auto-generated method stub
+		System.out.println("I should have drawn");
+		g.setColor(Color.BLACK);
+		g.fillOval(MAXSIZE + this.myLocation.getX(),this.myLocation.getY(), width, height);
 	}
 }

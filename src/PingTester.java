@@ -64,6 +64,9 @@ public class PingTester {
 		System.out.println(node3.getRouteTable().get("node1"));
 		System.out.println(node4.getRouteTable().get("node1"));
 		System.out.println(node5.getRouteTable().get("node1"));
+		node2.createPing();
+		System.out.println(node4.getRouteTable().get("node2"));
+		
 //		node2.createPing();
 //		node3.createPing();
 //		node4.createPing();
