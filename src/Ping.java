@@ -1,4 +1,5 @@
 import java.security.PublicKey;
+import java.sql.Time;
 
 public class Ping extends Message {
 	
@@ -8,8 +9,11 @@ public class Ping extends Message {
 	public String relayerString = null;
 	public Location currentLocation = null;
 	public PublicKey publicKey = null;
+	public Time timeSent = null;
 	
 	public Ping(String sender, String receiver, PublicKey pubKey){
+		// should create a public key whenever you start a node
+		// when i create a ping I need to set its location
 		super(sender, receiver);
 		this.messageType = "Ping";
 		this.originatorString = sender;
@@ -46,6 +50,12 @@ public class Ping extends Message {
 	}
 	public PublicKey getPublicKey(){
 		return this.publicKey;
+	}
+	public void setTime(Time newTime){
+		this.timeSent = newTime;
+	}
+	public Time getTimeSent(){
+		return this.timeSent;
 	}
 
 }

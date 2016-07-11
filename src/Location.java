@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Random;
 
-public class Location {
+public class Location implements Serializable{
 	public int x = 0;
 	public int y = 0;
 	public int size = 10;

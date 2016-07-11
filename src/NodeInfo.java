@@ -20,6 +20,68 @@ public class NodeInfo {
         this.pubKey = pubKey;
         this.myLocation = myLocation;
         this.resourceList = resourceList;
-        this.lastPingTime = lastPingTime;
+        this.lastPingTime = latPingTime;
     }
+    /**
+	 * @return the nodeID
+	 */
+	public String getNodeID() {
+		return nodeID;
+	}
+
+	/**
+	 * @param nodeID the nodeID to set
+	 */
+	public void setNodeID(String nodeID) {
+		this.nodeID = nodeID;
+	}
+
+	/**
+	 * @return the myLocation
+	 */
+	public Location getMyLocation() {
+		return myLocation;
+	}
+
+	/**
+	 * @param myLocation the myLocation to set
+	 */
+	public void setMyLocation(Location myLocation) {
+		this.myLocation = myLocation;
+	}
+
+	/**
+	 * @return the resourceList
+	 */
+	public ArrayList<Message> getResourceList() {
+		return resourceList;
+	}
+
+	/**
+	 * @param resourceList the resourceList to set
+	 */
+	public void setResourceList(ArrayList<Message> resourceList) {
+		this.resourceList = resourceList;
+	}
+
+	/**
+	 * @return the lastPingTime
+	 */
+	public Time getLastPingTime() {
+		return lastPingTime;
+	}
+
+	/**
+	 * @param lastPingTime the lastPingTime to set
+	 */
+	public void setLastPingTime(Time lastPingTime) {
+		this.lastPingTime = lastPingTime;
+	}
+
+	/**
+	 * @return the pubKey
+	 */
+	public PublicKey getPubKey() {
+		return pubKey;
+	}
 }
