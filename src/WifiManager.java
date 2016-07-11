@@ -74,8 +74,8 @@ public class WifiManager {
     public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException, IOException, ClassNotFoundException {
     	WifiManager wm = new WifiManager();
     	wm.start();
-    	Block b = new Block();
-    	wm.broadcast(b);
+    	//Block b = new Block();
+    	//wm.broadcast(b);
     }
 	    
 }

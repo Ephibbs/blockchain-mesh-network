@@ -57,7 +57,6 @@ public class WifiClient implements Runnable {
     public void run() {
     	System.out.println("running client");
     	while(true) {
-    		System.out.println(outQ);
     		delQ = new ArrayList<String>();
     		if(!outQ.isEmpty()) {
 				for(String s : outQ) {
