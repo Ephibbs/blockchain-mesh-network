@@ -67,6 +67,11 @@ public class PingTester {
 		node2.createPing();
 		System.out.println(node4.getRouteTable().get("node2"));
 		
+//		BluetoothGUI blueGUI = new BluetoothGUI();
+//		blueGUI.setMyNode(node1);
+//		blueGUI.beginSimulation();
+		
+		
 //		node2.createPing();
 //		node3.createPing();
 //		node4.createPing();

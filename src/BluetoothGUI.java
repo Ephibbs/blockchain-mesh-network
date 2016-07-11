@@ -208,6 +208,10 @@ public class BluetoothGUI extends Program{
 			}
 		}
 	}
+	
+	public void setMyNode(NetworkNode newNode){
+		this.myNode = newNode;
+	}
 
 	//Message Generation
 	private void generateResourceRequest() throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -387,27 +391,18 @@ public class BluetoothGUI extends Program{
 		g.drawLine(0, 25, MAXSIZE, 25);
 	}
 
-	private void beginSimulation() {
+	public void beginSimulation() {
 		this.g = this.canvas.getGraphics();
-//		g.setColor(Color.LIGHT_GRAY);
-//		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 		g.setColor(Color.BLACK);
 		
 		generateNodeMap();
-		//drawNodes();
-
 		generateMessageBoard();
 	}
 
 	private void drawNodes() {
-		// TODO Auto-generated method stub
-		
 		g.setColor(Color.BLACK);
-		//g.fillOval(MAXSIZE + this.myNode.getLocation().getX(), this.myNode.getLocation().getY(), WIDTH, HEIGHT);
-		
-//		g.setColor(Color.BLACK);
 		this.myNode.drawNodes(this.g, MAXSIZE, WIDTH, HEIGHT);
-//		g.fillOval(MAXSIZE + this.myNode.getLocation().getX(),this.myNode.getLocation().getY(), WIDTH, HEIGHT);
+		this.myNode.drawTemps(this.g, MAXSIZE, WIDTH, HEIGHT);
 	}
 
 	private void generateNodeMap() {
@@ -416,8 +411,6 @@ public class BluetoothGUI extends Program{
 		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
 
 		drawNodes();
-//		g.setColor(Color.BLACK);
-//		g.fillOval(MAXSIZE + this.myNode.getLocation().getX(), this.myNode.getLocation().getY(), WIDTH, HEIGHT);
 	}
 
 	private void sendMessage(String message, String sender, String receiver)

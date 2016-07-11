@@ -1,20 +1,20 @@
+import java.security.PublicKey;
 
 public class Ping extends Message {
-	
-	public Node originator = null;
-	public Node relayer= null;
 	
 	public int count = 0;
 	
 	public String originatorString = null;
 	public String relayerString = null;
 	public Location currentLocation = null;
+	public PublicKey publicKey = null;
 	
-	public Ping(String sender, String receiver){
+	public Ping(String sender, String receiver, PublicKey pubKey){
 		super(sender, receiver);
 		this.messageType = "Ping";
 		this.originatorString = sender;
 		this.relayerString = receiver;
+		this.publicKey = pubKey;
 	}
 	
 //	public Ping(String nodeID, String nodeID2) {
@@ -43,6 +43,9 @@ public class Ping extends Message {
 	}
 	public Location getLocation(){
 		return this.currentLocation;
+	}
+	public PublicKey getPublicKey(){
+		return this.publicKey;
 	}
 
 }

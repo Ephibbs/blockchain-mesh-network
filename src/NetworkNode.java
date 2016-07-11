@@ -9,6 +9,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Signature;
+import java.sql.Time;
 import java.util.*;
 
 /**
@@ -58,6 +59,8 @@ public class NetworkNode implements Node {
 	public HashMap<String, Integer> countHash = new HashMap<String, Integer>();
 	
 	public ArrayList<NetworkNode> tempNodes = new ArrayList<NetworkNode>();
+	
+	public HashMap<String, NodeInfo> nodeInfoMap = new HashMap<String, NodeInfo>();
 	
 	public BluetoothManager bm;
 	
@@ -110,49 +113,40 @@ public class NetworkNode implements Node {
 		try {
 			bm.broadcast(b);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	@Override
 	public HashMap<String, Integer> getResources() {
-		// TODO Auto-generated method stub
 		return myResources;
 	}
 	@Override
 	public String getNodeID() {
-		// TODO Auto-generated method stub
 		return nodeID;
 	}
 	@Override
 	public ArrayList<Message> getOpenRequests() {
-		// TODO Auto-generated method stub
 		return openRequests;
 	}
 	@Override
 	public ArrayList<Message> getBidsToMyRequests() {
-		// TODO Auto-generated method stub
 		return bidsToMyRequests;
 	}
 	@Override
 	public ArrayList<Message> getMyResourceAgreements() {
-		// TODO Auto-generated method stub
 		return myResourceAgreements;
 	}
 	@Override
 	public ArrayList<Message> getMyResourceSents() {
-		// TODO Auto-generated method stub
 		return myResourceSents;
 	}
 	@Override
 	public ArrayList<Message> getMyResourceReceives() {
-		// TODO Auto-generated method stub
 		return myResourceReceives;
 	}
 	@Override
 	public void addResource(String type, int amount) {
-		// TODO Auto-generated method stub
 		//using Integer because myResources.get may return null;
 		Integer am = myResources.get(type);
 		if(am != null) {
@@ -188,10 +182,7 @@ public class NetworkNode implements Node {
 					myResourceReceives.add(msg);
 					break;
 				case "Ping":
-					//System.out.println("received a ping");
-					//do stuff with the ping
 					receivePing((Ping) msg);
-					//updateRouteTable();
 					break;
 			}
 			msgMap.put(msg.getID(), msg);
@@ -204,7 +195,6 @@ public class NetworkNode implements Node {
 		}
 		else if (this.pingHash.containsKey(msg.getOriginator())) {
 			if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
-				// do nothing
 			} else {
 				this.pingHash.get(msg.getOriginator()).add(msg);
 			}
@@ -213,9 +203,40 @@ public class NetworkNode implements Node {
 			newArrayList.add(msg);
 			this.pingHash.put(msg.getOriginator(), newArrayList);
 		}
+		
+		Set<String> nodeInfoKeys = nodeInfoMap.keySet();
+		String pingOriginator = msg.getOriginator();
+		ArrayList<String> nodeInfoKeyAL = new ArrayList<String>();
+		for(String key:nodeInfoKeys){
+			nodeInfoKeyAL.add(key);
+		}
+		if(!nodeInfoKeyAL.contains(pingOriginator)){
+			// create a new node info class for this originator
+			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), 
+					msg.getLocation(), new ArrayList<Message>(), 
+					new Time(System.currentTimeMillis()));
+		}
+		if(nodeInfoKeyAL.contains(pingOriginator)){
+			// create a new node info class for this originator
+			NodeInfo currentNodeInfo = nodeInfoMap.get(pingOriginator);
+			// keep this //currentNodeInfo.setLatestPing(new Time(System.currentTimeMillis())); // keep this
+		}
 		updateRouteTable();
 		sendToTempNodes(msg);
 	}
+	
+	public void removeOutdatedPings(){
+		Set<String> nodeInfoKeys = nodeInfoMap.keySet();
+		ArrayList<String> nodeInfoKeyAL = new ArrayList<String>();
+		long someValue = 1000000;
+		for(String key:nodeInfoKeys){
+			nodeInfoKeyAL.add(key);
+//			if(nodeInfoMap.get(key).getLatestPing() < (new Time(System.currentTimeMillis()).getTime()-someValue)){
+//				nodeInfoMap.remove(key);
+//			}
+		}
+	}
+	
 	private void updateRouteTable() {
 		Set<String> pingSet = pingHash.keySet();
 		System.out.println("My node is: " + this.getNodeID());
@@ -234,6 +255,7 @@ public class NetworkNode implements Node {
 					//System.out.println("I should have put something in: " + relayer);
 				}
 				else if(nodePings.get(i).getCount() < min){
+					
 					min = nodePings.get(i).getCount();
 					if(this.countHash.get(originator) < min) {
 						this.routeTable.remove(originator);
@@ -268,7 +290,7 @@ public class NetworkNode implements Node {
 		blockChain.add(b);
 	}
 	public void createPing(){
-		Ping newPing = new Ping(this.getNodeID(), this.getNodeID());
+		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey);
 		sendToTempNodes(newPing);
 	}
 	public void sendToTempNodes(Ping newPing){
@@ -287,9 +309,13 @@ public class NetworkNode implements Node {
 		this.tempNodes.add(newNode);
 	}
 	public void drawNodes(Graphics g, int MAXSIZE, int width, int height) {
-		// TODO Auto-generated method stub
-		System.out.println("I should have drawn");
 		g.setColor(Color.BLACK);
 		g.fillOval(MAXSIZE + this.myLocation.getX(),this.myLocation.getY(), width, height);
+	}
+	public void drawTemps(Graphics g, int maxsize, int width, int height) {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < this.tempNodes.size();i++){
+			this.tempNodes.get(i).drawNodes(g, maxsize, width, height);
+		}
 	}
 }
