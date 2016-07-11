@@ -359,8 +359,28 @@ public class NetworkNode implements Node {
 	}
 
 	public void drawNodes(Graphics g, int MAXSIZE, int width, int height) {
-		g.setColor(Color.BLACK);
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
+		
+		g.setColor(Color.CYAN);
 		g.fillOval(MAXSIZE + this.myLocation.getX(), this.myLocation.getY(), width, height);
+		g.setColor(Color.BLACK);
+		
+		// need to get the locations of other nodes
+		// need to put them on the screen
+		//for()
+		// need to get the keyset from nodeInfoMap
+		// iterate over it
+		// print a node in the location from the Location within Nodeinfo
+		Set<String> nodeInfoKeys = nodeInfoMap.keySet();
+		int x = 0;
+		int y = 0;
+		for (String key : nodeInfoKeys) {
+			x = nodeInfoMap.get(key).getMyLocation().getX();
+			y = nodeInfoMap.get(key).getMyLocation().getY();
+			g.fillOval(MAXSIZE + x, y, width, height);
+		}
+		
 	}
 
 	public void drawTemps(Graphics g, int maxsize, int width, int height) {

@@ -429,7 +429,7 @@ public class BluetoothGUI extends Program{
 	private void drawNodes() {
 		g.setColor(Color.BLACK);
 		this.myNode.drawNodes(this.g, MAXSIZE, WIDTH, HEIGHT);
-		this.myNode.drawTemps(this.g, MAXSIZE, WIDTH, HEIGHT);
+		//this.myNode.drawTemps(this.g, MAXSIZE, WIDTH, HEIGHT);
 	}
 
 	private void generateNodeMap() {
