@@ -1,8 +1,10 @@
+import java.io.Serializable;
 import java.util.Random;
 
-public class Location {
+public class Location implements Serializable{
 	public int x = 0;
 	public int y = 0;
+	public int size = 10;
 	Random rn = new Random();
 	public Location(int x, int y){
 		this.x = x;
@@ -12,7 +14,7 @@ public class Location {
 		//createRandomLocation();
 	}
 	public Location createRandomLocation() {
-		return new Location(rn.nextInt(800), rn.nextInt(800));
+		return new Location(rn.nextInt(800 - 2 * size) + size, rn.nextInt(800 - 2 * size) + size);
 	}
 	public int getX(){
 		return this.x;
