@@ -1,0 +1,7 @@
+package LANcomm;
+
+public class WifiClient {
+	WifiClient() {
+		
+	}
+}

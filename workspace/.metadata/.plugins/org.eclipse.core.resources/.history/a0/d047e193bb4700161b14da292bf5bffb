@@ -1,0 +1,12 @@
+package LANcomm;
+
+public class WifiClient {
+	String hostName;
+	int portNum;
+	WifiClient() {
+		
+	}
+	void init() {
+		
+	}
+}
