@@ -27,7 +27,7 @@ public class WifiClient implements Runnable {
     	 */
     	//hostNames.add(""); //Colby
     	//hostNames.add(""); //Natalie
-    	//hostNames.add(""); //Andrew
+    	hostNames.add("BAH5CG621142N"); //Andrew
     	//hostNames.add(""); //Dylan
     	hostNames.add("BAHCND6206GP1"); //Evan
     	//hostNames.add(""); //Will
