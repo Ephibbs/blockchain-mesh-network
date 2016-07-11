@@ -104,7 +104,7 @@ public class PingTester {
 //		System.out.println("Node 5: Time: " + node5Info.getLastPingTime() + " and locx: " + node5Loc.getX()
 //				+ " and locy: " + node5Loc.getY());
 //
- 		Thread.sleep(3000);
+ 		Thread.sleep(1000);
 
 		node2.createPing();
 		System.out.println("trying to change node 2");

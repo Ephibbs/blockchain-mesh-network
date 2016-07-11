@@ -133,6 +133,8 @@ public class BluetoothGUI extends Program{
 		add(this.receiveResource, NORTH);
 		add(new JButton("Receive Resource"), NORTH);
 		
+		add(new JButton("Total Messages"), WEST);
+		
 		this.shortestPathTo = new JTextField(TEXT_FIELD_SIZE);
 		add(this.shortestPathTo, NORTH);
 		add(new JButton("Show Fastest Path"), NORTH);
@@ -176,6 +178,9 @@ public class BluetoothGUI extends Program{
 			receiveResource();
 		} else if (e.getActionCommand().equals("Check Resources")) {
 			receiveResource();
+		} else if (e.getActionCommand().equals("Total Messages")) {
+			generateTotalMessages();
+			this.myNode.printTotalMessages(this.g, MAXSIZE);
 		}
 	}
 
@@ -370,6 +375,28 @@ public class BluetoothGUI extends Program{
 		g.drawLine(0, 25,  MAXSIZE, 25);
 		g.drawLine(0, 50,  MAXSIZE, 50);
 
+	}
+	
+	private void generateTotalMessages() {
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
+
+		g.setColor(Color.WHITE);
+		g.drawRect(0 , 0, MAXSIZE / 3, MAXSIZE);
+		g.drawRect(MAXSIZE / 3, 0, MAXSIZE / 3, MAXSIZE);
+		g.drawRect(2 * MAXSIZE / 3, 0, MAXSIZE / 3, MAXSIZE);
+		//g.drawRect(3 * MAXSIZE / 5, 0, MAXSIZE / 5, MAXSIZE);
+		//g.drawRect(4 * MAXSIZE / 5, 0, MAXSIZE / 5, MAXSIZE);
+		
+
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.setColor(Color.WHITE); // Here
+		g.drawString("Message Type", 5, 20);
+		g.drawString("Message ID", 5 + MAXSIZE / 3, 20);
+		g.drawString("Author", 5 + 2 * MAXSIZE / 3, 20);
+		//g.drawString("Originator", 5 + 3 * MAXSIZE / 5, 20);
+		//g.drawString("Message Type", 5 + 4 * MAXSIZE / 5, 20);
+		g.drawLine(0, 25, MAXSIZE, 25);
 	}
 
 	private void generateMessageBoard() {

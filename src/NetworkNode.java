@@ -41,6 +41,8 @@ public class NetworkNode implements Node {
 	public ArrayList<String> blockRequestIDs = new ArrayList<String>();
 
 	// keep track of messages
+	public ArrayList<Message> totalMessages = new ArrayList<Message>();
+	public ArrayList<Message> directMessages = new ArrayList<Message>();
 	public ArrayList<Message> openRequests = new ArrayList<Message>();
 	public ArrayList<Message> bidsToMyRequests = new ArrayList<Message>();
 	public ArrayList<Message> myResourceAgreements = new ArrayList<Message>();
@@ -168,6 +170,9 @@ public class NetworkNode implements Node {
 		// if message is unique, add and
 		// distribute
 		// do nothing
+		if(!this.totalMessages.contains(msg)){
+			totalMessages.add(msg);
+		}
 		if (msg != null && !this.msgMap.containsKey(msg.getID())) {
 			blockChain.add(msg);
 			switch (msg.getMessageType()) {
@@ -194,9 +199,27 @@ public class NetworkNode implements Node {
 			case "Ping":
 				receivePing((Ping) msg);
 				break;
+			case "DirectMessage":
+				sendDirectMessage(msg);
+				//receivePing((Ping) msg);
+				break;
 			}
+			
 			msgMap.put(msg.getID(), msg);
 			distributeMessage(msg);
+		}
+	}
+
+	private void sendDirectMessage(Message msg) {
+		// this is not finished yet
+		String recipient = msg.getRecipient();
+		if(this.nodeID.equals(msg.getRecipient())){
+			this.directMessages.add(msg);
+		}
+		else{
+			String nextReceiver = routeTable.get(recipient);
+			// send to the receiver only not everybody. so dont do distributeMessage
+			// but it will be something similar
 		}
 	}
 
@@ -215,13 +238,7 @@ public class NetworkNode implements Node {
 					this.pingHash.get(msg.getOriginator()).add(msg);
 				}
 			}
-		} 
-//		else if (this.pingHash.containsKey(msg.getOriginator())) {
-//			if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
-//			} else {
-//				this.pingHash.get(msg.getOriginator()).add(msg);
-//			}
-//		} 
+		}
 		else {
 			ArrayList<Ping> newArrayList = new ArrayList<Ping>();
 			newArrayList.add(msg);
@@ -237,12 +254,8 @@ public class NetworkNode implements Node {
 		if (!nodeInfoKeyAL.contains(pingOriginator)) {
 			Location newLocation = msg.getLocation();
 			Time newTime = msg.getTimeSent();
-			// System.out.println("newTime " + newTime.toString());
-			System.out.println("I created a new Ping");
 			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(),
 					new ArrayList<Message>(), newTime);
-			// System.out.println("newTIme from nodeinfo " +
-			// newNodeInfo.getLastPingTime().toString());
 			this.nodeInfoMap.put(pingOriginator, newNodeInfo);
 		} else if (nodeInfoKeyAL.contains(pingOriginator)) {
 			NodeInfo currentNodeInfo = nodeInfoMap.get(pingOriginator);
@@ -268,7 +281,6 @@ public class NetworkNode implements Node {
 
 	private void updateRouteTable() {
 		Set<String> pingSet = pingHash.keySet();
-		// System.out.println("My node is: " + this.getNodeID());
 		for (String key : pingSet) {
 			ArrayList<Ping> nodePings = pingHash.get(key);
 			int min = 1000000;
@@ -276,13 +288,10 @@ public class NetworkNode implements Node {
 			for (int i = 0; i < nodePings.size(); i++) {
 				String originator = nodePings.get(i).getOriginator();
 				String relayer = nodePings.get(i).getRelayer();
-				// System.out.println("The relayer was: " + relayer);
 				if (i == 0) {
 					min = nodePings.get(i).getCount();
 					this.routeTable.put(originator, relayer);
 					this.countHash.put(originator, min);
-					// System.out.println("I should have put something in: " +
-					// relayer);
 				} else if (nodePings.get(i).getCount() < min) {
 
 					min = nodePings.get(i).getCount();
@@ -294,7 +303,6 @@ public class NetworkNode implements Node {
 				}
 			}
 		}
-		// System.out.println("before calling again");
 	}
 
 	public Hashtable<String, String> getRouteTable() {
@@ -356,7 +364,6 @@ public class NetworkNode implements Node {
 	}
 
 	public void drawTemps(Graphics g, int maxsize, int width, int height) {
-		// TODO Auto-generated method stub
 		for (int i = 0; i < this.tempNodes.size(); i++) {
 			this.tempNodes.get(i).drawNodes(g, maxsize, width, height);
 		}
@@ -364,5 +371,22 @@ public class NetworkNode implements Node {
 
 	public HashMap<String, NodeInfo> getNodeInfoList() {
 		return this.nodeInfoMap;
+	}
+
+	public void printTotalMessages(Graphics g, int MAXSIZE) {
+		// TODO Printing Total Messages
+		g.setColor(Color.WHITE);
+		if (this.totalMessages != null) {
+			for (int i = 0; i < this.totalMessages.size(); i++) {
+				Message msg = this.totalMessages.get(i);
+				String type = msg.getMessageType();
+				String id = msg.getID();
+				String author = msg.getAuthor();
+				g.drawString(type,  5, 40 + i * 25);
+				g.drawString(id,  5 + MAXSIZE / 3, 40 + i * 25);
+				g.drawString(author,  5 + 2 * MAXSIZE / 3, 40 + i * 25);
+				g.drawLine(0, 45 + i * 25, MAXSIZE, 45 + i * 25);
+			}
+		}
 	}
 }
