@@ -140,6 +140,9 @@ public class BluetoothGUI extends Program{
 		add(new JButton("Show Fastest Path"), NORTH);
 		
 		add(new JButton("Ping Everybody"), WEST);
+		
+		add(new JButton("Draw Nodes"), WEST);
+		add(new JButton("Create Ping"), WEST);
 	}
 
 	
@@ -181,7 +184,15 @@ public class BluetoothGUI extends Program{
 		} else if (e.getActionCommand().equals("Total Messages")) {
 			generateTotalMessages();
 			this.myNode.printTotalMessages(this.g, MAXSIZE);
+		} else if (e.getActionCommand().equals("Draw Nodes")) {
+			drawNodes();
+		} else if (e.getActionCommand().equals("Create Ping")) {
+			createPing();
 		}
+	}
+
+	private void createPing() {
+		this.myNode.createPingToBroadcast();
 	}
 
 	private void putInitResources() {

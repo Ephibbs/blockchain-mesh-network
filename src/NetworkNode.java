@@ -338,6 +338,13 @@ public class NetworkNode implements Node {
 		newPing.setTime(new Time(System.currentTimeMillis()));
 		sendToTempNodes(newPing);
 	}
+	
+	public void createPingToBroadcast() {
+		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey);
+		newPing.setLocation(new Location().createRandomLocation());
+		newPing.setTime(new Time(System.currentTimeMillis()));
+		distributeMessage(newPing);
+	}
 
 	public void sendToTempNodes(Ping newPing) {
 		for (int i = 0; i < this.tempNodes.size(); i++) {
@@ -362,7 +369,7 @@ public class NetworkNode implements Node {
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
 		
-		g.setColor(Color.CYAN);
+		g.setColor(Color.RED);
 		g.fillOval(MAXSIZE + this.myLocation.getX(), this.myLocation.getY(), width, height);
 		g.setColor(Color.BLACK);
 		
@@ -375,10 +382,12 @@ public class NetworkNode implements Node {
 		Set<String> nodeInfoKeys = nodeInfoMap.keySet();
 		int x = 0;
 		int y = 0;
+		System.out.println("I drew something");
 		for (String key : nodeInfoKeys) {
 			x = nodeInfoMap.get(key).getMyLocation().getX();
 			y = nodeInfoMap.get(key).getMyLocation().getY();
 			g.fillOval(MAXSIZE + x, y, width, height);
+			System.out.println("I should have drawn other nodes");
 		}
 		
 	}
