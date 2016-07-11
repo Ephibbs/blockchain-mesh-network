@@ -1,15 +1,10 @@
 package LANcomm;
 import java.io.*;
 import java.net.*;
+import java.util.*;
  
 public class EchoClient {
     public static void main(String[] args) throws IOException {
-         
-        if (args.length != 2) {
-            System.err.println(
-                "Usage: java EchoClient <host name> <port number>");
-            System.exit(1);
-        }
  
         String hostName = args[0];
         int portNumber = Integer.parseInt(args[1]);
@@ -38,5 +33,31 @@ public class EchoClient {
                 hostName);
             System.exit(1);
         } 
+    }
+    public static ArrayList<InetAddress> getNeighborhoodIPs() {
+	    InetAddress localhost;
+	    ArrayList<InetAddress> IPs = new ArrayList<InetAddress>();
+		try {
+			localhost = InetAddress.getLocalHost();
+
+		    byte[] ip = localhost.getAddress();
+		    String output;
+		
+		    for (int i = 1; i <= 254; i++) {
+	            ip[3] = (byte)i;
+	            InetAddress address;
+				address = InetAddress.getByAddress(ip);
+	
+	            if (address.isReachable(100))
+	            {
+	                output = address.toString().substring(1);
+	                System.out.print(output + " is on the network");
+	                IPs.add(address);
+	            }
+		    }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return IPs;
     }
 }
