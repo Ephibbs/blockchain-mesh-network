@@ -17,13 +17,13 @@ public class WifiManager {
 	
 	WifiManager(Node node) {
 		this.node = node;
-		client = new WifiClient();
-		server = new WifiServer(this);
+		client = new WifiClient(verbose);
+		server = new WifiServer(this, verbose);
 	}
 	
 	WifiManager() {
-		client = new WifiClient();
-		server = new WifiServer(this);
+		client = new WifiClient(verbose);
+		server = new WifiServer(this,verbose);
 	}
 	
 	void start() throws IOException {

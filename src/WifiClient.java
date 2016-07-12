@@ -19,14 +19,15 @@ public class WifiClient implements Runnable {
 
     private ArrayList<String> outQ = new ArrayList<String>();
     private Thread t;
+    private boolean verbose = false;
     
-    WifiClient() {
+    WifiClient(boolean verbose) {
        	/*
     	 * make sure only the line with your name at the end of it has "//" at the beginning of it
     	 */
-    	hostNames.add("BAH5CG621140Y"); //Colby
+    	//hostNames.add("BAH5CG621140Y"); //Colby
     	//hostNames.add(""); //Natalie
-    	//hostNames.add("BAH5CG621142N"); //Andrew
+    	hostNames.add("BAH5CG621142N"); //Andrew
     	//hostNames.add(""); //Dylan
     	//hostNames.add("BAHCND6206GP1"); //Evan
     	//hostNames.add(""); //Will
@@ -34,6 +35,7 @@ public class WifiClient implements Runnable {
     	 * END
     	 */
     	maxNumAttempts = 3;
+    	this.verbose = verbose;
     }
     
     public void addToOutQ(String s) throws IOException {
@@ -55,13 +57,13 @@ public class WifiClient implements Runnable {
     }
     public void run() {
     	String s;
-    	System.out.println("running client");
+    	if(verbose) System.out.println("running client");
     	while(true) {
     		if(!outQ.isEmpty()) {
 				for(int i=outQ.size()-1;i>-1;i--) {
 					s = outQ.get(i);
 					broadcast(s);
-					System.out.println("sent & removed");
+					if(verbose) System.out.println("sent & removed");
 					outQ.remove(s);
 				}
     		}
@@ -75,9 +77,9 @@ public class WifiClient implements Runnable {
     }
     
     public void send(String hostName, String s) throws IOException {
-    	System.out.println("start sending...");
+    	if(verbose) System.out.println("start sending...");
     	for(int numAttempts = 0; numAttempts < maxNumAttempts; numAttempts++) {
-    		System.out.println("attempt");
+    		if(verbose) System.out.println("attempt");
     		try (
 		        Socket echoSocket = new Socket(hostName, portNumber);
 		        PrintWriter out =

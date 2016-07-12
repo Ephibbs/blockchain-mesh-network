@@ -14,9 +14,11 @@ public class WifiServer implements Runnable {
     private WifiManager wm;
     private int portNumber = 9001;
     private boolean running = false;
+    private boolean verbose = false;
     
-    WifiServer(WifiManager wm) {
+    WifiServer(WifiManager wm, boolean verbose) {
     	this.wm = wm;
+    	this.verbose = verbose;
     }
     
     public void start() throws BluetoothStateException {
@@ -38,7 +40,7 @@ public class WifiServer implements Runnable {
     
     public void startServer() throws IOException, ClassNotFoundException {
     	running = true;
-    	System.out.println("running server...");
+    	if(verbose) System.out.println("running server...");
     	while (running) {
 	    	try (
 	            ServerSocket serverSocket =
@@ -58,7 +60,7 @@ public class WifiServer implements Runnable {
 	            System.out.println(e.getMessage());
 	        }
     	}
-    	System.out.println("shutting down server...");
+    	if(verbose) System.out.println("shutting down server...");
     }
 }
 

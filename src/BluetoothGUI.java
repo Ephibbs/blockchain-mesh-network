@@ -134,6 +134,7 @@ public class BluetoothGUI extends Program{
 		add(new JButton("Receive Resource"), NORTH);
 		
 		add(new JButton("Total Messages"), WEST);
+		add(new JButton("View Blocks"), WEST);
 		
 		this.shortestPathTo = new JTextField(TEXT_FIELD_SIZE);
 		add(this.shortestPathTo, NORTH);
@@ -183,6 +184,9 @@ public class BluetoothGUI extends Program{
 			receiveResource();
 		} else if (e.getActionCommand().equals("Total Messages")) {
 			generateTotalMessages();
+			this.myNode.printTotalMessages(this.g, MAXSIZE);
+		} else if (e.getActionCommand().equals("View Blocks")) {
+			generateBlockView();
 			this.myNode.printTotalMessages(this.g, MAXSIZE);
 		} else if (e.getActionCommand().equals("Draw Nodes")) {
 			drawNodes();
@@ -329,6 +333,10 @@ public class BluetoothGUI extends Program{
 				g.drawString(destination,  5 + 3 * MAXSIZE / 4, 40 + i * 20);
 			}
 		}
+	}
+	
+	private void generateBlockView() {
+		
 	}
 
 	private void generateBidMessageBoard() {
