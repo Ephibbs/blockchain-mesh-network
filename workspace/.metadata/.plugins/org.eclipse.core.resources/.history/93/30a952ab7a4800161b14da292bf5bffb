@@ -19,7 +19,7 @@ public class ResourceRequest extends Message{
 	 * @param type the type to set
 	 */
 	public void setType(String type) {
-		this.resourceType = type;
+		this.type = type;
 	}
 	/**
 	 * @return the amount

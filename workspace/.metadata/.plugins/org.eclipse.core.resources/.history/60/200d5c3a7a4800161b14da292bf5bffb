@@ -63,7 +63,6 @@ public class WifiManager {
     	if(verbose) System.out.print("Received string: ");
     	if(verbose) System.out.println(s);
     	Sendable o = (Sendable) fromString(s);
-    	System.out.println(o.getType());
     	if(o != null && o.getType().equals("Block")) {
     		if(verbose) System.out.print("received Block");
     		node.addBlock((Block) o);

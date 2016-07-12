@@ -328,7 +328,7 @@ public class BluetoothGUI extends Program {
 		for (int i = 0; i < availableMessages.size(); i++) {
 			ResourceRequest rr = (ResourceRequest) availableMessages.get(i);
 			String requestID = rr.id;
-			String resourceRequested = rr.resourceType;
+			String resourceRequested = rr.type;
 			String resourceAmount = "" + rr.amount;
 			String originator = rr.getAuthor();
 			g.drawString(requestID, 5, 40 + i * 20);
@@ -352,7 +352,7 @@ public class BluetoothGUI extends Program {
 				}
 				ResourceRequest rr = (ResourceRequest) myNode.msgMap.get(rrbid.requestID);
 				String messageNumber = rr.getID();
-				String resourceRequested = rr.resourceType;
+				String resourceRequested = rr.type;
 				String resourceAmount = "" + rr.amount;
 				String destination = rr.author;
 				g.drawString(messageNumber, 5, 40 + i * 20);

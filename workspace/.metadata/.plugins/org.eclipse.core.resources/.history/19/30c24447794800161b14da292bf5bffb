@@ -171,8 +171,6 @@ public class NetworkNode implements Node {
 		// distribute
 		// do nothing
 		if(!this.totalMessages.contains(msg)){
-			System.out.println(msg.getType());
-			System.out.println(msg.getID());
 			totalMessages.add(msg);
 		}
 		if (msg != null && !this.msgMap.containsKey(msg.getID())) {

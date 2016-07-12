@@ -1,11 +1,11 @@
 import java.io.*;
 
 public class Sendable implements Serializable {
-	private String sendType;
+	private String type;
 	Sendable(String t) {
-		sendType = t;
+		type = t;
 	}
 	String getType() {
-		return sendType;
+		return type;
 	}
 }
