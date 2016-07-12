@@ -172,11 +172,7 @@ public class BluetoothGUI extends Program {
 			checkBids();
 		} else if (e.getActionCommand().equals("Check Requests")) {
 			checkRequests();
-		}
-		// else if (e.getActionCommand().equals("View Resources")) {
-		// //viewNodesResources(this.viewResources.getText());
-		// }
-		else if (e.getActionCommand().equals("Send Resource")) {
+		} else if (e.getActionCommand().equals("Send Resource")) {
 			sendResource();
 		} else if (e.getActionCommand().equals("Receive Resource")) {
 			receiveResource();
@@ -215,15 +211,6 @@ public class BluetoothGUI extends Program {
 		resources.add(new Resource(14, "tons of coffee", null));
 		this.myNode.getNodeInfoList().put(this.myNode.getNodeID(),
 				new NodeInfo(this.myNode.getNodeID(), myNode.pubKey, myNode.getLocation(), resources, null));
-
-		// for(int i = 0; i < this.networkNodes.size();i++){
-		// NetworkNode thisNode = (NetworkNode) this.networkNodes.get(i);
-		//// thisNode.getResources().put("water", 500);
-		//// thisNode.getResources().put("medical supplies", 20);
-		//// thisNode.getResources().put("food", 300);
-		//// thisNode.getResources().put("blankets", 100);
-		//// thisNode.getResources().put("tents", 50);
-		// }
 	}
 
 	private void viewNodesResources(String nodeName) {
@@ -272,7 +259,6 @@ public class BluetoothGUI extends Program {
 		String bidID = this.bidNumber.getText();
 		ResourceAgreement ra = new ResourceAgreement(bidID, myNode.getNodeID());
 		myNode.addMessage(ra);
-
 	}
 
 	private void sendResource() {
@@ -490,7 +476,6 @@ public class BluetoothGUI extends Program {
 		this.g = this.canvas.getGraphics();
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
-
 		drawNodes();
 	}
 
