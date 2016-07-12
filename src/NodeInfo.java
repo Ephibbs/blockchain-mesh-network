@@ -15,12 +15,12 @@ public class NodeInfo {
     private Time lastPingTime = null;
 
     // Constructor
-    public NodeInfo(String nodeID, PublicKey pubKey, Location myLocation, ArrayList<Resource> resourceList, Time latPingTime) {
+    public NodeInfo(String nodeID, PublicKey pubKey, Location myLocation, ArrayList<Resource> resourceList, Time lastPingTime) {
         this.nodeID = nodeID;
         this.pubKey = pubKey;
         this.myLocation = myLocation;
         this.resourceList = resourceList;
-        this.lastPingTime = latPingTime;
+        this.lastPingTime = lastPingTime;
     }
     /**
 	 * @return the nodeID
