@@ -257,9 +257,9 @@ public class NetworkNode implements Node {
 	}
 
 	private void receivePing(Ping msg) {
-		System.out.println("Ping Author " + msg.getAuthor());
+		//System.out.println("Ping Author " + msg.getAuthor());
 		if (msg.getOriginator().equals(this.getNodeID())) {
-			System.out.println("I didn't do anything");
+			//System.out.println("I didn't do anything");
 			return;
 		}
 		if (this.pingHash.get(msg.getOriginator()) != null) {
@@ -275,7 +275,7 @@ public class NetworkNode implements Node {
 			}
 		}
 		else {
-			System.out.println("I should be creating a new arrayList of pings");
+			//System.out.println("I should be creating a new arrayList of pings");
 			ArrayList<Ping> newArrayList = new ArrayList<Ping>();
 			newArrayList.add(msg);
 			this.pingHash.put(msg.getOriginator(), newArrayList);
@@ -290,12 +290,12 @@ public class NetworkNode implements Node {
 		if (!nodeInfoKeyAL.contains(pingOriginator)) {
 			Location newLocation = msg.getLocation();
 			Time newTime = msg.getTimeSent();
-			System.out.println("I should be making a new NodeInfo List");
+			//System.out.println("I should be making a new NodeInfo List");
 			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(),
 					new ArrayList<Resource>(), newTime);
 			this.nodeInfoMap.put(pingOriginator, newNodeInfo);
 		} else if (nodeInfoKeyAL.contains(pingOriginator)) {
-			System.out.println("I already had this in here");
+			//System.out.println("I already had this in here");
 			NodeInfo currentNodeInfo = nodeInfoMap.get(pingOriginator);
 			currentNodeInfo.setLastPingTime(new Time(System.currentTimeMillis()));
 			currentNodeInfo.setMyLocation(msg.getLocation());

@@ -14,5 +14,4 @@ public class DirectMessage extends Message {
 		this.messageContents = messageText;
 		this.messageType = "DirectMessage";
 	}
-
 }
