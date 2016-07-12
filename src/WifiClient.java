@@ -16,7 +16,6 @@ public class WifiClient implements Runnable {
     private ArrayList<String> hostNames = new ArrayList<String>();
     private int portNumber = 9001;
     private int maxNumAttempts;
-    private ArrayList<String> delQ;
 
     private ArrayList<String> outQ = new ArrayList<String>();
     private Thread t;
@@ -51,19 +50,18 @@ public class WifiClient implements Runnable {
     	}
     }
     public void start() {
-    	t = new Thread(this, "bluetooth client");
+    	t = new Thread(this, "wifi client");
 		t.start();
     }
     public void run() {
+    	String s;
     	System.out.println("running client");
     	while(true) {
-    		delQ = new ArrayList<String>();
     		if(!outQ.isEmpty()) {
-				for(String s : outQ) {
+				for(int i=outQ.size()-1;i>-1;i--) {
+					s = outQ.get(i);
 					broadcast(s);
-					delQ.add(s);
-				}
-				for(String s : delQ) {
+					System.out.println("sent & removed");
 					outQ.remove(s);
 				}
     		}
@@ -77,9 +75,9 @@ public class WifiClient implements Runnable {
     }
     
     public void send(String hostName, String s) throws IOException {
+    	System.out.println("start sending...");
     	for(int numAttempts = 0; numAttempts < maxNumAttempts; numAttempts++) {
     		System.out.println("attempt");
-    		
     		try (
 		        Socket echoSocket = new Socket(hostName, portNumber);
 		        PrintWriter out =
@@ -92,6 +90,7 @@ public class WifiClient implements Runnable {
 		                new InputStreamReader(System.in))
     		) {
     			out.println(s);
+    			break;
 		    } catch (UnknownHostException e) {
 		        System.err.println("Don't know about host " + hostName);
 		        //System.exit(1);
@@ -100,6 +99,12 @@ public class WifiClient implements Runnable {
 		            hostName);
 		        //System.exit(1);
 		    } 
+    		try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
     }
 }

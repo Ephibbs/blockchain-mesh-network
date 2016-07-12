@@ -13,13 +13,14 @@ public class WifiServer implements Runnable {
     private Thread t;
     private WifiManager wm;
     private int portNumber = 9001;
+    private boolean running = false;
     
     WifiServer(WifiManager wm) {
     	this.wm = wm;
     }
     
     public void start() throws BluetoothStateException {
-		t = new Thread(this, "bluetooth server");
+		t = new Thread(this, "wifi server");
 		t.start();
 	}
     
@@ -36,25 +37,28 @@ public class WifiServer implements Runnable {
     }
     
     public void startServer() throws IOException, ClassNotFoundException {
-    	try (
-            ServerSocket serverSocket =
-                new ServerSocket(portNumber);
-            Socket clientSocket = serverSocket.accept();     
-            PrintWriter out =
-                new PrintWriter(clientSocket.getOutputStream(), true);                   
-            BufferedReader in = new BufferedReader(
-                new InputStreamReader(clientSocket.getInputStream()));
-        ) {
-            String line;
-            while ((line = in.readLine()) != null) {
-                wm.addReceived(line);
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            System.out.println("Exception caught when trying to listen on port "
-                + portNumber + " or listening for a connection");
-            System.out.println(e.getMessage());
-        }
+    	running = true;
+    	System.out.println("running server...");
+    	while (running) {
+	    	try (
+	            ServerSocket serverSocket =
+	                new ServerSocket(portNumber);
+	            Socket clientSocket = serverSocket.accept();     
+	            PrintWriter out =
+	                new PrintWriter(clientSocket.getOutputStream(), true);                   
+	            BufferedReader in = new BufferedReader(
+	                new InputStreamReader(clientSocket.getInputStream()));
+	        ) {
+	            String line;
+	        	if((line = in.readLine()) != null) wm.addReceived(line);
+	        	Thread.sleep(500);
+	        } catch (IOException | InterruptedException e) {
+	            System.out.println("Exception caught when trying to listen on port "
+	                + portNumber + " or listening for a connection");
+	            System.out.println(e.getMessage());
+	        }
+    	}
+    	System.out.println("shutting down server...");
     }
 }
 

@@ -32,6 +32,7 @@ public class WifiManager {
 	}
 	
 	void broadcast(Serializable b) throws IOException {
+		System.out.println("added to Q");
 		String s = toString(b);
 		client.addToOutQ(s);
 	}
