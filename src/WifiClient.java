@@ -25,9 +25,9 @@ public class WifiClient implements Runnable {
        	/*
     	 * make sure only the line with your name at the end of it has "//" at the beginning of it
     	 */
-    	//hostNames.add(""); //Colby
+    	hostNames.add("BAH5CG621140Y"); //Colby
     	//hostNames.add(""); //Natalie
-    	hostNames.add("BAH5CG621142N"); //Andrew
+    	//hostNames.add("BAH5CG621142N"); //Andrew
     	//hostNames.add(""); //Dylan
     	//hostNames.add("BAHCND6206GP1"); //Evan
     	//hostNames.add(""); //Will
@@ -51,7 +51,7 @@ public class WifiClient implements Runnable {
     	}
     }
     public void start() {
-    	t = new Thread(this, "bluetooth client");
+    	t = new Thread(this, "wifi client");
 		t.start();
     }
     public void run() {
@@ -59,9 +59,9 @@ public class WifiClient implements Runnable {
     	while(true) {
     		delQ = new ArrayList<String>();
     		if(!outQ.isEmpty()) {
-				for(String s : outQ) {
-					broadcast(s);
-					delQ.add(s);
+				for(int i=outQ.size()-1;i>-1;i--) {
+					broadcast(outQ.get(i));
+					delQ.add(outQ.get(i));
 				}
 				for(String s : delQ) {
 					outQ.remove(s);
@@ -92,6 +92,7 @@ public class WifiClient implements Runnable {
 		                new InputStreamReader(System.in))
     		) {
     			out.println(s);
+    			break;
 		    } catch (UnknownHostException e) {
 		        System.err.println("Don't know about host " + hostName);
 		        //System.exit(1);

@@ -13,13 +13,14 @@ public class WifiServer implements Runnable {
     private Thread t;
     private WifiManager wm;
     private int portNumber = 9001;
+    private boolean running = false;
     
     WifiServer(WifiManager wm) {
     	this.wm = wm;
     }
     
     public void start() throws BluetoothStateException {
-		t = new Thread(this, "bluetooth server");
+		t = new Thread(this, "wifi server");
 		t.start();
 	}
     
@@ -36,6 +37,8 @@ public class WifiServer implements Runnable {
     }
     
     public void startServer() throws IOException, ClassNotFoundException {
+    	running = true;
+    	System.out.println("running server...");
     	try (
             ServerSocket serverSocket =
                 new ServerSocket(portNumber);
@@ -46,9 +49,9 @@ public class WifiServer implements Runnable {
                 new InputStreamReader(clientSocket.getInputStream()));
         ) {
             String line;
-            while ((line = in.readLine()) != null) {
+            while (running) {
+            	line = in.readLine();
                 wm.addReceived(line);
-                System.out.println(line);
             }
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "

@@ -176,35 +176,34 @@ public class NetworkNode implements Node {
 		if (msg != null && !this.msgMap.containsKey(msg.getID())) {
 			blockChain.add(msg);
 			switch (msg.getMessageType()) {
-			case "ResourceRequest":
-				System.out.println("received resource request");
-				openRequests.add(msg);
-				break;
-			case "ResourceRequestBid":
-				System.out.println("received resource bid");
-				bidsToMyRequests.add(msg);
-				break;
-			case "ResourceAgreement":
-				System.out.println("received resource agreement");
-				myResourceAgreements.add(msg);
-				break;
-			case "ResourceSent":
-				System.out.println("received resource sent");
-				myResourceSents.add(msg);
-				break;
-			case "ResourceReceived":
-				System.out.println("received resource receives");
-				myResourceReceives.add(msg);
-				break;
-			case "Ping":
-				receivePing((Ping) msg);
-				break;
-			case "DirectMessage":
-				sendDirectMessage(msg);
-				//receivePing((Ping) msg);
-				break;
+				case "ResourceRequest":
+					System.out.println("received resource request");
+					openRequests.add(msg);
+					break;
+				case "ResourceRequestBid":
+					System.out.println("received resource bid");
+					bidsToMyRequests.add(msg);
+					break;
+				case "ResourceAgreement":
+					System.out.println("received resource agreement");
+					myResourceAgreements.add(msg);
+					break;
+				case "ResourceSent":
+					System.out.println("received resource sent");
+					myResourceSents.add(msg);
+					break;
+				case "ResourceReceived":
+					System.out.println("received resource receives");
+					myResourceReceives.add(msg);
+					break;
+				case "Ping":
+					receivePing((Ping) msg);
+					break;
+				case "DirectMessage":
+					sendDirectMessage(msg);
+					//receivePing((Ping) msg);
+					break;
 			}
-			
 			msgMap.put(msg.getID(), msg);
 			distributeMessage(msg);
 		}
