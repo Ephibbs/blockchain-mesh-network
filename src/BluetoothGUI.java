@@ -187,7 +187,6 @@ public class BluetoothGUI extends Program{
 			this.myNode.printTotalMessages(this.g, MAXSIZE);
 		} else if (e.getActionCommand().equals("View Blocks")) {
 			generateBlockView();
-			this.myNode.printTotalMessages(this.g, MAXSIZE);
 		} else if (e.getActionCommand().equals("Draw Nodes")) {
 			drawNodes();
 		} else if (e.getActionCommand().equals("Create Ping")) {
@@ -323,7 +322,7 @@ public class BluetoothGUI extends Program{
 					return;
 				}
 				ResourceRequest rr = (ResourceRequest) myNode.msgMap.get(rrbid.requestID);
-				String messageNumber = rrAgree.resourceBidID;
+				String messageNumber = rr.getID();
 				String resourceRequested = rr.type;
 				String resourceAmount = "" + rr.amount;
 				String destination = rr.author;
@@ -334,11 +333,46 @@ public class BluetoothGUI extends Program{
 			}
 		}
 	}
+
 	
 	private void generateBlockView() {
-		
+		generateBlockBoard();
+		g.setColor(Color.WHITE);
+		ArrayList<Block> blocks = new ArrayList<Block>(myNode.getBlockchain());
+		for (int i=0;i<blocks.size();i++) {
+			Block b = blocks.get(i);
+			String s;
+			if(b.getPrevHash().length() > 46){ 
+				s = b.getPrevHash().substring(0, 10);
+			} else {
+				s = b.getPrevHash();
+			}
+			g.drawString(b.getMyHash().substring(0, 10),  5, 40 + i * 20);
+			g.drawString(s,  5 + MAXSIZE / 4, 40 + i * 20);
+			g.drawString(Integer.toString(b.getMsgs().size()),  5 + 2 * MAXSIZE / 4, 40 + i * 20);
+			g.drawString(b.getNonce(),  5 + 3 * MAXSIZE / 4, 40 + i * 20);
+		}
 	}
 
+	private void generateBlockBoard() {
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
+
+		g.setColor(Color.WHITE);
+		g.drawRect(0 , 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(2 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(3 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
+
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.setColor(Color.WHITE); // Here
+		g.drawString("Hash ID",  5, 20);
+		g.drawString("Previous Hash", 5 + MAXSIZE / 4, 20);
+		g.drawString("Number of Messages", 5 + 2 * MAXSIZE / 4, 20);
+		g.drawString("Nonce", 5 + 3 * MAXSIZE / 4, 20);
+		g.drawLine(0, 25, MAXSIZE, 25);
+	}
+	
 	private void generateBidMessageBoard() {
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);

@@ -31,8 +31,8 @@ public class Blockstore implements Serializable {
 	}
 
 	// Accessors
-	Block getLastBlock() {
-		return blockTree.getDeepestTreeNode().getData();
+	TreeNode<Block> getLastBlock() {
+		return blockTree.getDeepestTreeNode();
 	}
 	
 	void makeVerbose() {

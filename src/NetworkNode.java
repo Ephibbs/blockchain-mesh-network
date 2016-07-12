@@ -417,4 +417,7 @@ public class NetworkNode implements Node {
 			}
 		}
 	}
+	public ArrayList<Block> getBlockchain() {
+		return blockChain.getBlockchain();
+	}
 }

@@ -36,12 +36,12 @@ public class Blockchain implements Runnable, Serializable {
 	// Constructor
     public Blockchain(Node node) {
     	this.node = node;
-    	this.difficulty = 5;
+    	this.difficulty = 6;
     }
 
 	// Accessors
 	public Block getLastTreeNode() {
-		return blockStore.getLastBlock();
+		return blockStore.getLastBlock().getData();
 	}
 	
 	public void makeVerbose() {
@@ -79,13 +79,13 @@ public class Blockchain implements Runnable, Serializable {
     			ArrayList<Message> msgs = blockStore.getOrphanMessages();
     			if(!msgs.isEmpty()) {
     				if(verbose) System.out.println("solving for block");
-	    			Block b = new Block(blockStore.getLastBlock().getMyHash(), msgs);
-	    			String head = blockStore.getLastBlock().getMyHash();
+    				String head = blockStore.getLastBlock().getData().getMyHash();
+	    			Block b = new Block(head, msgs);
 	    			long nonce = -1;
 	    			b.setNonce(String.valueOf(++nonce));
 	    			boolean isSolved = Utils.checkHash(b, difficulty);
 	    			while(!isSolved && node.isOnline()) {
-	    				if(!head.equals(blockStore.getLastBlock().getMyHash())) {
+	    				if(!head.equals(blockStore.getLastBlock().getData().getMyHash())) {
 	    					break;
 	    				}
 	    				b.setNonce(String.valueOf(++nonce));
@@ -158,5 +158,14 @@ public class Blockchain implements Runnable, Serializable {
     }
     public void setDifficulty(int difficulty) {
     	this.difficulty = difficulty;
+    }
+    public ArrayList<Block> getBlockchain() {
+    	TreeNode<Block> tn = blockStore.getLastBlock();
+    	ArrayList<Block> blocks = new ArrayList<Block>();
+    	blocks.add(tn.getData());
+    	while((tn = tn.getParent()) != null) {
+    		blocks.add(tn.getData());
+    	}
+    	return blocks;
     }
 }

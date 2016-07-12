@@ -13,7 +13,7 @@ public class WifiManager {
 	private WifiClient client;
 	private WifiServer server;
 	private Node node;
-	private boolean verbose = true;
+	private boolean verbose = false;
 	
 	WifiManager(Node node) {
 		this.node = node;
@@ -32,7 +32,7 @@ public class WifiManager {
 	}
 	
 	void broadcast(Serializable b) throws IOException {
-		System.out.println("added to Q");
+		if(verbose) System.out.println("added to Q");
 		String s = toString(b);
 		client.addToOutQ(s);
 	}
