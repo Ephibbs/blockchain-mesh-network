@@ -174,41 +174,44 @@ public class NetworkNode implements Node {
 			totalMessages.add(msg);
 		}
 		if (msg != null && !this.msgMap.containsKey(msg.getID())) {
-			blockChain.add(msg);
 			switch (msg.getMessageType()) {
-			case "ResourceRequest":
-				System.out.println("received resource request");
-				openRequests.add(msg);
-				break;
-			case "ResourceRequestBid":
-				System.out.println("received resource bid");
-				bidsToMyRequests.add(msg);
-				break;
-			case "ResourceAgreement":
-				System.out.println("received resource agreement");
-				myResourceAgreements.add(msg);
-				break;
-			case "ResourceSent":
-				System.out.println("received resource sent");
-				myResourceSents.add(msg);
-				updateNodeInfo((ResourceSent) msg);
-				//updateNodeInfo(String nodeName, String type of Resource, 
-					//	int amount of resource but negative to subtract it)
-				break;
-			case "ResourceReceived":
-				System.out.println("received resource receives");
-				myResourceReceives.add(msg);
-				updateNodeInfo((ResourceReceived) msg);
-				//updateNodeInfo(String nodeName, String type of Resource, 
-				//	int amount of resource but postive to subtract it)
-				break;
-			case "Ping":
-				receivePing((Ping) msg);
-				break;
-			case "DirectMessage":
-				sendDirectMessage(msg);
-				//receivePing((Ping) msg);
-				break;
+				case "ResourceRequest":
+					System.out.println("received resource request");
+					openRequests.add(msg);
+					blockChain.add(msg);
+					break;
+				case "ResourceRequestBid":
+					System.out.println("received resource bid");
+					bidsToMyRequests.add(msg);
+					blockChain.add(msg);
+					break;
+				case "ResourceAgreement":
+					System.out.println("received resource agreement");
+					myResourceAgreements.add(msg);
+					blockChain.add(msg);
+					break;
+				case "ResourceSent":
+					System.out.println("received resource sent");
+					myResourceSents.add(msg);
+					updateNodeInfo((ResourceSent) msg);
+					blockChain.add(msg);
+					//updateNodeInfo(String nodeName, String type of Resource, 
+						//	int amount of resource but negative to subtract it)
+					break;
+				case "ResourceReceived":
+					System.out.println("received resource receives");
+					myResourceReceives.add(msg);
+					updateNodeInfo((ResourceReceived) msg);
+					blockChain.add(msg);
+					//updateNodeInfo(String nodeName, String type of Resource, 
+					//	int amount of resource but postive to subtract it)
+					break;
+				case "Ping":
+					receivePing((Ping) msg);
+					break;
+				case "DirectMessage":
+					sendDirectMessage(msg);
+					break;
 			}
 			msgMap.put(msg.getID(), msg);
 			distributeMessage(msg);
