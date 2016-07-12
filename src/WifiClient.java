@@ -16,7 +16,6 @@ public class WifiClient implements Runnable {
     private ArrayList<String> hostNames = new ArrayList<String>();
     private int portNumber = 9001;
     private int maxNumAttempts;
-    private ArrayList<String> delQ;
 
     private ArrayList<String> outQ = new ArrayList<String>();
     private Thread t;
@@ -25,8 +24,8 @@ public class WifiClient implements Runnable {
        	/*
     	 * make sure only the line with your name at the end of it has "//" at the beginning of it
     	 */
-    	hostNames.add("BAH5CG621140Y"); //Colby
-    	//hostNames.add(""); //Natalie
+    	//hostNames.add("BAH5CG621140Y"); //Colby
+    	hostNames.add(""); //Natalie
     	//hostNames.add("BAH5CG621142N"); //Andrew
     	//hostNames.add(""); //Dylan
     	//hostNames.add("BAHCND6206GP1"); //Evan
@@ -55,15 +54,14 @@ public class WifiClient implements Runnable {
 		t.start();
     }
     public void run() {
+    	String s;
     	System.out.println("running client");
     	while(true) {
-    		delQ = new ArrayList<String>();
     		if(!outQ.isEmpty()) {
 				for(int i=outQ.size()-1;i>-1;i--) {
-					broadcast(outQ.get(i));
-					delQ.add(outQ.get(i));
-				}
-				for(String s : delQ) {
+					s = outQ.get(i);
+					broadcast(s);
+					System.out.println("sent & removed");
 					outQ.remove(s);
 				}
     		}
@@ -80,7 +78,6 @@ public class WifiClient implements Runnable {
     	System.out.println("start sending...");
     	for(int numAttempts = 0; numAttempts < maxNumAttempts; numAttempts++) {
     		System.out.println("attempt");
-    		
     		try (
 		        Socket echoSocket = new Socket(hostName, portNumber);
 		        PrintWriter out =
@@ -93,7 +90,6 @@ public class WifiClient implements Runnable {
 		                new InputStreamReader(System.in))
     		) {
     			out.println(s);
-    			System.out.println("Sent...");
     			break;
 		    } catch (UnknownHostException e) {
 		        System.err.println("Don't know about host " + hostName);

@@ -39,25 +39,26 @@ public class WifiServer implements Runnable {
     public void startServer() throws IOException, ClassNotFoundException {
     	running = true;
     	System.out.println("running server...");
-    	try (
-            ServerSocket serverSocket =
-                new ServerSocket(portNumber);
-            Socket clientSocket = serverSocket.accept();     
-            PrintWriter out =
-                new PrintWriter(clientSocket.getOutputStream(), true);                   
-            BufferedReader in = new BufferedReader(
-                new InputStreamReader(clientSocket.getInputStream()));
-        ) {
-            String line;
-            while (running) {
-            	if((line = in.readLine()) != null) wm.addReceived(line);
-            	Thread.sleep(500);
-            }
-        } catch (IOException | InterruptedException e) {
-            System.out.println("Exception caught when trying to listen on port "
-                + portNumber + " or listening for a connection");
-            System.out.println(e.getMessage());
-        }
+    	while (running) {
+	    	try (
+	            ServerSocket serverSocket =
+	                new ServerSocket(portNumber);
+	            Socket clientSocket = serverSocket.accept();     
+	            PrintWriter out =
+	                new PrintWriter(clientSocket.getOutputStream(), true);                   
+	            BufferedReader in = new BufferedReader(
+	                new InputStreamReader(clientSocket.getInputStream()));
+	        ) {
+	            String line;
+	        	if((line = in.readLine()) != null) wm.addReceived(line);
+	        	Thread.sleep(500);
+	        } catch (IOException | InterruptedException e) {
+	            System.out.println("Exception caught when trying to listen on port "
+	                + portNumber + " or listening for a connection");
+	            System.out.println(e.getMessage());
+	        }
+    	}
+    	System.out.println("shutting down server...");
     }
 }
 

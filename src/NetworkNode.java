@@ -79,6 +79,7 @@ public class NetworkNode implements Node {
 	}
 
 	public void distributeMessage(Message text) {
+		System.out.println("sent from node");
 		try {
 			wm.broadcast(text);
 		} catch (IOException e) {
