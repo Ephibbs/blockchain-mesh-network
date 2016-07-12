@@ -11,16 +11,16 @@ public class NodeInfo {
     private String nodeID = null;
     private PublicKey pubKey = null;
     private Location myLocation = null;
-    private ArrayList<Message> resourceList = new ArrayList<Message>();
+    private ArrayList<Resource> resourceList = new ArrayList<Resource>();
     private Time lastPingTime = null;
 
     // Constructor
-    public NodeInfo(String nodeID, PublicKey pubKey, Location myLocation, ArrayList<Message> resourceList, Time latPingTime) {
+    public NodeInfo(String nodeID, PublicKey pubKey, Location myLocation, ArrayList<Resource> resourceList, Time lastPingTime) {
         this.nodeID = nodeID;
         this.pubKey = pubKey;
         this.myLocation = myLocation;
         this.resourceList = resourceList;
-        this.lastPingTime = latPingTime;
+        this.lastPingTime = lastPingTime;
     }
     /**
 	 * @return the nodeID
@@ -53,14 +53,14 @@ public class NodeInfo {
 	/**
 	 * @return the resourceList
 	 */
-	public ArrayList<Message> getResourceList() {
+	public ArrayList<Resource> getResourceList() {
 		return resourceList;
 	}
 
 	/**
 	 * @param resourceList the resourceList to set
 	 */
-	public void setResourceList(ArrayList<Message> resourceList) {
+	public void setResourceList(ArrayList<Resource> resourceList) {
 		this.resourceList = resourceList;
 	}
 

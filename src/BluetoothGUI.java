@@ -17,7 +17,7 @@ import java.util.Set;
 
 import javax.swing.*;
 
-public class BluetoothGUI extends Program{
+public class BluetoothGUI extends Program {
 
 	public static final int TEXT_FIELD_SIZE = 15;
 	public static final int MAXMOVE = 50;
@@ -66,7 +66,7 @@ public class BluetoothGUI extends Program{
 		this.resourceAmount.addActionListener(this);
 		this.resourceCategory.addActionListener(this);
 		this.bidNumber.addActionListener(this);
-		this.amount.addActionListener(this);
+		// this.amount.addActionListener(this);
 		this.eta.addActionListener(this);
 		this.viewResources.addActionListener(this);
 		this.sentResource.addActionListener(this);
@@ -97,9 +97,9 @@ public class BluetoothGUI extends Program{
 		add(new JLabel("ETA"), WEST);
 		this.eta = new JTextField(TEXT_FIELD_SIZE);
 		add(this.eta, WEST);
-		add(new JLabel("Amount"), WEST);
-		this.amount = new JTextField(TEXT_FIELD_SIZE);
-		add(this.amount, WEST);
+		// add(new JLabel("Amount"), WEST);
+		// this.amount = new JTextField(TEXT_FIELD_SIZE);
+		// add(this.amount, WEST);
 		add(new JButton("Generate Bid"), WEST);
 
 		add(new JLabel("Bid Number"), WEST);
@@ -108,46 +108,44 @@ public class BluetoothGUI extends Program{
 
 		add(new JButton("Accept Bid"), WEST);
 
-//		this.removeNode = new JTextField(TEXT_FIELD_SIZE);
-//		add(this.removeNode, WEST);
-//		add(new JButton("Remove Node"), WEST);
-//
-//		add(new JButton("Move Nodes"), WEST);
+		// this.removeNode = new JTextField(TEXT_FIELD_SIZE);
+		// add(this.removeNode, WEST);
+		// add(new JButton("Remove Node"), WEST);
+		//
+		// add(new JButton("Move Nodes"), WEST);
 
 		add(new JButton("Check Accepted"), WEST);
 		add(new JButton("Check Bids"), WEST);
 
 		add(new JButton("Check Requests"), WEST);
-		
+
 		add(new JButton("Put Initial Resources"), NORTH);
-		
+
 		this.viewResources = new JTextField(TEXT_FIELD_SIZE);
 		add(this.viewResources, NORTH);
 		add(new JButton("View Resources"), NORTH);
-		
+
 		this.sentResource = new JTextField(TEXT_FIELD_SIZE);
 		add(this.sentResource, NORTH);
 		add(new JButton("Send Resource"), NORTH);
-		
+
 		this.receiveResource = new JTextField(TEXT_FIELD_SIZE);
 		add(this.receiveResource, NORTH);
 		add(new JButton("Receive Resource"), NORTH);
-		
+
 		add(new JButton("Total Messages"), WEST);
 		add(new JButton("View Blocks"), WEST);
-		
 		this.shortestPathTo = new JTextField(TEXT_FIELD_SIZE);
 		add(this.shortestPathTo, NORTH);
 		add(new JButton("Show Fastest Path"), NORTH);
-		
+
 		add(new JButton("Ping Everybody"), WEST);
-		
+
 		add(new JButton("Draw Nodes"), WEST);
 		add(new JButton("Create Ping"), WEST);
 	}
 
-	
-	//initialize
+	// initialize
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Start My Node")) {
@@ -174,8 +172,6 @@ public class BluetoothGUI extends Program{
 			checkBids();
 		} else if (e.getActionCommand().equals("Check Requests")) {
 			checkRequests();
-		} else if (e.getActionCommand().equals("View Resources")) {
-			viewNodesResources(this.viewResources.getText());
 		} else if (e.getActionCommand().equals("Send Resource")) {
 			sendResource();
 		} else if (e.getActionCommand().equals("Receive Resource")) {
@@ -191,6 +187,10 @@ public class BluetoothGUI extends Program{
 			drawNodes();
 		} else if (e.getActionCommand().equals("Create Ping")) {
 			createPing();
+		} else if (e.getActionCommand().equals("View Resources")) {
+			viewNodeResources();
+		} else if (e.getActionCommand().equals("Put Initial Resources")) {
+			putInitResources();
 		}
 	}
 
@@ -199,14 +199,20 @@ public class BluetoothGUI extends Program{
 	}
 
 	private void putInitResources() {
-		for(int i = 0; i < this.networkNodes.size();i++){
-			NetworkNode thisNode = (NetworkNode) this.networkNodes.get(i);
-			thisNode.getResources().put("water", 500);
-			thisNode.getResources().put("medical supplies", 20);
-			thisNode.getResources().put("food", 300);
-			thisNode.getResources().put("blankets", 100);
-			thisNode.getResources().put("tents", 50);
-		}
+		// this.myNode.myResources
+		ArrayList<Resource> resources = new ArrayList<Resource>();
+		resources.add(new Resource(500, "water", null));
+		resources.add(new Resource(20, "medical supplies", null));
+		resources.add(new Resource(300, "food", null));
+		resources.add(new Resource(100, "blankets", null));
+		resources.add(new Resource(50, "tents", null));
+		resources.add(new Resource(40, "gre", null));
+		resources.add(new Resource(50, "radios", null));
+		resources.add(new Resource(100, "laptops", null));
+		resources.add(new Resource(6, "raspberry pis", null));
+		resources.add(new Resource(14, "tons of coffee", null));
+		this.myNode.getNodeInfoList().put(this.myNode.getNodeID(),
+				new NodeInfo(this.myNode.getNodeID(), myNode.pubKey, myNode.getLocation(), resources, null));
 	}
 
 	private void viewNodesResources(String nodeName) {
@@ -216,25 +222,25 @@ public class BluetoothGUI extends Program{
 				HashMap<String, Integer> nodeResources = this.networkNodes.get(i).getResources();
 				Set<String> nodesR = nodeResources.keySet();
 				int o = 0;
-				for (String key: nodesR) {
+				for (String key : nodesR) {
 					String resourceName = key;
 					String resourceAmount = "" + nodeResources.get(key);
-					g.drawString(resourceName, 5 , 75 + o*25);
-					g.drawString(resourceAmount,  10 + 0/5, 75+o*25);
-					g.drawLine(0, 78 + o*25, MAXSIZE, 78 + o*25);
+					g.drawString(resourceName, 5, 75 + o * 25);
+					g.drawString(resourceAmount, 10 + 0 / 5, 75 + o * 25);
+					g.drawLine(0, 78 + o * 25, MAXSIZE, 78 + o * 25);
 					o++;
 				}
 			}
 		}
 	}
-	
-	public void setMyNode(NetworkNode newNode){
+
+	public void setMyNode(NetworkNode newNode) {
 		this.myNode = newNode;
 	}
 
-	//Message Generation
+	// Message Generation
 	private void generateResourceRequest() throws NoSuchAlgorithmException, NoSuchProviderException {
-		ResourceRequest newRequest = new ResourceRequest(Integer.parseInt(this.resourceAmount.getText()), 
+		ResourceRequest newRequest = new ResourceRequest(Integer.parseInt(this.resourceAmount.getText()),
 				this.resourceType.getText(), myNode.getNodeID());
 		myNode.addMessage(newRequest);
 		checkRequests();
@@ -242,11 +248,11 @@ public class BluetoothGUI extends Program{
 
 	private void generateBid() {
 		String messageID = this.acceptNumber.getText();
-		int eta =  Integer.parseInt(this.eta.getText());
-		int amount = Integer.parseInt(this.amount.getText());
-		ResourceRequestBid newBid = new ResourceRequestBid(messageID, eta, 
-				amount, myNode.getNodeID());
-		
+		int eta = Integer.parseInt(this.eta.getText());
+		// int amount = Integer.parseInt(this.amount.getText());
+		int amount = 100;
+		ResourceRequestBid newBid = new ResourceRequestBid(messageID, eta, amount, myNode.getNodeID());
+
 		myNode.addMessage(newBid);
 		checkBids();
 	}
@@ -255,25 +261,48 @@ public class BluetoothGUI extends Program{
 		String bidID = this.bidNumber.getText();
 		ResourceAgreement ra = new ResourceAgreement(bidID, myNode.getNodeID());
 		myNode.addMessage(ra);
-		
 	}
 
 	private void sendResource() {
-		String sendResourceID = this.sentResource.getText();
-		NetworkNode thisNode = (NetworkNode) this.myNode;
+		String MessageID = this.sentResource.getText();
+		ResourceSent rs = null;
 
-		ResourceSent rs = new ResourceSent(sendResourceID, myNode.getNodeID());
-		
+		for (int i = 0; i < myNode.openRequests.size(); i++) {
+			ResourceRequest req = (ResourceRequest) this.myNode.openRequests.get(i);
+			if (req.getID().equals(MessageID)) {
+				rs = new ResourceSent(MessageID, myNode.getNodeID(), req.getType(), req.getAmount());
+			}
+		}
+
+		// ResourceSent rs = new ResourceSent(MessageID, myNode.getNodeID());
+		// for(int i = 0; i < thisNode.)
+
+		// String typ =
+
+		// ResourceSent rs = new ResourceSent(sendResourceID,
+		// myNode.getNodeID(), need type, need amount);
+
 		myNode.addMessage(rs);
 	}
 
 	private void receiveResource() {
-		String sendID = this.sentResource.getText();
-		ResourceReceived rr = new ResourceReceived(sendID, myNode.getNodeID());
+		String MessageID = this.sentResource.getText();
+		ResourceReceived rr = null;
+
+		for (int i = 0; i < myNode.openRequests.size(); i++) {
+			ResourceRequest req = (ResourceRequest) this.myNode.openRequests.get(i);
+			if (req.getID().equals(MessageID)) {
+				rr = new ResourceReceived(MessageID, myNode.getNodeID(), req.getType(), req.getAmount());
+			}
+		}
+		// ResourceReceived rr = new ResourceReceived(sendID,
+		// myNode.getNodeID());
+		// ResourceReceived rr = new ResourceReceived(sendID,
+		// myNode.getNodeID(), need type, need amount);
 		myNode.addMessage(rr);
 	}
 
-	//GUI generation
+	// GUI generation
 	private void checkBids() {
 		generateBidMessageBoard();
 		g.setColor(Color.WHITE);
@@ -284,14 +313,14 @@ public class BluetoothGUI extends Program{
 				String eta = "" + rrbid.eta;
 				String resourceAmount = "" + rrbid.amount;
 				String bidder = rrbid.author;
-				g.drawString(bidID,  5, 40 + i * 20);
-				g.drawString(eta,  5 + MAXSIZE / 4, 40 + i * 20);
-				g.drawString(resourceAmount,  5 + 2 * MAXSIZE / 4, 40 + i * 20);
+				g.drawString(bidID, 5, 40 + i * 20);
+				g.drawString(eta, 5 + MAXSIZE / 4, 40 + i * 20);
+				g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
 				g.drawString(bidder, 5 + 3 * MAXSIZE / 4, 40 + i * 20);
 			}
 		}
 	}
-	
+
 	private void checkRequests() {
 		generateMessageBoard();
 		g.setColor(Color.WHITE);
@@ -302,13 +331,13 @@ public class BluetoothGUI extends Program{
 			String resourceRequested = rr.type;
 			String resourceAmount = "" + rr.amount;
 			String originator = rr.getAuthor();
-			g.drawString(requestID,  5, 40 + i * 20);
+			g.drawString(requestID, 5, 40 + i * 20);
 			g.drawString(resourceRequested, 5 + MAXSIZE / 4, 40 + i * 20);
 			g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
 			g.drawString(originator, 5 + 3 * MAXSIZE / 4, 40 + i * 20);
 		}
 	}
-	
+
 	private void checkAccepts() {
 		generateAcceptedMessageBoard();
 		g.setColor(Color.WHITE);
@@ -317,7 +346,7 @@ public class BluetoothGUI extends Program{
 			for (int i = 0; i < resourceAgreements.size(); i++) {
 				ResourceAgreement rrAgree = (ResourceAgreement) resourceAgreements.get(i);
 				ResourceRequestBid rrbid = (ResourceRequestBid) myNode.msgMap.get(rrAgree.resourceBidID);
-				if(rrbid == null) {
+				if (rrbid == null) {
 					System.out.println("incorrect bid id");
 					return;
 				}
@@ -326,10 +355,10 @@ public class BluetoothGUI extends Program{
 				String resourceRequested = rr.type;
 				String resourceAmount = "" + rr.amount;
 				String destination = rr.author;
-				g.drawString(messageNumber,  5, 40 + i * 20);
-				g.drawString(resourceRequested,  5 + MAXSIZE / 4, 40 + i * 20);
-				g.drawString(resourceAmount,  5 + 2 * MAXSIZE / 4, 40 + i * 20);
-				g.drawString(destination,  5 + 3 * MAXSIZE / 4, 40 + i * 20);
+				g.drawString(messageNumber, 5, 40 + i * 20);
+				g.drawString(resourceRequested, 5 + MAXSIZE / 4, 40 + i * 20);
+				g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
+				g.drawString(destination, 5 + 3 * MAXSIZE / 4, 40 + i * 20);
 			}
 		}
 	}
@@ -378,15 +407,15 @@ public class BluetoothGUI extends Program{
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 
 		g.setColor(Color.WHITE);
-		
+
 		g.drawRect(0, 0, MAXSIZE / 4, MAXSIZE);
 		g.drawRect(MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(2 * MAXSIZE / 4 , 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(3 * MAXSIZE / 4 , 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(2 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(3 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
 
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g.setColor(Color.WHITE);
-		g.drawString("Bid Number",  5, 20);
+		g.drawString("Bid Number", 5, 20);
 		g.drawString("Time of Arrival", 5 + MAXSIZE / 4, 20);
 		g.drawString("Amount Can Send", 5 + 2 * MAXSIZE / 4, 20);
 		g.drawString("Bidder", 5 + 3 * MAXSIZE / 4, 20);
@@ -400,8 +429,8 @@ public class BluetoothGUI extends Program{
 		g.setColor(Color.WHITE);
 		g.drawRect(0, 0, MAXSIZE / 4, MAXSIZE);
 		g.drawRect(MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(2 * MAXSIZE / 4 , 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(3 * MAXSIZE / 4 , 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(2 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(3 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
 
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g.setColor(Color.WHITE);
@@ -417,7 +446,7 @@ public class BluetoothGUI extends Program{
 		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
 
 		g.setColor(Color.WHITE);
-		g.drawRect(0 , 0, MAXSIZE / 5, MAXSIZE);
+		g.drawRect(0, 0, MAXSIZE / 5, MAXSIZE);
 		g.drawRect(MAXSIZE / 5, 0, 4 * MAXSIZE / 5, MAXSIZE);
 
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
@@ -425,30 +454,29 @@ public class BluetoothGUI extends Program{
 		g.drawString(this.viewResources.getText() + "'s resources at Location ", 5 + 2 * MAXSIZE / 5, 20);
 		g.drawString("Resource Name", 5, 45);
 		g.drawString("Quantity", 5 + MAXSIZE / 5, 45);
-		g.drawLine(0, 25,  MAXSIZE, 25);
-		g.drawLine(0, 50,  MAXSIZE, 50);
+		g.drawLine(0, 25, MAXSIZE, 25);
+		g.drawLine(0, 50, MAXSIZE, 50);
 
 	}
-	
+
 	private void generateTotalMessages() {
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 
 		g.setColor(Color.WHITE);
-		g.drawRect(0 , 0, MAXSIZE / 3, MAXSIZE);
+		g.drawRect(0, 0, MAXSIZE / 3, MAXSIZE);
 		g.drawRect(MAXSIZE / 3, 0, MAXSIZE / 3, MAXSIZE);
 		g.drawRect(2 * MAXSIZE / 3, 0, MAXSIZE / 3, MAXSIZE);
-		//g.drawRect(3 * MAXSIZE / 5, 0, MAXSIZE / 5, MAXSIZE);
-		//g.drawRect(4 * MAXSIZE / 5, 0, MAXSIZE / 5, MAXSIZE);
-		
+		// g.drawRect(3 * MAXSIZE / 5, 0, MAXSIZE / 5, MAXSIZE);
+		// g.drawRect(4 * MAXSIZE / 5, 0, MAXSIZE / 5, MAXSIZE);
 
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g.setColor(Color.WHITE); // Here
 		g.drawString("Message Type", 5, 20);
 		g.drawString("Message ID", 5 + MAXSIZE / 3, 20);
 		g.drawString("Author", 5 + 2 * MAXSIZE / 3, 20);
-		//g.drawString("Originator", 5 + 3 * MAXSIZE / 5, 20);
-		//g.drawString("Message Type", 5 + 4 * MAXSIZE / 5, 20);
+		// g.drawString("Originator", 5 + 3 * MAXSIZE / 5, 20);
+		// g.drawString("Message Type", 5 + 4 * MAXSIZE / 5, 20);
 		g.drawLine(0, 25, MAXSIZE, 25);
 	}
 
@@ -457,7 +485,7 @@ public class BluetoothGUI extends Program{
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 
 		g.setColor(Color.WHITE);
-		g.drawRect(0 , 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(0, 0, MAXSIZE / 4, MAXSIZE);
 		g.drawRect(MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
 		g.drawRect(2 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
 		g.drawRect(3 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
@@ -474,7 +502,7 @@ public class BluetoothGUI extends Program{
 	public void beginSimulation() {
 		this.g = this.canvas.getGraphics();
 		g.setColor(Color.BLACK);
-		
+
 		generateNodeMap();
 		generateMessageBoard();
 	}
@@ -482,14 +510,13 @@ public class BluetoothGUI extends Program{
 	private void drawNodes() {
 		g.setColor(Color.BLACK);
 		this.myNode.drawNodes(this.g, MAXSIZE, WIDTH, HEIGHT);
-		//this.myNode.drawTemps(this.g, MAXSIZE, WIDTH, HEIGHT);
+		// this.myNode.drawTemps(this.g, MAXSIZE, WIDTH, HEIGHT);
 	}
 
 	private void generateNodeMap() {
 		this.g = this.canvas.getGraphics();
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
-
 		drawNodes();
 	}
 
@@ -502,10 +529,49 @@ public class BluetoothGUI extends Program{
 			String nodeNameRec = "Node" + networkNodes.get(i).nodeID;
 			if (networkNodes.get(i).nodeID.equals(receiver)) {
 				receiverNode = networkNodes.get(i);
-				//currentMessage = new TextMessage(message, receiverNode.getNodeID());
+				// currentMessage = new TextMessage(message,
+				// receiverNode.getNodeID());
 				myNode.addMessage(currentMessage);
 			}
 		}
+	}
+
+	public void viewNodeResources() {
+		String nodeToView = this.viewResources.getText();
+		NodeInfo nodeInfo = this.myNode.getNodeInfoList().get(nodeToView);
+		ArrayList<Resource> resources = nodeInfo.getResourceList();
+		Location nodeLoc = nodeInfo.getMyLocation();
+		int nodeX = nodeLoc.getX();
+		int nodeY = nodeLoc.getY();
+		generateNodeResourceWindow(nodeToView, nodeX, nodeY);
+		displayResources(resources);
+	}
+
+	private void displayResources(ArrayList<Resource> resources) {
+		for (int i = 0; i < resources.size(); i++) {
+			String amount = String.valueOf(resources.get(i).getAmount());
+			String type = resources.get(i).getType();
+			g.drawString(amount, 5, 70 + i * 25);
+			g.drawString(type, 5 + MAXSIZE/5, 70+i*25);
+			g.drawLine(0, 73+i*25, MAXSIZE, 73+i*25);
+		}
+	}
+
+	private void generateNodeResourceWindow(String nodeToView, int nodeX, int nodeY) {
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
+
+		g.setColor(Color.WHITE);
+		g.drawRect(0, 0, MAXSIZE / 5, MAXSIZE);
+		g.drawRect(MAXSIZE / 5, 0, 4 * MAXSIZE / 5, MAXSIZE);
+
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.setColor(Color.WHITE);
+		g.drawString(nodeToView + "'s resources at Location X:  " + nodeX + " Y: " + nodeY, 5 + 3 * MAXSIZE / 10, 20);
+		g.drawString("Quantity", 5, 45);
+		g.drawString("Name", 5 + MAXSIZE / 5, 45);
+		g.drawLine(0, 25, MAXSIZE, 25);
+		g.drawLine(0, 50, MAXSIZE, 50);
 	}
 
 }

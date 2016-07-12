@@ -25,12 +25,12 @@ public class WifiClient implements Runnable {
        	/*
     	 * make sure only the line with your name at the end of it has "//" at the beginning of it
     	 */
-    	//hostNames.add("BAH5CG621140Y"); //Colby
-    	hostNames.add(""); //Natalie
-    	//hostNames.add("BAH5CG621142N"); //Andrew
-    	//hostNames.add(""); //Dylan
+    	hostNames.add("BAH5CG621140Y"); //Colby
+    	hostNames.add("BAH5CG621142S"); //Natalie
+    	hostNames.add("BAH5CG621142N"); //Andrew
+    	hostNames.add("BAH5CG62113G8"); //Dylan
     	//hostNames.add("BAHCND6206GP1"); //Evan
-    	//hostNames.add(""); //Will
+    	hostNames.add("BAH5CG62113Z0"); //Will
     	/*
     	 * END
     	 */

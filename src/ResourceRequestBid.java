@@ -12,5 +12,4 @@ public class ResourceRequestBid extends Message {
 		this.amount = amount;
 		this.messageType = "ResourceRequestBid";
 	}
-	
 }
