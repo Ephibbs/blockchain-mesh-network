@@ -1,7 +1,7 @@
 
 public class ResourceReceived extends Message{
 	String resourceSentID;
-	public String type;
+	public String resourceType;
 	public int amount;
 	//public ResourceReceived(String sentID, String auth) {
 	public ResourceReceived(String sentID, String auth, String typ, int amt) {
@@ -9,7 +9,7 @@ public class ResourceReceived extends Message{
 		resourceSentID = sentID;
 		// TODO Auto-generated constructor stub
 		this.messageType = "ResourceReceived";
-		this.type = typ;
+		this.resourceType = typ;
 		this.amount = amt;
 	}
 	/**
@@ -27,14 +27,14 @@ public class ResourceReceived extends Message{
 	/**
 	 * @return the type
 	 */
-	public String getType() {
-		return type;
+	public String getResourceType() {
+		return resourceType;
 	}
 	/**
 	 * @param type the type to set
 	 */
 	public void setType(String type) {
-		this.type = type;
+		this.resourceType = type;
 	}
 	/**
 	 * @return the amount
