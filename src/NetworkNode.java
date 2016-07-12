@@ -191,10 +191,16 @@ public class NetworkNode implements Node {
 			case "ResourceSent":
 				System.out.println("received resource sent");
 				myResourceSents.add(msg);
+				updateNodeInfo((ResourceSent) msg);
+				//updateNodeInfo(String nodeName, String type of Resource, 
+					//	int amount of resource but negative to subtract it)
 				break;
 			case "ResourceReceived":
 				System.out.println("received resource receives");
 				myResourceReceives.add(msg);
+				updateNodeInfo((ResourceReceived) msg);
+				//updateNodeInfo(String nodeName, String type of Resource, 
+				//	int amount of resource but postive to subtract it)
 				break;
 			case "Ping":
 				receivePing((Ping) msg);
@@ -208,6 +214,33 @@ public class NetworkNode implements Node {
 			msgMap.put(msg.getID(), msg);
 			distributeMessage(msg);
 		}
+	}
+
+	private void updateNodeInfo(ResourceReceived msg) {
+		String NodeID = msg.getAuthor();
+		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
+		String resourceType = msg.getType();
+		int resourceAmt = msg.getAmount();
+		updateResourceInfo(resourceType, -1*resourceAmt, currentInfo);
+	}
+
+	private void updateResourceInfo(String resourceType, int resourceAmt, NodeInfo currentInfo) {
+		for(int i = 0; i < currentInfo.getResourceList().size();i++){
+			Resource cResource = currentInfo.getResourceList().get(i);
+			if(cResource.getType().equals(resourceType)){
+				cResource.setAmount(cResource.getAmount() + resourceAmt);
+				System.out.println("I was able to change a resource value by: " + resourceAmt);
+			}
+		}
+	}
+
+	private void updateNodeInfo(ResourceSent msg) {
+		String NodeID = msg.getAuthor();
+		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
+		String resourceType = msg.getType();
+		int resourceAmt = msg.getAmount();
+		updateResourceInfo(resourceType, 1*resourceAmt, currentInfo);
+		
 	}
 
 	private void sendDirectMessage(Message msg) {
@@ -255,7 +288,7 @@ public class NetworkNode implements Node {
 			Location newLocation = msg.getLocation();
 			Time newTime = msg.getTimeSent();
 			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(),
-					new ArrayList<Message>(), newTime);
+					new ArrayList<Resource>(), newTime);
 			this.nodeInfoMap.put(pingOriginator, newNodeInfo);
 		} else if (nodeInfoKeyAL.contains(pingOriginator)) {
 			NodeInfo currentNodeInfo = nodeInfoMap.get(pingOriginator);
@@ -293,7 +326,6 @@ public class NetworkNode implements Node {
 					this.routeTable.put(originator, relayer);
 					this.countHash.put(originator, min);
 				} else if (nodePings.get(i).getCount() < min) {
-
 					min = nodePings.get(i).getCount();
 					if (this.countHash.get(originator) < min) {
 						this.routeTable.remove(originator);
@@ -417,5 +449,9 @@ public class NetworkNode implements Node {
 				g.drawLine(0, 45 + i * 25, MAXSIZE, 45 + i * 25);
 			}
 		}
+	}
+
+	public Blockchain getBlockChain() {
+		return this.blockChain;
 	}
 }
