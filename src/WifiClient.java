@@ -44,6 +44,8 @@ public class WifiClient implements Runnable {
 		names.add("Dylan");
 		names.add("Evan");
 		names.add("Will");
+		names.add("Jerry");
+		
 		
 		String myName="";
 		try {
@@ -60,6 +62,9 @@ public class WifiClient implements Runnable {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		if(hostNames.isEmpty()) {
+			hostNames.add("");
 		}
 		System.out.println(myName);
 		System.out.println(hostNames);
