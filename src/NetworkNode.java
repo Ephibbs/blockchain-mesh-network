@@ -197,11 +197,11 @@ public class NetworkNode implements Node {
 					myResourceReceives.add(msg);
 					break;
 				case "Ping":
+					System.out.println("received ping");
 					receivePing((Ping) msg);
 					break;
 				case "DirectMessage":
 					sendDirectMessage(msg);
-					//receivePing((Ping) msg);
 					break;
 			}
 			msgMap.put(msg.getID(), msg);

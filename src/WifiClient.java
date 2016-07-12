@@ -77,6 +77,7 @@ public class WifiClient implements Runnable {
     }
     
     public void send(String hostName, String s) throws IOException {
+    	System.out.println("start sending...");
     	for(int numAttempts = 0; numAttempts < maxNumAttempts; numAttempts++) {
     		System.out.println("attempt");
     		
@@ -92,6 +93,7 @@ public class WifiClient implements Runnable {
 		                new InputStreamReader(System.in))
     		) {
     			out.println(s);
+    			System.out.println("Sent...");
     			break;
 		    } catch (UnknownHostException e) {
 		        System.err.println("Don't know about host " + hostName);
@@ -101,6 +103,12 @@ public class WifiClient implements Runnable {
 		            hostName);
 		        //System.exit(1);
 		    } 
+    		try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
     }
 }
