@@ -174,75 +174,40 @@ public class NetworkNode implements Node {
 			totalMessages.add(msg);
 		}
 		if (msg != null && !this.msgMap.containsKey(msg.getID())) {
+			blockChain.add(msg);
 			switch (msg.getMessageType()) {
-				case "ResourceRequest":
-					System.out.println("received resource request");
-					openRequests.add(msg);
-					blockChain.add(msg);
-					break;
-				case "ResourceRequestBid":
-					System.out.println("received resource bid");
-					bidsToMyRequests.add(msg);
-					blockChain.add(msg);
-					break;
-				case "ResourceAgreement":
-					System.out.println("received resource agreement");
-					myResourceAgreements.add(msg);
-					blockChain.add(msg);
-					break;
-				case "ResourceSent":
-					System.out.println("received resource sent");
-					myResourceSents.add(msg);
-					updateNodeInfo((ResourceSent) msg);
-					blockChain.add(msg);
-					//updateNodeInfo(String nodeName, String type of Resource, 
-						//	int amount of resource but negative to subtract it)
-					break;
-				case "ResourceReceived":
-					System.out.println("received resource receives");
-					myResourceReceives.add(msg);
-					updateNodeInfo((ResourceReceived) msg);
-					blockChain.add(msg);
-					//updateNodeInfo(String nodeName, String type of Resource, 
-					//	int amount of resource but postive to subtract it)
-					break;
-				case "Ping":
-					receivePing((Ping) msg);
-					break;
-				case "DirectMessage":
-					sendDirectMessage(msg);
-					break;
+			case "ResourceRequest":
+				System.out.println("received resource request");
+				openRequests.add(msg);
+				break;
+			case "ResourceRequestBid":
+				System.out.println("received resource bid");
+				bidsToMyRequests.add(msg);
+				break;
+			case "ResourceAgreement":
+				System.out.println("received resource agreement");
+				myResourceAgreements.add(msg);
+				break;
+			case "ResourceSent":
+				System.out.println("received resource sent");
+				myResourceSents.add(msg);
+				break;
+			case "ResourceReceived":
+				System.out.println("received resource receives");
+				myResourceReceives.add(msg);
+				break;
+			case "Ping":
+				receivePing((Ping) msg);
+				break;
+			case "DirectMessage":
+				sendDirectMessage(msg);
+				//receivePing((Ping) msg);
+				break;
 			}
+			
 			msgMap.put(msg.getID(), msg);
 			distributeMessage(msg);
 		}
-	}
-
-	private void updateNodeInfo(ResourceReceived msg) {
-		String NodeID = msg.getAuthor();
-		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
-		String resourceType = msg.getType();
-		int resourceAmt = msg.getAmount();
-		updateResourceInfo(resourceType, -1*resourceAmt, currentInfo);
-	}
-
-	private void updateResourceInfo(String resourceType, int resourceAmt, NodeInfo currentInfo) {
-		for(int i = 0; i < currentInfo.getResourceList().size();i++){
-			Resource cResource = currentInfo.getResourceList().get(i);
-			if(cResource.getType().equals(resourceType)){
-				cResource.setAmount(cResource.getAmount() + resourceAmt);
-				System.out.println("I was able to change a resource value by: " + resourceAmt);
-			}
-		}
-	}
-
-	private void updateNodeInfo(ResourceSent msg) {
-		String NodeID = msg.getAuthor();
-		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
-		String resourceType = msg.getType();
-		int resourceAmt = msg.getAmount();
-		updateResourceInfo(resourceType, 1*resourceAmt, currentInfo);
-		
 	}
 
 	private void sendDirectMessage(Message msg) {
@@ -259,9 +224,7 @@ public class NetworkNode implements Node {
 	}
 
 	private void receivePing(Ping msg) {
-		//System.out.println("Ping Author " + msg.getAuthor());
 		if (msg.getOriginator().equals(this.getNodeID())) {
-			//System.out.println("I didn't do anything");
 			return;
 		}
 		if (this.pingHash.get(msg.getOriginator()) != null) {
@@ -277,7 +240,6 @@ public class NetworkNode implements Node {
 			}
 		}
 		else {
-			//System.out.println("I should be creating a new arrayList of pings");
 			ArrayList<Ping> newArrayList = new ArrayList<Ping>();
 			newArrayList.add(msg);
 			this.pingHash.put(msg.getOriginator(), newArrayList);
@@ -292,12 +254,10 @@ public class NetworkNode implements Node {
 		if (!nodeInfoKeyAL.contains(pingOriginator)) {
 			Location newLocation = msg.getLocation();
 			Time newTime = msg.getTimeSent();
-			//System.out.println("I should be making a new NodeInfo List");
 			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(),
-					new ArrayList<Resource>(), newTime);
+					new ArrayList<Message>(), newTime);
 			this.nodeInfoMap.put(pingOriginator, newNodeInfo);
 		} else if (nodeInfoKeyAL.contains(pingOriginator)) {
-			//System.out.println("I already had this in here");
 			NodeInfo currentNodeInfo = nodeInfoMap.get(pingOriginator);
 			currentNodeInfo.setLastPingTime(new Time(System.currentTimeMillis()));
 			currentNodeInfo.setMyLocation(msg.getLocation());
@@ -333,6 +293,7 @@ public class NetworkNode implements Node {
 					this.routeTable.put(originator, relayer);
 					this.countHash.put(originator, min);
 				} else if (nodePings.get(i).getCount() < min) {
+
 					min = nodePings.get(i).getCount();
 					if (this.countHash.get(originator) < min) {
 						this.routeTable.remove(originator);
@@ -442,6 +403,7 @@ public class NetworkNode implements Node {
 	}
 
 	public void printTotalMessages(Graphics g, int MAXSIZE) {
+		// TODO Printing Total Messages
 		g.setColor(Color.WHITE);
 		if (this.totalMessages != null) {
 			for (int i = 0; i < this.totalMessages.size(); i++) {
@@ -455,8 +417,5 @@ public class NetworkNode implements Node {
 				g.drawLine(0, 45 + i * 25, MAXSIZE, 45 + i * 25);
 			}
 		}
-	}
-	public ArrayList<Block> getBlockchain() {
-		return blockChain.getBlockchain();
 	}
 }
