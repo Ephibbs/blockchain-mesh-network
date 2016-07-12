@@ -51,8 +51,9 @@ public class WifiServer implements Runnable {
             String line;
             while (running) {
             	if((line = in.readLine()) != null) wm.addReceived(line);
+            	Thread.sleep(500);
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             System.out.println("Exception caught when trying to listen on port "
                 + portNumber + " or listening for a connection");
             System.out.println(e.getMessage());
