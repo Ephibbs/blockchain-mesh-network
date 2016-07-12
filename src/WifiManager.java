@@ -13,7 +13,7 @@ public class WifiManager {
 	private WifiClient client;
 	private WifiServer server;
 	private Node node;
-	private boolean verbose = true;
+	private boolean verbose = false;
 	
 	WifiManager(Node node) {
 		this.node = node;

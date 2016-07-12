@@ -6,7 +6,7 @@ public class ResourceRequest extends Message{
 	public ResourceRequest(int amount, String type, String auth) {
 		super(auth);
 		this.amount = amount;
-		this.resourceType = resourceType;
+		this.resourceType = type;
 		this.messageType = "ResourceRequest";
 	}
 	/**
