@@ -221,16 +221,20 @@ public class NetworkNode implements Node {
 	}
 
 	private void updateNodeInfo(ResourceReceived msg) {
+		System.out.println("I should be adding more resource received");
 		String NodeID = msg.getAuthor();
 		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
-		String resourceType = msg.getType();
+		String resourceType = msg.getResourceType();
 		int resourceAmt = msg.getAmount();
-		updateResourceInfo(resourceType, -1*resourceAmt, currentInfo);
+		updateResourceInfo(resourceType, 1*resourceAmt, currentInfo);
 	}
 
 	private void updateResourceInfo(String resourceType, int resourceAmt, NodeInfo currentInfo) {
+		System.out.println("I got here");
 		for(int i = 0; i < currentInfo.getResourceList().size();i++){
 			Resource cResource = currentInfo.getResourceList().get(i);
+			//System.out.println("resourceType: " + resourceType);
+			//System.out.println("cResource.getType(): " + cResource.getType());
 			if(cResource.getType().equals(resourceType)){
 				cResource.setAmount(cResource.getAmount() + resourceAmt);
 				System.out.println("I was able to change a resource value by: " + resourceAmt);
@@ -243,8 +247,7 @@ public class NetworkNode implements Node {
 		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
 		String resourceType = msg.getType();
 		int resourceAmt = msg.getAmount();
-		updateResourceInfo(resourceType, 1*resourceAmt, currentInfo);
-		
+		updateResourceInfo(resourceType, -1*resourceAmt, currentInfo);
 	}
 
 	private void sendDirectMessage(Message msg) {

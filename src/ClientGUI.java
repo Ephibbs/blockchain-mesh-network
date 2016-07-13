@@ -272,9 +272,9 @@ public class ClientGUI extends Program {
 	private void sendResource() {
 		String MessageID = this.sentResource.getText();
 		if(myNode.msgMap.containsKey(MessageID)) {
-			ResourceRequestBid bid = (ResourceRequestBid) myNode.msgMap.get(MessageID);
-			ResourceRequest req = (ResourceRequest) myNode.msgMap.get(bid.requestID);
-			ResourceSent rs = new ResourceSent(MessageID, myNode.getNodeID(), req.resourceType, req.amount);
+			//ResourceRequestBid bid = (ResourceRequestBid) myNode.msgMap.get(MessageID);
+			ResourceRequest req = (ResourceRequest) myNode.msgMap.get(MessageID);
+			ResourceSent rs = new ResourceSent(MessageID, myNode.getNodeID(), req.getResourceType(), req.getAmount());
 			myNode.addMessage(rs);
 		} else {
 			System.out.println("no resource agreement with that id");
@@ -284,8 +284,9 @@ public class ClientGUI extends Program {
 	private void receiveResource() {
 		String MessageID = this.sentResource.getText();
 		if(myNode.msgMap.containsKey(MessageID)) {
-			ResourceSent rs = (ResourceSent) myNode.msgMap.get(MessageID);
-			ResourceReceived rr = new ResourceReceived(MessageID, myNode.getNodeID(), rs.resourceType, rs.amount);
+			//ResourceSent rs = (ResourceSent) myNode.msgMap.get(MessageID);
+			ResourceRequest rs = (ResourceRequest) myNode.msgMap.get(MessageID);
+			ResourceReceived rr = new ResourceReceived(MessageID, myNode.getNodeID(), rs.getResourceType(), rs.getAmount());
 			myNode.addMessage(rr);
 		} else {
 			System.out.println("no resource sent with that id");
