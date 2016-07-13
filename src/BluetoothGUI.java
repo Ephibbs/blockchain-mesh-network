@@ -144,9 +144,6 @@ public class BluetoothGUI extends Program {
 
 		add(new JButton("Draw Nodes"), WEST);
 		add(new JButton("Create Ping"), WEST);
-		
-		add(new JButton("Send ResourceSent"), WEST);
-		add(new JButton("Send ResourceReceived"), WEST);
 	}
 
 	// initialize
