@@ -17,7 +17,7 @@ import java.util.Set;
 
 import javax.swing.*;
 
-public class BluetoothGUI extends Program {
+public class ClientGUI extends Program {
 
 	public static final int TEXT_FIELD_SIZE = 15;
 	public static final int MAXMOVE = 50;
