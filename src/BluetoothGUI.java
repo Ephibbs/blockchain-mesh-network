@@ -144,6 +144,9 @@ public class BluetoothGUI extends Program {
 
 		add(new JButton("Draw Nodes"), WEST);
 		add(new JButton("Create Ping"), WEST);
+		
+		add(new JButton("Send ResourceSent"), WEST);
+		add(new JButton("Send ResourceReceived"), WEST);
 	}
 
 	// initialize
@@ -167,7 +170,7 @@ public class BluetoothGUI extends Program {
 				generateResourceRequest();
 			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
 				e1.printStackTrace();
-			}
+				}
 		} else if (e.getActionCommand().equals("Generate Bid")) {
 			generateBid();
 		} else if (e.getActionCommand().equals("Accept Bid")) {
