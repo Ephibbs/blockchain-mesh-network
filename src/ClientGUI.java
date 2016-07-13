@@ -278,6 +278,8 @@ public class ClientGUI extends Program {
 			if (req.getID().equals(MessageID)) {
 				rs = new ResourceSent(MessageID, myNode.getNodeID(), req.getType(), req.getAmount());
 			}
+			
+			this.myNode.updateMyResources(req.getType(),-1*req.getAmount());
 		}
 
 		// ResourceSent rs = new ResourceSent(MessageID, myNode.getNodeID());
@@ -300,6 +302,8 @@ public class ClientGUI extends Program {
 			if (req.getID().equals(MessageID)) {
 				rr = new ResourceReceived(MessageID, myNode.getNodeID(), req.getType(), req.getAmount());
 			}
+			
+			this.myNode.updateMyResources(req.getType(), req.getAmount());
 		}
 		// ResourceReceived rr = new ResourceReceived(sendID,
 		// myNode.getNodeID());

@@ -461,4 +461,12 @@ public class NetworkNode implements Node {
 	public ArrayList<Block> getBlockchain() {
 		return blockChain.getBlockchain();
 	}
+
+	public void updateMyResources(String type, int amount) {
+		// TODO Auto-generated method stub
+		int currentAmount = this.myResources.get(type);
+		this.myResources.remove(type);
+		this.myResources.put(type, currentAmount + amount);
+		System.out.println("I should have changed my resources");
+	}
 }
