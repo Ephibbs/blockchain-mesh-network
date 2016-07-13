@@ -272,7 +272,9 @@ public class ClientGUI extends Program {
 	private void sendResource() {
 		String MessageID = this.sentResource.getText();
 		if(myNode.msgMap.containsKey(MessageID)) {
-			ResourceSent rs = new ResourceSent(MessageID, myNode.getNodeID());
+			ResourceRequestBid bid = (ResourceRequestBid) myNode.msgMap.get(MessageID);
+			ResourceRequest req = (ResourceRequest) myNode.msgMap.get(bid.requestID);
+			ResourceSent rs = new ResourceSent(MessageID, myNode.getNodeID(), req.resourceType, req.amount);
 			myNode.addMessage(rs);
 		} else {
 			System.out.println("no resource agreement with that id");
@@ -282,7 +284,8 @@ public class ClientGUI extends Program {
 	private void receiveResource() {
 		String MessageID = this.sentResource.getText();
 		if(myNode.msgMap.containsKey(MessageID)) {
-			ResourceReceived rr = new ResourceReceived(MessageID, myNode.getNodeID());
+			ResourceSent rs = (ResourceSent) myNode.msgMap.get(MessageID);
+			ResourceReceived rr = new ResourceReceived(MessageID, myNode.getNodeID(), rs.resourceType, rs.amount);
 			myNode.addMessage(rr);
 		} else {
 			System.out.println("no resource sent with that id");
