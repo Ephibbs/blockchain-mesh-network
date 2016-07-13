@@ -271,41 +271,22 @@ public class ClientGUI extends Program {
 
 	private void sendResource() {
 		String MessageID = this.sentResource.getText();
-		ResourceSent rs = null;
-
-		for (int i = 0; i < myNode.openRequests.size(); i++) {
-			ResourceRequest req = (ResourceRequest) this.myNode.openRequests.get(i);
-			if (req.getID().equals(MessageID)) {
-				rs = new ResourceSent(MessageID, myNode.getNodeID(), req.getType(), req.getAmount());
-			}
+		if(myNode.msgMap.containsKey(MessageID)) {
+			ResourceSent rs = new ResourceSent(MessageID, myNode.getNodeID());
+			myNode.addMessage(rs);
+		} else {
+			System.out.println("no resource agreement with that id");
 		}
-
-		// ResourceSent rs = new ResourceSent(MessageID, myNode.getNodeID());
-		// for(int i = 0; i < thisNode.)
-
-		// String typ =
-
-		// ResourceSent rs = new ResourceSent(sendResourceID,
-		// myNode.getNodeID(), need type, need amount);
-
-		myNode.addMessage(rs);
 	}
 
 	private void receiveResource() {
 		String MessageID = this.sentResource.getText();
-		ResourceReceived rr = null;
-
-		for (int i = 0; i < myNode.openRequests.size(); i++) {
-			ResourceRequest req = (ResourceRequest) this.myNode.openRequests.get(i);
-			if (req.getID().equals(MessageID)) {
-				rr = new ResourceReceived(MessageID, myNode.getNodeID(), req.getType(), req.getAmount());
-			}
+		if(myNode.msgMap.containsKey(MessageID)) {
+			ResourceReceived rr = new ResourceReceived(MessageID, myNode.getNodeID());
+			myNode.addMessage(rr);
+		} else {
+			System.out.println("no resource sent with that id");
 		}
-		// ResourceReceived rr = new ResourceReceived(sendID,
-		// myNode.getNodeID());
-		// ResourceReceived rr = new ResourceReceived(sendID,
-		// myNode.getNodeID(), need type, need amount);
-		myNode.addMessage(rr);
 	}
 
 	// GUI generation

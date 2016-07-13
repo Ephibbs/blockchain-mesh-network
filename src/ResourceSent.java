@@ -11,6 +11,11 @@ public class ResourceSent extends Message {
 		this.resourceType = typ;
 		this.amount = amt;
 	}
+	public ResourceSent(String agreeID, String auth) {
+		super(auth);
+		resourceAgreementID = agreeID;
+		this.messageType = "ResourceSent";
+	}
 	/**
 	 * @return the resourceAgreementID
 	 */

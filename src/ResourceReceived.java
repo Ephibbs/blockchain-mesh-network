@@ -12,6 +12,12 @@ public class ResourceReceived extends Message{
 		this.resourceType = typ;
 		this.amount = amt;
 	}
+	public ResourceReceived(String sentID, String auth) {
+		super(auth);
+		resourceSentID = sentID;
+		// TODO Auto-generated constructor stub
+		this.messageType = "ResourceReceived";
+	}
 	/**
 	 * @return the resourceSentID
 	 */
