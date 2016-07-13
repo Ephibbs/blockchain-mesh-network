@@ -45,6 +45,7 @@ public class BluetoothGUI extends Program {
 	public Random rand = new Random();
 	public Graphics g = this.canvas.getGraphics();
 	public NetworkNode myNode = null;
+	private boolean nodeCreated = false; // prevent multiple clicks
 
 	/**
 	 * This method has the responsibility for initializing the interactors in
@@ -149,13 +150,18 @@ public class BluetoothGUI extends Program {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Start My Node")) {
-			try {
-				myNode = new NetworkNode(this.nodeName.getText());
-			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
-				e1.printStackTrace();
+			if (nodeCreated) { // check for multiple clicks
+				System.out.println("Node already created");
+			} else {
+				nodeCreated = true;
+				try {
+					myNode = new NetworkNode(this.nodeName.getText());
+				} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
+					e1.printStackTrace();
+				}
+				beginSimulation();
+				myNode.start();	
 			}
-			beginSimulation();
-			myNode.start();
 		} else if (e.getActionCommand().equals("Request Resources")) {
 			try {
 				generateResourceRequest();
