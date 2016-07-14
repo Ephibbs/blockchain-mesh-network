@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.*;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -120,7 +121,7 @@ public class ClientGUI extends Program {
 
 		add(new JButton("Check Requests"), WEST);
 
-		add(new JButton("Put Initial Resources"), NORTH);
+//		add(new JButton("Put Initial Resources"), NORTH);
 
 		this.viewResources = new JTextField(TEXT_FIELD_SIZE);
 		add(this.viewResources, NORTH);
@@ -140,10 +141,18 @@ public class ClientGUI extends Program {
 		add(this.shortestPathTo, NORTH);
 		add(new JButton("Show Fastest Path"), NORTH);
 
-		add(new JButton("Ping Everybody"), WEST);
+		//add(new JButton("Ping Everybody"), WEST);
 
 		add(new JButton("Draw Nodes"), WEST);
 		add(new JButton("Create Ping"), WEST);
+		
+		//add(new JButton("what what"), new Point(500,500));
+		
+//		JButton hope = new JButton("what is this");
+//		hope.setSize(20, 20);
+//		hope.setLocation(500, 500);
+//		add(hope);
+		
 	}
 
 	// initialize
@@ -160,7 +169,8 @@ public class ClientGUI extends Program {
 					e1.printStackTrace();
 				}
 				beginSimulation();
-				myNode.start();	
+				myNode.start();
+				putInitResources();
 			}
 		} else if (e.getActionCommand().equals("Request Resources")) {
 			try {
@@ -195,9 +205,10 @@ public class ClientGUI extends Program {
 			createPing();
 		} else if (e.getActionCommand().equals("View Resources")) {
 			viewNodeResources();
-		} else if (e.getActionCommand().equals("Put Initial Resources")) {
-			putInitResources();
-		}
+		} 
+//		else if (e.getActionCommand().equals("Put Initial Resources")) {
+//			putInitResources();
+//		}
 	}
 
 	private void createPing() {

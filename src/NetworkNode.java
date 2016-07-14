@@ -217,6 +217,7 @@ public class NetworkNode implements Node {
 			}
 			msgMap.put(msg.getID(), msg);
 			distributeMessage(msg);
+			this.createPingToBroadcast();
 		}
 	}
 
