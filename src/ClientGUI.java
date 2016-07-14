@@ -49,21 +49,30 @@ public class ClientGUI extends Program {
 	public NetworkNode myNode = null;
 	private boolean nodeCreated = false; // prevent multiple clicks
 	public Thread t;
-	public int openTabID; //the id of the tab currently open
+	public int openTabID = 0; //the id of the tab currently open
 	
 	class GUIRefresher implements Runnable {
 		public void run() {
+			System.out.println(""+openTabID);
 			switch(openTabID) {
 				case 0:
 					printTotalMessages();
+					break;
 				case 1:
 					checkRequests();
+					break;
 				case 2:
 					checkBids();
+					break;
 				case 3:
 					checkAccepts();
+					break;
 				case 4:
 					generateBlockView();
+					break;
+				case 5:
+					viewNodeResources();
+					break;
 			}
 			try {
 				Thread.sleep(1000);
@@ -212,10 +221,13 @@ public class ClientGUI extends Program {
 		} else if (e.getActionCommand().equals("Accept Bid")) {
 			acceptBid();
 		} else if (e.getActionCommand().equals("Check Accepted")) {
+			openTabID = 3;
 			checkAccepts();
 		} else if (e.getActionCommand().equals("Check Bids")) {
+			openTabID = 2;
 			checkBids();
 		} else if (e.getActionCommand().equals("Check Requests")) {
+			openTabID = 1;
 			checkRequests();
 		} else if (e.getActionCommand().equals("Send Resource")) {
 			sendResource();
@@ -224,14 +236,17 @@ public class ClientGUI extends Program {
 		} else if (e.getActionCommand().equals("Check Resources")) {
 			receiveResource();
 		} else if (e.getActionCommand().equals("Total Messages")) {
+			openTabID = 0;
 			printTotalMessages();
 		} else if (e.getActionCommand().equals("View Blocks")) {
+			openTabID = 4;
 			generateBlockView();
 		} else if (e.getActionCommand().equals("Draw Nodes")) {
 			drawNodes();
 		} else if (e.getActionCommand().equals("Create Ping")) {
 			createPing();
 		} else if (e.getActionCommand().equals("View Resources")) {
+			openTabID = 5;
 			System.out.println("failure called from here");
 			viewNodeResources();
 		} 
@@ -349,7 +364,7 @@ public class ClientGUI extends Program {
 		}
 	}
 
-	// GUI generation
+	// GUI data drawing
 	public void printTotalMessages() {
 		generateTotalMessages();
 		g.setColor(Color.WHITE);
@@ -367,6 +382,23 @@ public class ClientGUI extends Program {
 		}
 	}
 	
+	private void checkRequests() {
+		generateMessageBoard();
+		g.setColor(Color.WHITE);
+		ArrayList<Message> availableMessages = myNode.getOpenRequests();
+		for (int i = 0; i < availableMessages.size(); i++) {
+			ResourceRequest rr = (ResourceRequest) availableMessages.get(i);
+			String requestID = rr.id;
+			String resourceRequested = rr.resourceType;
+			String resourceAmount = "" + rr.amount;
+			String originator = rr.getAuthor();
+			g.drawString(requestID, 5, 40 + i * 20);
+			g.drawString(resourceRequested, 5 + MAXSIZE / 4, 40 + i * 20);
+			g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
+			g.drawString(originator, 5 + 3 * MAXSIZE / 4, 40 + i * 20);
+		}
+	}
+
 	private void checkBids() {
 		generateBidMessageBoard();
 		g.setColor(Color.WHITE);
@@ -382,23 +414,6 @@ public class ClientGUI extends Program {
 				g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
 				g.drawString(bidder, 5 + 3 * MAXSIZE / 4, 40 + i * 20);
 			}
-		}
-	}
-
-	private void checkRequests() {
-		generateMessageBoard();
-		g.setColor(Color.WHITE);
-		ArrayList<Message> availableMessages = myNode.getOpenRequests();
-		for (int i = 0; i < availableMessages.size(); i++) {
-			ResourceRequest rr = (ResourceRequest) availableMessages.get(i);
-			String requestID = rr.id;
-			String resourceRequested = rr.resourceType;
-			String resourceAmount = "" + rr.amount;
-			String originator = rr.getAuthor();
-			g.drawString(requestID, 5, 40 + i * 20);
-			g.drawString(resourceRequested, 5 + MAXSIZE / 4, 40 + i * 20);
-			g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
-			g.drawString(originator, 5 + 3 * MAXSIZE / 4, 40 + i * 20);
 		}
 	}
 
@@ -442,6 +457,7 @@ public class ClientGUI extends Program {
 		}
 	}
 
+	//GUI background drawing
 	private void generateBlockBoard() {
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
