@@ -267,7 +267,7 @@ public class NetworkNode implements Node {
 			// System.out.println("I should be making a new NodeInfo List");
 			
 			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(),
-					this.convertToArrayList(msg.getCurrentResources()), newTime);
+					msg.getCurrentResources(), newTime);
 			System.out.println("I made the new node info in initial ping");
 			this.nodeInfoMap.put(pingOriginator, newNodeInfo);
 		} else if (nodeInfoKeyAL.contains(pingOriginator)) {
@@ -550,7 +550,8 @@ public class NetworkNode implements Node {
 	}
 
 	public void createInitialPingToBroadcast() {
-		InitialPing newPing = new InitialPing(this.getNodeID(), this.getNodeID(), this.pubKey, this.myResources);
+		InitialPing newPing = new InitialPing(this.getNodeID(), this.getNodeID(), 
+				this.pubKey, this.getNodeInfoList().get(this.nodeID).getResourceList());
 		newPing.setLocation(new Location().createRandomLocation());
 		newPing.setTime(new Time(System.currentTimeMillis()));
 		distributeMessage(newPing);

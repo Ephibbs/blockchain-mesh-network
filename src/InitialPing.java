@@ -12,9 +12,10 @@ public class InitialPing extends Message {
 	public Location currentLocation = null;
 	public PublicKey publicKey = null;
 	public Time timeSent = null;
-	public HashMap<String, Integer> currentResources = null;
+	public ArrayList<Resource> currentResources = null;
 	
-	public InitialPing(String sender, String receiver, PublicKey pubKey, HashMap<String, Integer> myResources){
+	//public InitialPing(String sender, String receiver, PublicKey pubKey, HashMap<String, Integer> myResources){
+	public InitialPing(String sender, String receiver, PublicKey pubKey, ArrayList<Resource> myResources){
 		// should create a public key whenever you start a node
 		// when i create a ping I need to set its location
 		super(sender, receiver);
@@ -65,7 +66,7 @@ public class InitialPing extends Message {
 	/**
 	 * @return the currentResources
 	 */
-	public HashMap<String, Integer> getCurrentResources() {
+	public ArrayList<Resource> getCurrentResources() {
 		return currentResources;
 	}
 	
