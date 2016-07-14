@@ -35,6 +35,8 @@ public class NetworkNode implements Node {
 	public PrivateKey privKey = null;
 	public PublicKey pubKey = null;
 	public byte[] byteArray = new byte[1024];
+	public int TIMEING = 10;
+	public int currentMessageCount = 0;
 
 	// Blockchain
 	public Blockchain blockChain;
@@ -217,7 +219,10 @@ public class NetworkNode implements Node {
 			}
 			msgMap.put(msg.getID(), msg);
 			distributeMessage(msg);
-			this.createPingToBroadcast();
+			this.currentMessageCount++;
+			if(this.currentMessageCount % this.TIMEING == 0){
+				this.createPingToBroadcast();
+			}
 		}
 	}
 

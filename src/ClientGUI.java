@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.*;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -146,7 +147,7 @@ public class ClientGUI extends Program {
 		add(new JButton("Draw Nodes"), WEST);
 		add(new JButton("Create Ping"), WEST);
 		
-		//add(new JButton("what what"), new Point(500,500));
+		//add(new JButton("what what"), new Rectangle(500,500, 20, 20));
 		
 //		JButton hope = new JButton("what is this");
 //		hope.setSize(20, 20);
