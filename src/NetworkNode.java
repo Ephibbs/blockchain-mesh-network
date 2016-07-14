@@ -468,12 +468,12 @@ public class NetworkNode implements Node {
 			BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); //Author of request is the block recipient
 			distributeMessage(bd);
 		} else if (!blockRequestIDs.contains(br.getBlockHash() + br.getAuthor())) { //If I haven't received this request
-			blockRequestIDs.add(br.getBlockHash() + br.getAuthor());
 			Block b = blockChain.getBlock(br.getBlockHash());
-			if (b != null) { //if I have the block make a block delivery
+			if (b != null) { //if I have the block, make a block delivery
 				BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); //Author of request is the block recipient
 				distributeMessage(bd);
 			} else {
+				blockRequestIDs.add(br.getBlockHash() + br.getAuthor());
 				distributeMessage(br);
 			}
 		}
