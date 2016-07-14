@@ -1,6 +1,8 @@
+import java.io.Serializable;
+
 import javax.tools.DocumentationTool.Location;
 
-public class Resource {
+public class Resource implements Serializable {
 	
 	public String type;
 	public int amount;
