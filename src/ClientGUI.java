@@ -172,6 +172,7 @@ public class ClientGUI extends Program {
 				beginSimulation();
 				myNode.start();
 				putInitResources();
+				createInitialPing();
 			}
 		} else if (e.getActionCommand().equals("Request Resources")) {
 			try {
@@ -210,6 +211,11 @@ public class ClientGUI extends Program {
 //		else if (e.getActionCommand().equals("Put Initial Resources")) {
 //			putInitResources();
 //		}
+	}
+
+	private void createInitialPing() {
+		this.myNode.createInitialPingToBroadcast();
+		
 	}
 
 	private void createPing() {
