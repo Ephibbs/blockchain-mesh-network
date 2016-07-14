@@ -206,6 +206,7 @@ public class ClientGUI extends Program {
 		} else if (e.getActionCommand().equals("Create Ping")) {
 			createPing();
 		} else if (e.getActionCommand().equals("View Resources")) {
+			System.out.println("failure called from here");
 			viewNodeResources();
 		} 
 //		else if (e.getActionCommand().equals("Put Initial Resources")) {
@@ -214,6 +215,7 @@ public class ClientGUI extends Program {
 	}
 
 	private void createInitialPing() {
+		System.out.println("I should be making my initial ping");
 		this.myNode.createInitialPingToBroadcast();
 		
 	}
@@ -553,6 +555,7 @@ public class ClientGUI extends Program {
 
 	public void viewNodeResources() {
 		String nodeToView = this.viewResources.getText();
+		System.out.println("here is the failure");
 		NodeInfo nodeInfo = this.myNode.getNodeInfoList().get(nodeToView);
 		ArrayList<Resource> resources = nodeInfo.getResourceList();
 		Location nodeLoc = nodeInfo.getMyLocation();

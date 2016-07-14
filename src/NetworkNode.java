@@ -217,6 +217,7 @@ public class NetworkNode implements Node {
 				sendDirectMessage(msg);
 				break;
 			case "InitialPing":
+				System.out.println("I received an initial ping");
 				receivePing((InitialPing) msg);
 				break;
 			}
@@ -260,12 +261,14 @@ public class NetworkNode implements Node {
 			nodeInfoKeyAL.add(key);
 		}
 		if (!nodeInfoKeyAL.contains(pingOriginator)) {
+			System.out.println("I dont have a node so I am making a new one in initial ping");
 			Location newLocation = msg.getLocation();
 			Time newTime = msg.getTimeSent();
 			// System.out.println("I should be making a new NodeInfo List");
 			
 			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(),
 					this.convertToArrayList(msg.getCurrentResources()), newTime);
+			System.out.println("I made the new node info in initial ping");
 			this.nodeInfoMap.put(pingOriginator, newNodeInfo);
 		} else if (nodeInfoKeyAL.contains(pingOriginator)) {
 			// System.out.println("I already had this in here");
