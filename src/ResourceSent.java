@@ -31,7 +31,7 @@ public class ResourceSent extends Message {
 	/**
 	 * @return the type
 	 */
-	public String getType() {
+	public String getResourceType() {
 		return resourceType;
 	}
 	/**
