@@ -40,7 +40,7 @@ public class Blockchain implements Runnable, Serializable {
     }
 
 	// Accessors
-	public Block getLastTreeNode() {
+	public Block getLastBlock() {
 		return blockStore.getLastBlock().getData();
 	}
 	

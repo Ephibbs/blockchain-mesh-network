@@ -17,7 +17,7 @@ public class WifiClient implements Runnable {
 
     private ArrayList<String> hostNames = new ArrayList<String>();
     private int portNumber = 9001;
-    private int maxNumAttempts;
+    private int maxNumAttempts = 1;
 
     private ArrayList<String> outQ = new ArrayList<String>();
     private Thread t;
@@ -68,7 +68,6 @@ public class WifiClient implements Runnable {
 		}
 		System.out.println(myName);
 		System.out.println(hostNames);
-    	maxNumAttempts = 3;
     	this.verbose = verbose;
     }
     

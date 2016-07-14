@@ -38,9 +38,9 @@ interface Node {
 	
 	public void distributeBlock(Block b);
 	
-	public void receiveBlock(Block b);
+	public void receiveBlockDelivery(BlockDelivery bd);
 
-	public void requestBlock(String hash);
+	public void receiveBlockRequest(BlockRequest br);
 	
 	public void makeBlockRequest(String hash);
 

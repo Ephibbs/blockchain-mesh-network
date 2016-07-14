@@ -103,16 +103,7 @@ public class NetworkNode implements Node {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void makeBlockRequest(String hash) {
-		// BlockRequest br = new BlockRequest(hash, nodeID);
-		// try {
-		// bm.broadcast(br);
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
+		makeBlockRequest("latest");
 	}
 
 	public void broadcastBlock(Block b) {
@@ -183,16 +174,19 @@ public class NetworkNode implements Node {
 					System.out.println("received resource request");
 					openRequests.add(msg);
 					blockChain.add(msg);
+					distributeMessage(msg);
 					break;
 				case "ResourceRequestBid":
 					System.out.println("received resource bid");
 					bidsToMyRequests.add(msg);
 					blockChain.add(msg);
+					distributeMessage(msg);
 					break;
 				case "ResourceAgreement":
 					System.out.println("received resource agreement");
 					myResourceAgreements.add(msg);
 					blockChain.add(msg);
+					distributeMessage(msg);
 					break;
 				case "ResourceSent":
 					System.out.println("received resource sent");
@@ -201,6 +195,7 @@ public class NetworkNode implements Node {
 					blockChain.add(msg);
 					//updateNodeInfo(String nodeName, String type of Resource, 
 						//	int amount of resource but negative to subtract it)
+					distributeMessage(msg);
 					break;
 				case "ResourceReceived":
 					System.out.println("received resource receives");
@@ -209,16 +204,26 @@ public class NetworkNode implements Node {
 					blockChain.add(msg);
 					//updateNodeInfo(String nodeName, String type of Resource, 
 					//	int amount of resource but postive to subtract it)
+					distributeMessage(msg);
 					break;
 				case "Ping":
 					receivePing((Ping) msg);
+					distributeMessage(msg);
 					break;
 				case "DirectMessage":
 					sendDirectMessage(msg);
+					distributeMessage(msg);
+					break;
+				case "BlockRequest":
+					BlockRequest br = (BlockRequest) msg;
+					receiveBlockRequest(br);
+					break;
+				case "BlockDelivery":
+					BlockDelivery bd = (BlockDelivery) msg;
+					receiveBlockDelivery(bd);
 					break;
 			}
 			msgMap.put(msg.getID(), msg);
-			distributeMessage(msg);
 			this.currentMessageCount++;
 			if(this.currentMessageCount % this.TIMEING == 0){
 				this.createPingToBroadcast();
@@ -367,13 +372,45 @@ public class NetworkNode implements Node {
 	public void setBlockChainDifficulty(int difficulty) {
 		blockChain.setDifficulty(difficulty);
 	}
-
+	
 	@Override
-	public void receiveBlock(Block b) {
+	public void makeBlockRequest(String hash) {
+		 BlockRequest br = new BlockRequest(hash, nodeID);
+		 try {
+		 wm.broadcast(br);
+		 } catch (IOException e) {
+		 e.printStackTrace();
+		 }
 	}
 
 	@Override
-	public void requestBlock(String hash) {
+	public void receiveBlockDelivery(BlockDelivery bd) {
+		if (blockRequestIDs.contains(bd.getBlockHash() + bd.getRecipient())) {
+			blockRequestIDs.remove(bd.getBlockHash() + bd.getRecipient());
+			if (nodeID == bd.getRecipient()) { //if the delivery is for me
+				blockChain.add(bd.getBlock());
+			} else {
+				distributeMessage(bd);
+			}
+		}
+	}
+
+	@Override
+	public void receiveBlockRequest(BlockRequest br) {
+		if (br.getBlockHash().equals("latest")) {
+			Block b = blockChain.getLastBlock();
+			BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); //Author of request is the block recipient
+			distributeMessage(bd);
+		} else if (!blockRequestIDs.contains(br.getBlockHash() + br.getAuthor())) { //If I haven't received this request
+			blockRequestIDs.add(br.getBlockHash() + br.getAuthor());
+			Block b = blockChain.getBlock(br.getBlockHash());
+			if (b != null) { //if I have the block make a block delivery
+				BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); //Author of request is the block recipient
+				distributeMessage(bd);
+			} else {
+				distributeMessage(br);
+			}
+		}
 	}
 
 	@Override

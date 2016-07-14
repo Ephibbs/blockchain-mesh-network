@@ -372,7 +372,6 @@ public class ClientGUI extends Program {
 		}
 	}
 
-	
 	private void generateBlockView() {
 		generateBlockBoard();
 		g.setColor(Color.WHITE);
