@@ -73,6 +73,24 @@ public class NetworkNode implements Node {
 		blockChain = new Blockchain(this);
 		this.wm = new WifiManager(this);
 		// this.myLocation = this.myLocation.createRandomLocation();
+		
+		this.nodeID = id;
+		this.keyGen = KeyPairGenerator.getInstance("DSA", "SUN"); // create key
+		// generator
+		// object
+		this.random = SecureRandom.getInstance("SHA1PRNG", "SUN"); // random var
+		// for
+		// random
+		// generation
+		this.dsa = Signature.getInstance("SHA1withDSA", "SUN"); // create
+		// signature
+		// object
+		keyGen.initialize(1024, random); // initialize and generate random key
+		// pair
+		this.pair = keyGen.generateKeyPair();
+		this.privKey = pair.getPrivate();
+		this.pubKey = pair.getPublic();
+		this.blockChain = new Blockchain(this);
 	}
 
 	private Location generateRandomLocation() {
@@ -561,22 +579,6 @@ public class NetworkNode implements Node {
 
 	public HashMap<String, NodeInfo> getNodeInfoList() {
 		return this.nodeInfoMap;
-	}
-
-	public void printTotalMessages(Graphics g, int MAXSIZE) {
-		g.setColor(Color.WHITE);
-		if (this.totalMessages != null) {
-			for (int i = 0; i < this.totalMessages.size(); i++) {
-				Message msg = this.totalMessages.get(i);
-				String type = msg.getMessageType();
-				String id = msg.getID();
-				String author = msg.getAuthor();
-				g.drawString(type, 5, 40 + i * 25);
-				g.drawString(id, 5 + MAXSIZE / 3, 40 + i * 25);
-				g.drawString(author, 5 + 2 * MAXSIZE / 3, 40 + i * 25);
-				g.drawLine(0, 45 + i * 25, MAXSIZE, 45 + i * 25);
-			}
-		}
 	}
 
 	public ArrayList<Block> getBlockchain() {

@@ -48,6 +48,31 @@ public class ClientGUI extends Program {
 	public Graphics g = this.canvas.getGraphics();
 	public NetworkNode myNode = null;
 	private boolean nodeCreated = false; // prevent multiple clicks
+	public Thread t;
+	public int openTabID; //the id of the tab currently open
+	
+	class GUIRefresher implements Runnable {
+		public void run() {
+			switch(openTabID) {
+				case 0:
+					printTotalMessages();
+				case 1:
+					checkRequests();
+				case 2:
+					checkBids();
+				case 3:
+					checkAccepts();
+				case 4:
+					generateBlockView();
+			}
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			run();
+		}
+	}
 
 	/**
 	 * This method has the responsibility for initializing the interactors in
@@ -173,6 +198,8 @@ public class ClientGUI extends Program {
 				myNode.start();
 				putInitResources();
 				createInitialPing();
+				t = new Thread(new GUIRefresher(), "refresher");
+				t.start();
 			}
 		} else if (e.getActionCommand().equals("Request Resources")) {
 			try {
@@ -197,8 +224,7 @@ public class ClientGUI extends Program {
 		} else if (e.getActionCommand().equals("Check Resources")) {
 			receiveResource();
 		} else if (e.getActionCommand().equals("Total Messages")) {
-			generateTotalMessages();
-			this.myNode.printTotalMessages(this.g, MAXSIZE);
+			printTotalMessages();
 		} else if (e.getActionCommand().equals("View Blocks")) {
 			generateBlockView();
 		} else if (e.getActionCommand().equals("Draw Nodes")) {
@@ -324,6 +350,23 @@ public class ClientGUI extends Program {
 	}
 
 	// GUI generation
+	public void printTotalMessages() {
+		generateTotalMessages();
+		g.setColor(Color.WHITE);
+		if (myNode.totalMessages != null) {
+			for (int i = 0; i < myNode.totalMessages.size(); i++) {
+				Message msg = myNode.totalMessages.get(i);
+				String type = msg.getMessageType();
+				String id = msg.getID();
+				String author = msg.getAuthor();
+				g.drawString(type, 5, 40 + i * 25);
+				g.drawString(id, 5 + MAXSIZE / 3, 40 + i * 25);
+				g.drawString(author, 5 + 2 * MAXSIZE / 3, 40 + i * 25);
+				g.drawLine(0, 45 + i * 25, MAXSIZE, 45 + i * 25);
+			}
+		}
+	}
+	
 	private void checkBids() {
 		generateBidMessageBoard();
 		g.setColor(Color.WHITE);
