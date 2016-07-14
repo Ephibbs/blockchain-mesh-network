@@ -297,6 +297,7 @@ public class ClientGUI extends Program {
 			ResourceRequestBid bid = (ResourceRequestBid) myNode.msgMap.get(agree.resourceBidID);
 			ResourceRequest req = (ResourceRequest) myNode.msgMap.get(bid.requestID);
 			ResourceSent rs = new ResourceSent(MessageID, myNode.getNodeID(), req.resourceType, req.amount);
+			System.out.println(rs.amount);
 			myNode.addMessage(rs);
 		} else {
 			System.err.println("no resource agreement with that id");

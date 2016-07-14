@@ -226,6 +226,15 @@ public class NetworkNode implements Node {
 		}
 	}
 
+	private void updateNodeInfo(ResourceSent msg) {
+		System.out.println("subtracting resource sent");
+		String NodeID = msg.getAuthor();
+		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
+		String resourceType = msg.getResourceType();
+		int resourceAmt = msg.getAmount();
+		updateResourceInfo(resourceType, -1*resourceAmt, currentInfo);
+	}
+	
 	private void updateNodeInfo(ResourceReceived msg) {
 		System.out.println("I should be adding more resource received");
 		String NodeID = msg.getAuthor();
@@ -237,6 +246,8 @@ public class NetworkNode implements Node {
 
 	private void updateResourceInfo(String resourceType, int resourceAmt, NodeInfo currentInfo) {
 		System.out.println("I got here");
+		System.out.println(resourceType);
+		System.out.println(resourceAmt);
 		for(int i = 0; i < currentInfo.getResourceList().size();i++){
 			Resource cResource = currentInfo.getResourceList().get(i);
 			//System.out.println("resourceType: " + resourceType);
@@ -248,13 +259,6 @@ public class NetworkNode implements Node {
 		}
 	}
 
-	private void updateNodeInfo(ResourceSent msg) {
-		String NodeID = msg.getAuthor();
-		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
-		String resourceType = msg.getType();
-		int resourceAmt = msg.getAmount();
-		updateResourceInfo(resourceType, -1*resourceAmt, currentInfo);
-	}
 
 	private void sendDirectMessage(Message msg) {
 		// this is not finished yet
