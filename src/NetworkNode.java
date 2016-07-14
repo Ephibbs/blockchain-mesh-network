@@ -314,7 +314,6 @@ public class NetworkNode implements Node {
 			}
 		}
 	}
-
 	private void updateNodeInfo(ResourceSent msg) {
 		String NodeID = msg.getAuthor();
 		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
@@ -322,6 +321,7 @@ public class NetworkNode implements Node {
 		int resourceAmt = msg.getAmount();
 		updateResourceInfo(resourceType, -1 * resourceAmt, currentInfo);
 	}
+
 
 	private void sendDirectMessage(Message msg) {
 		// this is not finished yet
