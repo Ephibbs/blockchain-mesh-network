@@ -164,69 +164,69 @@ public class NetworkNode implements Node {
 		// if message is unique, add and
 		// distribute
 		// else do nothing
-		if(!this.totalMessages.contains(msg)){
+		if (!this.totalMessages.contains(msg)) {
 			System.out.println(msg.getType());
 			System.out.println(msg.getID());
 			totalMessages.add(msg);
 		}
 		if (msg != null && !this.msgMap.containsKey(msg.getID())) {
 			switch (msg.getMessageType()) {
-				case "ResourceRequest":
-					System.out.println("received resource request");
-					openRequests.add(msg);
-					blockChain.add(msg);
-					distributeMessage(msg);
-					break;
-				case "ResourceRequestBid":
-					System.out.println("received resource bid");
-					bidsToMyRequests.add(msg);
-					blockChain.add(msg);
-					distributeMessage(msg);
-					break;
-				case "ResourceAgreement":
-					System.out.println("received resource agreement");
-					myResourceAgreements.add(msg);
-					blockChain.add(msg);
-					distributeMessage(msg);
-					break;
-				case "ResourceSent":
-					System.out.println("received resource sent");
-					myResourceSents.add(msg);
-					updateNodeInfo((ResourceSent) msg);
-					blockChain.add(msg);
-					//updateNodeInfo(String nodeName, String type of Resource, 
-						//	int amount of resource but negative to subtract it)
-					distributeMessage(msg);
-					break;
-				case "ResourceReceived":
-					System.out.println("received resource receives");
-					myResourceReceives.add(msg);
-					updateNodeInfo((ResourceReceived) msg);
-					blockChain.add(msg);
-					//updateNodeInfo(String nodeName, String type of Resource, 
-					//	int amount of resource but postive to subtract it)
-					distributeMessage(msg);
-					break;
-				case "Ping":
-					receivePing((Ping) msg);
-					distributeMessage(msg);
-					break;
-				case "DirectMessage":
-					sendDirectMessage(msg);
-					distributeMessage(msg);
-					break;
-				case "InitialPing":
-					System.out.println("I received an initial ping");
-					receivePing((InitialPing) msg);
-					break;
-				case "BlockRequest":
-					BlockRequest br = (BlockRequest) msg;
-					receiveBlockRequest(br);
-					break;
-				case "BlockDelivery":
-					BlockDelivery bd = (BlockDelivery) msg;
-					receiveBlockDelivery(bd);
-					break;
+			case "ResourceRequest":
+				System.out.println("received resource request");
+				openRequests.add(msg);
+				blockChain.add(msg);
+				distributeMessage(msg);
+				break;
+			case "ResourceRequestBid":
+				System.out.println("received resource bid");
+				bidsToMyRequests.add(msg);
+				blockChain.add(msg);
+				distributeMessage(msg);
+				break;
+			case "ResourceAgreement":
+				System.out.println("received resource agreement");
+				myResourceAgreements.add(msg);
+				blockChain.add(msg);
+				distributeMessage(msg);
+				break;
+			case "ResourceSent":
+				System.out.println("received resource sent");
+				myResourceSents.add(msg);
+				updateNodeInfo((ResourceSent) msg);
+				blockChain.add(msg);
+				// updateNodeInfo(String nodeName, String type of Resource,
+				// int amount of resource but negative to subtract it)
+				distributeMessage(msg);
+				break;
+			case "ResourceReceived":
+				System.out.println("received resource receives");
+				myResourceReceives.add(msg);
+				updateNodeInfo((ResourceReceived) msg);
+				blockChain.add(msg);
+				// updateNodeInfo(String nodeName, String type of Resource,
+				// int amount of resource but postive to subtract it)
+				distributeMessage(msg);
+				break;
+			case "Ping":
+				receivePing((Ping) msg);
+				distributeMessage(msg);
+				break;
+			case "DirectMessage":
+				sendDirectMessage(msg);
+				distributeMessage(msg);
+				break;
+			case "InitialPing":
+				System.out.println("I received an initial ping");
+				receivePing((InitialPing) msg);
+				break;
+			case "BlockRequest":
+				BlockRequest br = (BlockRequest) msg;
+				receiveBlockRequest(br);
+				break;
+			case "BlockDelivery":
+				BlockDelivery bd = (BlockDelivery) msg;
+				receiveBlockDelivery(bd);
+				break;
 			}
 			msgMap.put(msg.getID(), msg);
 			this.currentMessageCount++;
@@ -242,23 +242,23 @@ public class NetworkNode implements Node {
 			// System.out.println("I didn't do anything");
 			return;
 		}
-//		if (this.pingHash.get(msg.getOriginator()) != null) {
-//			if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
-//				return;
-//			} else if (this.pingHash.containsKey(msg.getOriginator())) {
-//				if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
-//					return;
-//				} else {
-//					this.pingHash.get(msg.getOriginator()).add(msg);
-//				}
-//			}
-//		} else {
-//			// System.out.println("I should be creating a new arrayList of
-//			// pings");
-//			ArrayList<Ping> newArrayList = new ArrayList<Ping>();
-//			newArrayList.add(msg);
-//			this.pingHash.put(msg.getOriginator(), newArrayList);
-//		}
+		// if (this.pingHash.get(msg.getOriginator()) != null) {
+		// if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
+		// return;
+		// } else if (this.pingHash.containsKey(msg.getOriginator())) {
+		// if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
+		// return;
+		// } else {
+		// this.pingHash.get(msg.getOriginator()).add(msg);
+		// }
+		// }
+		// } else {
+		// // System.out.println("I should be creating a new arrayList of
+		// // pings");
+		// ArrayList<Ping> newArrayList = new ArrayList<Ping>();
+		// newArrayList.add(msg);
+		// this.pingHash.put(msg.getOriginator(), newArrayList);
+		// }
 
 		Set<String> nodeInfoKeys = nodeInfoMap.keySet();
 		String pingOriginator = msg.getOriginator();
@@ -271,7 +271,7 @@ public class NetworkNode implements Node {
 			Location newLocation = msg.getLocation();
 			Time newTime = msg.getTimeSent();
 			// System.out.println("I should be making a new NodeInfo List");
-			
+
 			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(),
 					msg.getCurrentResources(), newTime);
 			System.out.println("I made the new node info in initial ping");
@@ -283,21 +283,21 @@ public class NetworkNode implements Node {
 			currentNodeInfo.setMyLocation(msg.getLocation());
 		}
 		updateRouteTable();
-		//sendToTempNodes(msg);
+		// sendToTempNodes(msg);
 	}
 
 	private ArrayList<Resource> convertToArrayList(HashMap<String, Integer> currentResources) {
 		// TODO Auto-generated method stub
 		Set<String> nodeInfoKeys = nodeInfoMap.keySet();
-		//String pingOriginator = msg.getOriginator();
-		//ArrayList<String> nodeInfoKeyAL = new ArrayList<String>();
-		
+		// String pingOriginator = msg.getOriginator();
+		// ArrayList<String> nodeInfoKeyAL = new ArrayList<String>();
+
 		ArrayList<Resource> resourceArrayList = new ArrayList<Resource>();
-		
+
 		for (String key : nodeInfoKeys) {
-			resourceArrayList.add(new Resource(currentResources.get(key),key,null));
+			resourceArrayList.add(new Resource(currentResources.get(key), key, null));
 		}
-		
+
 		return resourceArrayList;
 	}
 
@@ -323,6 +323,7 @@ public class NetworkNode implements Node {
 			}
 		}
 	}
+
 	private void updateNodeInfo(ResourceSent msg) {
 		String NodeID = msg.getAuthor();
 		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
@@ -330,7 +331,6 @@ public class NetworkNode implements Node {
 		int resourceAmt = msg.getAmount();
 		updateResourceInfo(resourceType, -1 * resourceAmt, currentInfo);
 	}
-
 
 	private void sendDirectMessage(Message msg) {
 		// this is not finished yet
@@ -438,22 +438,22 @@ public class NetworkNode implements Node {
 	public void setBlockChainDifficulty(int difficulty) {
 		blockChain.setDifficulty(difficulty);
 	}
-	
+
 	@Override
 	public void makeBlockRequest(String hash) {
-		 BlockRequest br = new BlockRequest(hash, nodeID);
-		 try {
-		 wm.broadcast(br);
-		 } catch (IOException e) {
-		 e.printStackTrace();
-		 }
+		BlockRequest br = new BlockRequest(hash, nodeID);
+		try {
+			wm.broadcast(br);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void receiveBlockDelivery(BlockDelivery bd) {
 		if (blockRequestIDs.contains(bd.getBlockHash() + bd.getRecipient())) {
 			blockRequestIDs.remove(bd.getBlockHash() + bd.getRecipient());
-			if (nodeID == bd.getRecipient()) { //if the delivery is for me
+			if (nodeID == bd.getRecipient()) { // if the delivery is for me
 				blockChain.add(bd.getBlock());
 			} else {
 				distributeMessage(bd);
@@ -465,12 +465,29 @@ public class NetworkNode implements Node {
 	public void receiveBlockRequest(BlockRequest br) {
 		if (br.getBlockHash().equals("latest")) {
 			Block b = blockChain.getLastBlock();
-			BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); //Author of request is the block recipient
+			BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author
+																				// of
+																				// request
+																				// is
+																				// the
+																				// block
+																				// recipient
 			distributeMessage(bd);
-		} else if (!blockRequestIDs.contains(br.getBlockHash() + br.getAuthor())) { //If I haven't received this request
+		} else if (!blockRequestIDs.contains(br.getBlockHash() + br.getAuthor())) { // If
+																					// I
+																					// haven't
+																					// received
+																					// this
+																					// request
 			Block b = blockChain.getBlock(br.getBlockHash());
-			if (b != null) { //if I have the block, make a block delivery
-				BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); //Author of request is the block recipient
+			if (b != null) { // if I have the block, make a block delivery
+				BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author
+																					// of
+																					// request
+																					// is
+																					// the
+																					// block
+																					// recipient
 				distributeMessage(bd);
 			} else {
 				blockRequestIDs.add(br.getBlockHash() + br.getAuthor());
@@ -486,8 +503,9 @@ public class NetworkNode implements Node {
 
 	@Override
 	public void addBlock(Block b) {
-		//add any messages that are in b but have not been received to their respective lists
-		for(Message m : b.getMsgs()) {
+		// add any messages that are in b but have not been received to their
+		// respective lists
+		for (Message m : b.getMsgs()) {
 			addMessage(m);
 		}
 		blockChain.add(b);
@@ -543,12 +561,14 @@ public class NetworkNode implements Node {
 		Set<String> nodeInfoKeys = nodeInfoMap.keySet();
 		int x = 0;
 		int y = 0;
-		System.out.println("I drew something");
+		//System.out.println("I drew something");
 		for (String key : nodeInfoKeys) {
 			x = nodeInfoMap.get(key).getMyLocation().getX();
 			y = nodeInfoMap.get(key).getMyLocation().getY();
-			g.fillOval(MAXSIZE + x, y, width, height);
-			System.out.println("I should have drawn other nodes");
+			if (!this.nodeID.equals(key)) {
+				g.fillOval(MAXSIZE + x, y, width, height);
+			}
+			//System.out.println("I should have drawn other nodes");
 		}
 
 	}
@@ -592,8 +612,8 @@ public class NetworkNode implements Node {
 	}
 
 	public void createInitialPingToBroadcast() {
-		InitialPing newPing = new InitialPing(this.getNodeID(), this.getNodeID(), 
-				this.pubKey, this.getNodeInfoList().get(this.nodeID).getResourceList());
+		InitialPing newPing = new InitialPing(this.getNodeID(), this.getNodeID(), this.pubKey,
+				this.getNodeInfoList().get(this.nodeID).getResourceList());
 		newPing.setLocation(new Location().createRandomLocation());
 		newPing.setTime(new Time(System.currentTimeMillis()));
 		distributeMessage(newPing);
