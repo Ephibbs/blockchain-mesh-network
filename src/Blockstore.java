@@ -77,12 +77,15 @@ public class Blockstore implements Serializable {
 
 				//verify all messages in the block have been received
 				boolean messagesVerified = true;
-				for(Message m : b.getMsgs()) { // check if messageIDs list has all messages in block
-					if(!messageIDs.contains(m.getHash())) {
-						messagesVerified = false;
-						break;
-					}
-				}
+				//The below code is commented out until we get the signature code up and running
+				//instead of checking if all the messages have been received
+				//we should verify all the messages signatures
+//				for(Message m : b.getMsgs()) { // check if messageIDs list has all messages in block
+//					if(!messageIDs.contains(m.getHash())) {
+//						messagesVerified = false;
+//						break;
+//					}
+//				}
 				
 				//verify messages aren't in any previous block
 				if(messagesVerified) {

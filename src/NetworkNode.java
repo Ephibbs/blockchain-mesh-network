@@ -160,9 +160,10 @@ public class NetworkNode implements Node {
 
 	@Override
 	public void addMessage(Message msg) {
+		// TODO: later, implement signature checking mechanism for messages
 		// if message is unique, add and
 		// distribute
-		// do nothing
+		// else do nothing
 		if(!this.totalMessages.contains(msg)){
 			System.out.println(msg.getType());
 			System.out.println(msg.getID());
@@ -420,6 +421,10 @@ public class NetworkNode implements Node {
 
 	@Override
 	public void addBlock(Block b) {
+		//add any messages that are in b but have not been received to their respective lists
+		for(Message m : b.getMsgs()) {
+			addMessage(m);
+		}
 		blockChain.add(b);
 	}
 
