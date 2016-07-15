@@ -198,7 +198,7 @@ public class NetworkNode implements Node {
 				//System.out.println("no verified message");
 				return;
 			}
-			System.out.println("There was a verified message");
+			//System.out.println("There was a verified message");
 		}
 		System.out.println(byteArray);
 		ByteArrayInputStream in = new ByteArrayInputStream(this.byteArray);
@@ -593,18 +593,12 @@ public class NetworkNode implements Node {
 		this.myResources.put(type, currentAmount + amount);
 		System.out.println("I should have changed my resources");
 	}
-
-	public void createInitialPingToBroadcast() {
+	public void createInitialPingToBroadcast() throws InvalidKeyException, SignatureException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
 		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey,
 				this.getNodeInfoList().get(this.nodeID).getResourceList());
 		newPing.setLocation(new Location().createRandomLocation());
 		newPing.setTime(new Time(System.currentTimeMillis()));
-		try {
-			addMessage(newPing);
-		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
-				| ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
+		sendMessage(newPing);
 	}
 
 	public void sendMessage(Message newMess)
@@ -617,7 +611,7 @@ public class NetworkNode implements Node {
 		os.close();
 
 		byteArray = out.toByteArray();
-		System.out.println("size of that byte array: " + this.byteArray.length);
+		//System.out.println("size of that byte array: " + this.byteArray.length);
 
 		byte[] realSig = new byte[1024];
 		dsa.initSign(this.privKey); // sign message with private key

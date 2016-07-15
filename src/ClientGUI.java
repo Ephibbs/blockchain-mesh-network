@@ -207,7 +207,13 @@ public class ClientGUI extends Program {
 				beginSimulation();
 				myNode.start();
 				putInitResources();
-				createInitialPing();
+				try {
+					createInitialPing();
+				} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
+						| ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				t = new Thread(new GUIRefresher(), "refresher");
 				t.start();
 			}
@@ -299,7 +305,7 @@ public class ClientGUI extends Program {
 //		}
 	}
 
-	private void createInitialPing() {
+	private void createInitialPing() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, ClassNotFoundException, IOException {
 		System.out.println("I should be making my initial ping");
 		this.myNode.createInitialPingToBroadcast();
 	}
