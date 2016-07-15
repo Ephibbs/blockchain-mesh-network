@@ -106,7 +106,6 @@ public class Node implements Serializable {
 			throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, NoSuchProviderException {
 
 		distributePublicKey(this.getPublicKey());
-		// System.out.println("I distributed my public key");
 
 		Random rand = new Random(); // create a message with a random friend
 		// node as the recipient

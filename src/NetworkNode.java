@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.IOException;
+import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -9,6 +10,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Signature;
+import java.security.SignatureException;
 import java.sql.Time;
 import java.util.*;
 
@@ -619,5 +621,25 @@ public class NetworkNode implements Node {
 		newPing.setLocation(new Location().createRandomLocation());
 		newPing.setTime(new Time(System.currentTimeMillis()));
 		distributeMessage(newPing);
+	}
+
+	public void sendMessage(ResourceRequest newRequest) throws InvalidKeyException, SignatureException {
+		// TODO Auto-generated method stub
+		byteArray = newRequest.toString().getBytes(); // convert
+		// message
+		// to series
+		// of bytes
+		byte[] realSig = new byte[1024];
+
+		dsa.initSign(this.privKey); // sign message with private key
+		dsa.update(byteArray);
+		realSig = dsa.sign();
+		
+		Message newMessage = new SignedObject(this.nodeID, byteArray, realSig);
+		
+		
+
+		//this.distributeSignedMessage(realSig, byteArray, text);
+		this.addMessage(newRequest);
 	}
 }

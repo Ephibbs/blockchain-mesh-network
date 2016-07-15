@@ -10,8 +10,10 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.*;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -212,7 +214,12 @@ public class ClientGUI extends Program {
 			}
 		} else if (e.getActionCommand().equals("Request Resources")) {
 			try {
-				generateResourceRequest();
+				try {
+					generateResourceRequest();
+				} catch (InvalidKeyException | SignatureException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
 				e1.printStackTrace();
 				}
@@ -306,10 +313,11 @@ public class ClientGUI extends Program {
 	}
 
 	// Message Generation
-	private void generateResourceRequest() throws NoSuchAlgorithmException, NoSuchProviderException {
+	private void generateResourceRequest() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException {
 		ResourceRequest newRequest = new ResourceRequest(Integer.parseInt(this.resourceAmount.getText()),
 				this.resourceType.getText(), myNode.getNodeID());
-		myNode.addMessage(newRequest);
+		myNode.sendMessage(newRequest);
+		//myNode.addMessage(newRequest);
 		checkRequests();
 	}
 
