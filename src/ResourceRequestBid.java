@@ -5,7 +5,7 @@ public class ResourceRequestBid extends Message {
 	public int amount;
 	public int eta;
 	public String requestID;
-	public ResourceRequestBid(String requestID, int eta, int amount, String auth) {
+	public ResourceRequestBid(String requestID, int eta, String auth) {
 		super(auth);
 		this.requestID = requestID;
 		this.eta = eta;

@@ -34,7 +34,7 @@ public class ClientGUI extends Program {
 	public JTextField nodeName;
 	public JTextField resourceAmount;
 	public JTextField resourceType;
-	//public JTextField resourceCategory;
+	public JTextField requestReason;
 	public JTextField acceptNumber;
 	public JTextField bidNumber;
 	public JTextField amount;
@@ -43,6 +43,7 @@ public class ClientGUI extends Program {
 	public JTextField sentResource;
 	public JTextField receiveResource;
 	public JTextField shortestPathTo;
+	public JTextField nodeIDTextField;
 
 	public ArrayList<NetworkNode> networkNodes = new ArrayList<NetworkNode>();
 
@@ -105,9 +106,8 @@ public class ClientGUI extends Program {
 	private void addListeners() {
 		this.resourceType.addActionListener(this);
 		this.resourceAmount.addActionListener(this);
-		//this.resourceCategory.addActionListener(this);
+		this.requestReason.addActionListener(this);
 		this.bidNumber.addActionListener(this);
-		// this.amount.addActionListener(this);
 		this.eta.addActionListener(this);
 		this.viewResources.addActionListener(this);
 		this.sentResource.addActionListener(this);
@@ -131,9 +131,9 @@ public class ClientGUI extends Program {
 		add(new JLabel("Enter the Amount"), WEST);
 		this.resourceAmount = new JTextField(TEXT_FIELD_SIZE);
 		add(this.resourceAmount, WEST);
-		add(new JLabel("Enter the Category"), WEST);
-		//this.resourceCategory = new JTextField(TEXT_FIELD_SIZE);
-		//add(this.resourceCategory, WEST);
+		add(new JLabel("Enter a Reason"), WEST);
+		this.requestReason = new JTextField(TEXT_FIELD_SIZE);
+		add(this.requestReason, WEST);
 		add(new JButton("Request Resources"), WEST);
 
 		
@@ -145,9 +145,6 @@ public class ClientGUI extends Program {
 		add(new JLabel("ETA"), WEST);
 		this.eta = new JTextField(TEXT_FIELD_SIZE);
 		add(this.eta, WEST);
-		// add(new JLabel("Amount"), WEST);
-		// this.amount = new JTextField(TEXT_FIELD_SIZE);
-		// add(this.amount, WEST);
 		add(new JButton("Generate Bid"), WEST);
 
 		add(new JLabel("Bid Number"), WEST);
@@ -155,12 +152,6 @@ public class ClientGUI extends Program {
 		add(this.bidNumber, WEST);
 		
 		add(new JButton("Accept Bid"), WEST);
-
-		// this.removeNode = new JTextField(TEXT_FIELD_SIZE);
-		// add(this.removeNode, WEST);
-		// add(new JButton("Remove Node"), WEST);
-		//
-		// add(new JButton("Move Nodes"), WEST);
 		
 		
 		// Actions
@@ -177,10 +168,10 @@ public class ClientGUI extends Program {
 		add(new JButton("Check Requests"), WEST);
 		add(new JButton("Check Bids"), WEST);
 		add(new JButton("Check Accepted"), WEST);
+		
+		this.nodeIDTextField = new JTextField(TEXT_FIELD_SIZE);
+		add(nodeIDTextField, WEST);
 		add(new JButton("View Blocks"), WEST);
-
-
-//		add(new JButton("Put Initial Resources"), NORTH);
 
 		this.viewResources = new JTextField(TEXT_FIELD_SIZE);
 		add(this.viewResources, NORTH);
@@ -197,15 +188,6 @@ public class ClientGUI extends Program {
 		this.shortestPathTo = new JTextField(TEXT_FIELD_SIZE);
 		add(this.shortestPathTo, NORTH);
 		add(new JButton("Show Fastest Path"), NORTH);
-
-		//add(new JButton("Ping Everybody"), WEST);
-
-		//add(new JButton("what what"), new Rectangle(500,500, 20, 20));
-		
-//		JButton hope = new JButton("what is this");
-//		hope.setSize(20, 20);
-//		hope.setLocation(500, 500);
-//		add(hope);
 		
 	}
 
@@ -225,7 +207,13 @@ public class ClientGUI extends Program {
 				beginSimulation();
 				myNode.start();
 				putInitResources();
-				createInitialPing();
+				try {
+					createInitialPing();
+				} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
+						| ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				t = new Thread(new GUIRefresher(), "refresher");
 				t.start();
 			}
@@ -233,7 +221,7 @@ public class ClientGUI extends Program {
 			System.err.println("Must create node first!");
 		} else if (e.getActionCommand().equals("Request Resources")) {
 
-			if (resourceType.getText().isEmpty() || resourceAmount.getText().isEmpty()) {
+			if (resourceType.getText().isEmpty() || resourceAmount.getText().isEmpty() || requestReason.getText().isEmpty()) {
 				System.err.println("Aborting request: one or more fields are empty");
 			} else if (!resourceAmount.getText().matches("\\d+")) { // check if amount is an integer
 				System.err.println("Error: Supply amount is not a valid integer");
@@ -317,7 +305,7 @@ public class ClientGUI extends Program {
 //		}
 	}
 
-	private void createInitialPing() {
+	private void createInitialPing() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, ClassNotFoundException, IOException {
 		System.out.println("I should be making my initial ping");
 		this.myNode.createInitialPingToBroadcast();
 		
@@ -352,7 +340,7 @@ public class ClientGUI extends Program {
 	// Message Generation
 	private void generateResourceRequest() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException, IOException, ClassNotFoundException {
 		ResourceRequest newRequest = new ResourceRequest(Integer.parseInt(this.resourceAmount.getText()),
-				this.resourceType.getText(), myNode.getNodeID());
+				this.resourceType.getText(), myNode.getNodeID(), requestReason.getText());
 		myNode.sendMessage(newRequest);
 		//myNode.addMessage(newRequest);
 		checkRequests();
@@ -362,12 +350,10 @@ public class ClientGUI extends Program {
 		String requestID = this.acceptNumber.getText();
 		int eta = Integer.parseInt(this.eta.getText());
 		//int amount = Integer.parseInt(this.amount.getText());
-		int amount = 100;
 		if(myNode.msgMap.containsKey(requestID)
 				&& myNode.msgMap.get(requestID).messageType.equals("ResourceRequest")) {
-			ResourceRequestBid newBid = new ResourceRequestBid(requestID, eta, amount, myNode.getNodeID());
-			//myNode.addMessage(newBid);
-			myNode.sendMessage(newBid);
+			ResourceRequestBid newBid = new ResourceRequestBid(requestID, eta, myNode.getNodeID());
+			myNode.addMessage(newBid);
 			checkBids();
 		} else {
 			System.err.println("no request with that id");
