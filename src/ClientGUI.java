@@ -150,11 +150,20 @@ public class ClientGUI extends Program {
 		// add(new JButton("Remove Node"), WEST);
 		//
 		// add(new JButton("Move Nodes"), WEST);
-
-		add(new JButton("Check Accepted"), WEST);
-		add(new JButton("Check Bids"), WEST);
-
+		
+		add(new JLabel("Actions"), WEST);
+		add(new JButton("Draw Nodes"), WEST);
+		add(new JButton("Create Ping"), WEST);
+		
+		
+		// Messages
+		add(new JLabel("Messages"), WEST);
+		add(new JButton("Total Messages"), WEST);
 		add(new JButton("Check Requests"), WEST);
+		add(new JButton("Check Bids"), WEST);
+		add(new JButton("Check Accepted"), WEST);
+		add(new JButton("View Blocks"), WEST);
+
 
 //		add(new JButton("Put Initial Resources"), NORTH);
 
@@ -170,17 +179,12 @@ public class ClientGUI extends Program {
 		add(this.receiveResource, NORTH);
 		add(new JButton("Receive Resource"), NORTH);
 
-		add(new JButton("Total Messages"), WEST);
-		add(new JButton("View Blocks"), WEST);
 		this.shortestPathTo = new JTextField(TEXT_FIELD_SIZE);
 		add(this.shortestPathTo, NORTH);
 		add(new JButton("Show Fastest Path"), NORTH);
 
 		//add(new JButton("Ping Everybody"), WEST);
 
-		add(new JButton("Draw Nodes"), WEST);
-		add(new JButton("Create Ping"), WEST);
-		
 		//add(new JButton("what what"), new Rectangle(500,500, 20, 20));
 		
 //		JButton hope = new JButton("what is this");
