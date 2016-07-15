@@ -302,7 +302,6 @@ public class ClientGUI extends Program {
 	private void createInitialPing() {
 		System.out.println("I should be making my initial ping");
 		this.myNode.createInitialPingToBroadcast();
-		
 	}
 
 	private void createPing() {

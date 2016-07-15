@@ -200,7 +200,7 @@ public class NetworkNode implements Node {
 			}
 			System.out.println("There was a verified message");
 		}
-		
+		System.out.println(byteArray);
 		ByteArrayInputStream in = new ByteArrayInputStream(this.byteArray);
 		ObjectInputStream is = new ObjectInputStream(in);
 		//ResourceRequest newObject = (ResourceRequest) is.readObject();
