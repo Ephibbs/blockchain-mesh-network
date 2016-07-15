@@ -198,7 +198,7 @@ public class NetworkNode implements Node {
 				//System.out.println("no verified message");
 				return;
 			}
-			System.out.println("There was a verified message");
+			//System.out.println("There was a verified message");
 		}
 		//System.out.println("I skipped stuff");
 		
@@ -596,7 +596,7 @@ public class NetworkNode implements Node {
 	}
 
 	public void createInitialPingToBroadcast() {
-		System.out.println("my Pub Key: " + this.pubKey);
+		//System.out.println("my Pub Key: " + this.pubKey);
 		InitialPing newPing = new InitialPing(this.getNodeID(), this.getNodeID(), this.pubKey,
 				this.getNodeInfoList().get(this.nodeID).getResourceList());
 		newPing.setLocation(new Location().createRandomLocation());
@@ -614,7 +614,7 @@ public class NetworkNode implements Node {
 		os.close();
 
 		byteArray = out.toByteArray();
-		System.out.println("size of that byte array: " + this.byteArray.length);
+		//System.out.println("size of that byte array: " + this.byteArray.length);
 
 		byte[] realSig = new byte[1024];
 		dsa.initSign(this.privKey); // sign message with private key
