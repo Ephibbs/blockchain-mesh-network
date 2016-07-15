@@ -55,7 +55,8 @@ public class ClientGUI extends Program {
 	
 	class GUIRefresher implements Runnable {
 		public void run() {
-			System.out.println(""+openTabID);
+			drawNodes();
+//			System.out.println("Current Tab: "+openTabID);
 			switch(openTabID) {
 				case 0:
 					printTotalMessages();
@@ -77,7 +78,7 @@ public class ClientGUI extends Program {
 					break;
 			}
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -113,12 +114,16 @@ public class ClientGUI extends Program {
 
 	// Just the window, don't worry about it
 	private void generateWestFrame() {
+		
+		// Node name
 		add(new JLabel("Enter your Node Name"), WEST);
 		this.nodeName = new JTextField(TEXT_FIELD_SIZE);
 		add(this.nodeName, WEST);
 		add(new JButton("Start My Node"), WEST);
 
-		add(new JLabel("Enter resource Requester"), WEST);
+		
+		// Request resources
+		add(new JLabel("________________________"), WEST);		
 		add(new JLabel("Enter the Supply"), WEST);
 		this.resourceType = new JTextField(TEXT_FIELD_SIZE);
 		add(this.resourceType, WEST);
@@ -130,6 +135,9 @@ public class ClientGUI extends Program {
 		add(this.resourceCategory, WEST);
 		add(new JButton("Request Resources"), WEST);
 
+		
+		// Bidding
+		add(new JLabel("________________________"), WEST);		
 		add(new JLabel("Message Number"), WEST);
 		this.acceptNumber = new JTextField(TEXT_FIELD_SIZE);
 		add(this.acceptNumber, WEST);
@@ -144,7 +152,7 @@ public class ClientGUI extends Program {
 		add(new JLabel("Bid Number"), WEST);
 		this.bidNumber = new JTextField(TEXT_FIELD_SIZE);
 		add(this.bidNumber, WEST);
-
+		
 		add(new JButton("Accept Bid"), WEST);
 
 		// this.removeNode = new JTextField(TEXT_FIELD_SIZE);
@@ -152,11 +160,24 @@ public class ClientGUI extends Program {
 		// add(new JButton("Remove Node"), WEST);
 		//
 		// add(new JButton("Move Nodes"), WEST);
-
-		add(new JButton("Check Accepted"), WEST);
-		add(new JButton("Check Bids"), WEST);
-
+		
+		
+		// Actions
+		add(new JLabel("________________________"), WEST);
+		add(new JLabel("Actions"), WEST);
+		add(new JButton("Draw Nodes"), WEST);
+		add(new JButton("Create Ping"), WEST);
+		
+		
+		// Messages
+		add(new JLabel("________________________"), WEST);
+		add(new JLabel("Messages"), WEST);
+		add(new JButton("Total Messages"), WEST);
 		add(new JButton("Check Requests"), WEST);
+		add(new JButton("Check Bids"), WEST);
+		add(new JButton("Check Accepted"), WEST);
+		add(new JButton("View Blocks"), WEST);
+
 
 //		add(new JButton("Put Initial Resources"), NORTH);
 
@@ -172,17 +193,12 @@ public class ClientGUI extends Program {
 		add(this.receiveResource, NORTH);
 		add(new JButton("Receive Resource"), NORTH);
 
-		add(new JButton("Total Messages"), WEST);
-		add(new JButton("View Blocks"), WEST);
 		this.shortestPathTo = new JTextField(TEXT_FIELD_SIZE);
 		add(this.shortestPathTo, NORTH);
 		add(new JButton("Show Fastest Path"), NORTH);
 
 		//add(new JButton("Ping Everybody"), WEST);
 
-		add(new JButton("Draw Nodes"), WEST);
-		add(new JButton("Create Ping"), WEST);
-		
 		//add(new JButton("what what"), new Rectangle(500,500, 20, 20));
 		
 //		JButton hope = new JButton("what is this");
@@ -197,7 +213,7 @@ public class ClientGUI extends Program {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Start My Node")) {
 			if (nodeCreated) { // check for multiple clicks
-				System.out.println("Node already created");
+				System.err.println("Node already created");
 			} else {
 				nodeCreated = true;
 				try {
@@ -212,29 +228,33 @@ public class ClientGUI extends Program {
 				t = new Thread(new GUIRefresher(), "refresher");
 				t.start();
 			}
+		} else if (!nodeCreated) { // don't go below unless node is created
+			System.err.println("Must create node first!");
 		} else if (e.getActionCommand().equals("Request Resources")) {
-			try {
+
+			if (resourceType.getText().isEmpty() || resourceAmount.getText().isEmpty() || resourceCategory.getText().isEmpty()) {
+				System.err.println("Aborting request: one or more fields are empty");
+			} else if (!resourceAmount.getText().matches("\\d+")) { // check if amount is an integer
+				System.err.println("Error: Supply amount is not a valid integer");
+			} else {
 				try {
 					generateResourceRequest();
 				} catch (InvalidKeyException | SignatureException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+				} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
+					e1.printStackTrace();
 				}
-			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
-				e1.printStackTrace();
-				}
+			}
 		} else if (e.getActionCommand().equals("Generate Bid")) {
 			generateBid();
 		} else if (e.getActionCommand().equals("Accept Bid")) {
 			acceptBid();
 		} else if (e.getActionCommand().equals("Check Accepted")) {
-			openTabID = 3;
 			checkAccepts();
 		} else if (e.getActionCommand().equals("Check Bids")) {
-			openTabID = 2;
 			checkBids();
 		} else if (e.getActionCommand().equals("Check Requests")) {
-			openTabID = 1;
 			checkRequests();
 		} else if (e.getActionCommand().equals("Send Resource")) {
 			sendResource();
@@ -243,17 +263,14 @@ public class ClientGUI extends Program {
 		} else if (e.getActionCommand().equals("Check Resources")) {
 			receiveResource();
 		} else if (e.getActionCommand().equals("Total Messages")) {
-			openTabID = 0;
 			printTotalMessages();
 		} else if (e.getActionCommand().equals("View Blocks")) {
-			openTabID = 4;
 			generateBlockView();
 		} else if (e.getActionCommand().equals("Draw Nodes")) {
 			drawNodes();
 		} else if (e.getActionCommand().equals("Create Ping")) {
 			createPing();
 		} else if (e.getActionCommand().equals("View Resources")) {
-			openTabID = 5;
 			System.out.println("failure called from here");
 			viewNodeResources();
 		} 
@@ -269,6 +286,7 @@ public class ClientGUI extends Program {
 	}
 
 	private void createPing() {
+		openTabID = 0; // all messages
 		this.myNode.createPingToBroadcast();
 	}
 
@@ -374,6 +392,7 @@ public class ClientGUI extends Program {
 
 	// GUI data drawing
 	public void printTotalMessages() {
+		openTabID = 0;
 		generateTotalMessages();
 		g.setColor(Color.WHITE);
 		if (myNode.totalMessages != null) {
@@ -391,6 +410,7 @@ public class ClientGUI extends Program {
 	}
 	
 	private void checkRequests() {
+		openTabID = 1;
 		generateMessageBoard();
 		g.setColor(Color.WHITE);
 		ArrayList<Message> availableMessages = myNode.getOpenRequests();
@@ -408,6 +428,7 @@ public class ClientGUI extends Program {
 	}
 
 	private void checkBids() {
+		openTabID = 2;
 		generateBidMessageBoard();
 		g.setColor(Color.WHITE);
 		if (myNode.getBidsToMyRequests() != null) {
@@ -426,6 +447,7 @@ public class ClientGUI extends Program {
 	}
 
 	private void checkAccepts() {
+		openTabID = 3;
 		generateAcceptedMessageBoard();
 		g.setColor(Color.WHITE);
 		if (myNode.getMyResourceAgreements() != null) {
@@ -447,6 +469,8 @@ public class ClientGUI extends Program {
 	}
 
 	private void generateBlockView() {
+		openTabID = 4;
+
 		generateBlockBoard();
 		g.setColor(Color.WHITE);
 		ArrayList<Block> blocks = new ArrayList<Block>(myNode.getBlockchain());
@@ -591,6 +615,7 @@ public class ClientGUI extends Program {
 	}
 
 	private void drawNodes() {
+//		System.out.println("Nodes drawn");
 		g.setColor(Color.BLACK);
 		this.myNode.drawNodes(this.g, MAXSIZE, WIDTH, HEIGHT);
 		// this.myNode.drawTemps(this.g, MAXSIZE, WIDTH, HEIGHT);
@@ -620,6 +645,7 @@ public class ClientGUI extends Program {
 	}
 
 	public void viewNodeResources() {
+		openTabID = 5;
 		String nodeToView = this.viewResources.getText();
 		System.out.println("here is the failure");
 		NodeInfo nodeInfo = this.myNode.getNodeInfoList().get(nodeToView);
