@@ -4,7 +4,7 @@ public class BlockRequest extends Message {
 	BlockRequest(String hash, String auth) {
 		super(auth);
 		this.messageType = "BlockRequest";
-		this.blockHash = blockHash;
+		this.blockHash = hash;
 	}
 	
 	public String getBlockHash() {

@@ -182,32 +182,32 @@ public class NetworkNode implements Node {
 	}
 
 	@Override
-	public void addMessage(Message mess) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, IOException, ClassNotFoundException {
+	public void addMessage(Message msg) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, IOException, ClassNotFoundException {
 		// TODO: later, implement signature checking mechanism for messages
-		
-		//System.out.println("i got here");
 
-		if(mess.getMessageType().equals("MySignedObject")) {
+		if(msg.getMessageType().equals("MySignedObject")) {
 			//System.out.println("There was a signed object");
-			this.byteArray = ((MySignedObject) mess).getByteArray();
+			this.byteArray = ((MySignedObject) msg).getByteArray();
 			//System.out.println("size of this byte array: " + this.byteArray.length);
-			MySignedObject m = (MySignedObject) mess;
-			if(verifyMessage((MySignedObject) mess)==false){
-				this.byteArray = ((MySignedObject) mess).getByteArray();
+			MySignedObject m = (MySignedObject) msg;
+			if(verifyMessage((MySignedObject) msg)==false){
+				this.byteArray = ((MySignedObject) msg).getByteArray();
+				System.out.println("received unverified msg");
 				//System.out.println("size of this byte array: " + this.byteArray.length);
 				//System.out.println("no verified message");
 				return;
 			}
 			//System.out.println("There was a verified message");
+			ByteArrayInputStream in = new ByteArrayInputStream(this.byteArray);
+			ObjectInputStream is = new ObjectInputStream(in);
+			//ResourceRequest newObject = (ResourceRequest) is.readObject();
+			msg = (Message) is.readObject();
 		}
-		System.out.println(byteArray);
-		ByteArrayInputStream in = new ByteArrayInputStream(this.byteArray);
-		ObjectInputStream is = new ObjectInputStream(in);
-		//ResourceRequest newObject = (ResourceRequest) is.readObject();
-		Message msg = (Message) is.readObject();
 		
-//		System.out.println("Message type: " + msg.getMessageType());
-
+		System.out.println("Message type: " + msg.getMessageType());
+		System.out.println(msg.getAuthor());
+		System.out.println(msg.id);
+		System.out.println("===");
 		if (!this.totalMessages.contains(msg)) {
 			System.out.println(msg.getType());
 			System.out.println(msg.getID());
@@ -250,6 +250,7 @@ public class NetworkNode implements Node {
 				distributeMessage(msg);
 				break;
 			case "Ping":
+				System.out.println("received ping");
 				receivePing((Ping) msg);
 				distributeMessage(msg);
 				break;
@@ -334,13 +335,13 @@ public class NetworkNode implements Node {
 	}
 	
 	private void receivePing(Ping msg) {
-		// System.out.println("Ping Author " + msg.getAuthor());
+		System.out.println("Ping Author " + msg.getOriginator());
 		if (msg.getOriginator().equals(this.getNodeID())) {
 			// System.out.println("I didn't do anything");
 			return;
 		}
 		
-		if(msg.getID().equals("InitialPing")) {
+		if(msg.getCurrentResources() != null) {
 			if (this.pingHash.get(msg.getOriginator()) != null) {
 				if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
 					return;
@@ -460,37 +461,37 @@ public class NetworkNode implements Node {
 
 	@Override
 	public void receiveBlockRequest(BlockRequest br) {
-		if (br.getBlockHash().equals("latest")) {
-			Block b = blockChain.getLastBlock();
-			BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author
-																				// of
-																				// request
-																				// is
-																				// the
-																				// block
-																				// recipient
-			distributeMessage(bd);
-		} else if (!blockRequestIDs.contains(br.getBlockHash() + br.getAuthor())) { // If
-																					// I
-																					// haven't
-																					// received
-																					// this
-																					// request
-			Block b = blockChain.getBlock(br.getBlockHash());
-			if (b != null) { // if I have the block, make a block delivery
-				BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author
-																					// of
-																					// request
-																					// is
-																					// the
-																					// block
-																					// recipient
-				distributeMessage(bd);
-			} else {
-				blockRequestIDs.add(br.getBlockHash() + br.getAuthor());
-				distributeMessage(br);
-			}
-		}
+//		if (br.getBlockHash().equals("latest")) {
+//			Block b = blockChain.getLastBlock();
+//			BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author
+//																				// of
+//																				// request
+//																				// is
+//																				// the
+//																				// block
+//																				// recipient
+//			distributeMessage(bd);
+//		} else if (!blockRequestIDs.contains(br.getBlockHash() + br.getAuthor())) { // If
+//																					// I
+//																					// haven't
+//																					// received
+//																					// this
+//																					// request
+//			Block b = blockChain.getBlock(br.getBlockHash());
+//			if (b != null) { // if I have the block, make a block delivery
+//				BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author
+//																					// of
+//																					// request
+//																					// is
+//																					// the
+//																					// block
+//																					// recipient
+//				distributeMessage(bd);
+//			} else {
+//				blockRequestIDs.add(br.getBlockHash() + br.getAuthor());
+//				distributeMessage(br);
+//			}
+//		}
 	}
 
 	@Override

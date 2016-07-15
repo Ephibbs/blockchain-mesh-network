@@ -13,6 +13,7 @@ public class Ping extends Message {
 	public Time timeSent = null;
 	public ArrayList<Resource> currentResources = null;
 	public ArrayList<Block> blockchainArr = new ArrayList<Block>();
+	public boolean containsResources = false; 
 	
 	public Ping(String sender, String receiver, PublicKey pubKey){
 		// should create a public key whenever you start a node
@@ -28,7 +29,8 @@ public class Ping extends Message {
 		// should create a public key whenever you start a node
 		// when i create a ping I need to set its location
 		super(sender, receiver);
-		this.messageType = "InitialPing";
+		containsResources = true;
+		this.messageType = "Ping";
 		this.originatorString = sender;
 		this.relayerString = receiver;
 		this.publicKey = pubKey;
