@@ -689,7 +689,7 @@ public class ClientGUI extends Program {
 	public void viewNodeResources() {
 		openTabID = 5;
 		String nodeToView = this.viewResources.getText();
-		System.out.println("here is the failure");
+		//System.out.println("here is the failure");
 		NodeInfo nodeInfo = this.myNode.getNodeInfoList().get(nodeToView);
 		ArrayList<Resource> resources = nodeInfo.getResourceList();
 		Location nodeLoc = nodeInfo.getMyLocation();
