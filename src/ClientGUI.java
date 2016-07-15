@@ -247,7 +247,13 @@ public class ClientGUI extends Program {
 				}
 			}
 		} else if (e.getActionCommand().equals("Generate Bid")) {
-			generateBid();
+			if (acceptNumber.getText().isEmpty() || eta.getText().isEmpty()) {
+				System.err.println("Cannot generate bid: one or more fields are empty");
+			} else if (!eta.getText().matches("\\d+")) { // eta has to be an integer
+				System.err.println("Error: ETA is not a valid integer");
+			} else {
+				generateBid();
+			}
 		} else if (e.getActionCommand().equals("Accept Bid")) {
 			acceptBid();
 		} else if (e.getActionCommand().equals("Check Accepted")) {
