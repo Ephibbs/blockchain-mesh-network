@@ -185,7 +185,7 @@ public class NetworkNode implements Node {
 	public void addMessage(Message mess) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, IOException, ClassNotFoundException {
 		// TODO: later, implement signature checking mechanism for messages
 		
-		System.out.println("i got here");
+		//System.out.println("i got here");
 
 		if(mess.getMessageType().equals("MySignedObject")) {
 			//System.out.println("There was a signed object");
@@ -206,6 +206,8 @@ public class NetworkNode implements Node {
 		ObjectInputStream is = new ObjectInputStream(in);
 		//ResourceRequest newObject = (ResourceRequest) is.readObject();
 		Message msg = (Message) is.readObject();
+		
+//		System.out.println("Message type: " + msg.getMessageType());
 
 		if (!this.totalMessages.contains(msg)) {
 			System.out.println(msg.getType());
@@ -214,6 +216,7 @@ public class NetworkNode implements Node {
 		}
 		if (msg != null && !this.msgMap.containsKey(msg.getID())) {
 			switch (msg.getMessageType()) {
+			//System.out.println("Message type: " + msg.getMessageType());
 			case "ResourceRequest":
 				System.out.println("received resource request");
 				openRequests.add(msg);
@@ -234,6 +237,7 @@ public class NetworkNode implements Node {
 				break;
 			case "ResourceSent":
 				System.out.println("received resource sent");
+				//System.out.println("I should be sending  resource amount: " + ((ResourceSent) msg).getAmount());
 				myResourceSents.add(msg);
 				updateNodeInfo((ResourceSent) msg);
 				blockChain.add(msg);
@@ -287,7 +291,7 @@ public class NetworkNode implements Node {
 	}
 
 	private void updateNodeInfo(ResourceReceived msg) {
-		System.out.println("I should be adding more resource received");
+		//System.out.println("I should be adding more resource received");
 		String NodeID = msg.getAuthor();
 		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
 		String resourceType = msg.getResourceType();
@@ -296,7 +300,7 @@ public class NetworkNode implements Node {
 	}
 
 	private void updateResourceInfo(String resourceType, int resourceAmt, NodeInfo currentInfo) {
-		System.out.println("I got here");
+		//System.out.println("I got here");
 		for (int i = 0; i < currentInfo.getResourceList().size(); i++) {
 			Resource cResource = currentInfo.getResourceList().get(i);
 			// System.out.println("resourceType: " + resourceType);
@@ -627,7 +631,7 @@ public class NetworkNode implements Node {
 		Signature sig = Signature.getInstance("SHA1withDSA", "SUN");
 		byte[] realSig = msg.getSig();
 		byte[] byteArray2 = msg.getByteArray();
-		System.out.println(this.publicKeySet.size());
+		//System.out.println(this.publicKeySet.size());
 		for (int i = 0; i < publicKeySet.size(); i++) { // find public key that
 			// can verify message
 			sig.initVerify(publicKeySet.get(i));

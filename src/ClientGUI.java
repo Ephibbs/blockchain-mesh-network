@@ -361,7 +361,8 @@ public class ClientGUI extends Program {
 	private void generateBid() throws InvalidKeyException, SignatureException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
 		String requestID = this.acceptNumber.getText();
 		int eta = Integer.parseInt(this.eta.getText());
-		int amount = Integer.parseInt(this.amount.getText());
+		//int amount = Integer.parseInt(this.amount.getText());
+		int amount = 100;
 		if(myNode.msgMap.containsKey(requestID)
 				&& myNode.msgMap.get(requestID).messageType.equals("ResourceRequest")) {
 			ResourceRequestBid newBid = new ResourceRequestBid(requestID, eta, amount, myNode.getNodeID());
