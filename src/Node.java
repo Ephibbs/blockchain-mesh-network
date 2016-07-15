@@ -29,7 +29,7 @@ interface Node {
 
 	// Mutators
 	public void addResource(String type, int amount);
-	public void addMessage(Message msg) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException;
+	public void addMessage(Message msg) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, IOException, ClassNotFoundException;
 
 	public void setBlockChainDifficulty(int difficulty);
 
@@ -51,5 +51,5 @@ interface Node {
 
 	public boolean isOnline();
 
-	public void addBlock(Block b) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException;
+	public void addBlock(Block b) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, ClassNotFoundException, IOException;
 }

@@ -9,9 +9,9 @@ public class MySignedObject extends Message{
 		super(author);
 		this.byteArray = bytearray;
 		this.sig = sig;
-		this.Author = author; 
+		this.Author = author;
 		//this.typeToCast = classToCast;
-		this.messageType = "MySignedOject";
+		this.messageType = "MySignedObject";
 	}
 
 	/**

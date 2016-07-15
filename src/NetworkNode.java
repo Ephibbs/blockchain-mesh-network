@@ -98,6 +98,7 @@ public class NetworkNode implements Node {
 		this.pair = keyGen.generateKeyPair();
 		this.privKey = pair.getPrivate();
 		this.pubKey = pair.getPublic();
+		this.publicKeySet.add(this.pubKey);
 		this.blockChain = new Blockchain(this);
 	}
 
@@ -181,18 +182,30 @@ public class NetworkNode implements Node {
 	}
 
 	@Override
-	public void addMessage(Message msg) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException {
+	public void addMessage(Message mess) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, IOException, ClassNotFoundException {
 		// TODO: later, implement signature checking mechanism for messages
-		// if message is unique, add and
-		// distribute
-		// else do nothing
+		
+		System.out.println("i got here");
 
-		if(msg.getMessageType().equals("MySignedObject")) {
-			MySignedObject m = (MySignedObject) msg;
-//			if(verifyMessage((MySignedObject) msg)==false){
-//				return;
-//			}
+		if(mess.getMessageType().equals("MySignedObject")) {
+			//System.out.println("There was a signed object");
+			this.byteArray = ((MySignedObject) mess).getByteArray();
+			//System.out.println("size of this byte array: " + this.byteArray.length);
+			MySignedObject m = (MySignedObject) mess;
+			if(verifyMessage((MySignedObject) mess)==false){
+				this.byteArray = ((MySignedObject) mess).getByteArray();
+				//System.out.println("size of this byte array: " + this.byteArray.length);
+				//System.out.println("no verified message");
+				return;
+			}
+			System.out.println("There was a verified message");
 		}
+		//System.out.println("I skipped stuff");
+		
+		ByteArrayInputStream in = new ByteArrayInputStream(this.byteArray);
+		ObjectInputStream is = new ObjectInputStream(in);
+		//ResourceRequest newObject = (ResourceRequest) is.readObject();
+		Message msg = (Message) is.readObject();
 
 		if (!this.totalMessages.contains(msg)) {
 			System.out.println(msg.getType());
@@ -355,6 +368,8 @@ public class NetworkNode implements Node {
 			System.out.println("I dont have a node so I am making a new one in initial ping");
 			Location newLocation = msg.getLocation();
 			Time newTime = msg.getTimeSent();
+			System.out.println("public key: " + msg.getPublicKey());
+			this.publicKeySet.add(msg.getPublicKey());
 			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(),
 					msg.getCurrentResources(), newTime);
 			newNodeInfo.setBlockchain(msg.getBlockchain());
@@ -481,11 +496,12 @@ public class NetworkNode implements Node {
 	}
 
 	@Override
-	public void addBlock(Block b) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException {
+	public void addBlock(Block b) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, ClassNotFoundException, IOException {
 		// add any messages that are in b but have not been received to their
 		// respective lists
 		for (Message m : b.getMsgs()) {
-			addMessage(m);
+			//addMessage(m);
+			this.sendMessage(m);
 		}
 		blockChain.add(b);
 	}
@@ -594,6 +610,7 @@ public class NetworkNode implements Node {
 		os.close();
 
 		byteArray = out.toByteArray();
+		System.out.println("size of that byte array: " + this.byteArray.length);
 
 		byte[] realSig = new byte[1024];
 		dsa.initSign(this.privKey); // sign message with private key
@@ -603,5 +620,25 @@ public class NetworkNode implements Node {
 		Message newMessage = new MySignedObject(this.nodeID, byteArray, realSig);
 
 		this.addMessage(newMessage);
+	}
+	
+	private boolean verifyMessage(MySignedObject msg) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException {
+		// do nothing
+		Signature sig = Signature.getInstance("SHA1withDSA", "SUN");
+		byte[] realSig = msg.getSig();
+		byte[] byteArray2 = msg.getByteArray();
+		System.out.println(this.publicKeySet.size());
+		for (int i = 0; i < publicKeySet.size(); i++) { // find public key that
+			// can verify message
+			sig.initVerify(publicKeySet.get(i));
+			sig.update(byteArray2);
+			boolean verifies = sig.verify(realSig);
+
+			if (verifies == true) {
+				return true;
+			} else {
+			}
+		}
+		return false;
 	}
 }
