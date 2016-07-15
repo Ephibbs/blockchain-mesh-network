@@ -1,5 +1,6 @@
 import java.security.PublicKey;
 import java.sql.Time;
+import java.util.ArrayList;
 
 public class Ping extends Message {
 	
@@ -10,6 +11,8 @@ public class Ping extends Message {
 	public Location currentLocation = null;
 	public PublicKey publicKey = null;
 	public Time timeSent = null;
+	public ArrayList<Resource> currentResources = null;
+	public ArrayList<Block> blockchainArr = new ArrayList<Block>();
 	
 	public Ping(String sender, String receiver, PublicKey pubKey){
 		// should create a public key whenever you start a node
@@ -21,11 +24,16 @@ public class Ping extends Message {
 		this.publicKey = pubKey;
 	}
 	
-//	public Ping(String nodeID, String nodeID2) {
-//		// TODO Auto-generated constructor stub
-//		super(nodeID, nodeID2);
-//		this.messageType = "Ping";
-//	}
+	public Ping(String sender, String receiver, PublicKey pubKey, ArrayList<Resource> myResources){
+		// should create a public key whenever you start a node
+		// when i create a ping I need to set its location
+		super(sender, receiver);
+		this.messageType = "InitialPing";
+		this.originatorString = sender;
+		this.relayerString = receiver;
+		this.publicKey = pubKey;
+		this.currentResources = myResources;
+	}
 
 	public void setRelayer(String relayer) {
 		this.relayerString = relayer;
@@ -57,5 +65,14 @@ public class Ping extends Message {
 	public Time getTimeSent(){
 		return this.timeSent;
 	}
-
+	
+	public void setBlockchain(ArrayList<Block> chain) {
+		this.blockchainArr = chain;
+	}
+	public ArrayList<Block> getBlockchain() {
+		return blockchainArr;
+	}
+	public ArrayList<Resource> getCurrentResources() {
+		return currentResources;
+	}
 }

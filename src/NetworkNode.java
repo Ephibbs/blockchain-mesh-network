@@ -123,6 +123,7 @@ public class NetworkNode implements Node {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		//get latest block on blockchain from neighboring nodes
 		makeBlockRequest("latest");
 	}
 
@@ -235,10 +236,6 @@ public class NetworkNode implements Node {
 				sendDirectMessage(msg);
 				distributeMessage(msg);
 				break;
-			case "InitialPing":
-				System.out.println("I received an initial ping");
-				receivePing((InitialPing) msg);
-				break;
 			case "BlockRequest":
 				BlockRequest br = (BlockRequest) msg;
 				receiveBlockRequest(br);
@@ -254,56 +251,6 @@ public class NetworkNode implements Node {
 				this.createPingToBroadcast();
 			}
 		}
-	}
-
-	private void receivePing(InitialPing msg) {
-		// System.out.println("Ping Author " + msg.getAuthor());
-		if (msg.getOriginator().equals(this.getNodeID())) {
-			// System.out.println("I didn't do anything");
-			return;
-		}
-		// if (this.pingHash.get(msg.getOriginator()) != null) {
-		// if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
-		// return;
-		// } else if (this.pingHash.containsKey(msg.getOriginator())) {
-		// if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
-		// return;
-		// } else {
-		// this.pingHash.get(msg.getOriginator()).add(msg);
-		// }
-		// }
-		// } else {
-		// // System.out.println("I should be creating a new arrayList of
-		// // pings");
-		// ArrayList<Ping> newArrayList = new ArrayList<Ping>();
-		// newArrayList.add(msg);
-		// this.pingHash.put(msg.getOriginator(), newArrayList);
-		// }
-
-		Set<String> nodeInfoKeys = nodeInfoMap.keySet();
-		String pingOriginator = msg.getOriginator();
-		ArrayList<String> nodeInfoKeyAL = new ArrayList<String>();
-		for (String key : nodeInfoKeys) {
-			nodeInfoKeyAL.add(key);
-		}
-		if (!nodeInfoKeyAL.contains(pingOriginator)) {
-			System.out.println("I dont have a node so I am making a new one in initial ping");
-			Location newLocation = msg.getLocation();
-			Time newTime = msg.getTimeSent();
-			// System.out.println("I should be making a new NodeInfo List");
-
-			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(),
-					msg.getCurrentResources(), newTime);
-			System.out.println("I made the new node info in initial ping");
-			this.nodeInfoMap.put(pingOriginator, newNodeInfo);
-		} else if (nodeInfoKeyAL.contains(pingOriginator)) {
-			// System.out.println("I already had this in here");
-			NodeInfo currentNodeInfo = nodeInfoMap.get(pingOriginator);
-			currentNodeInfo.setLastPingTime(new Time(System.currentTimeMillis()));
-			currentNodeInfo.setMyLocation(msg.getLocation());
-		}
-		updateRouteTable();
-		// sendToTempNodes(msg);
 	}
 
 	private ArrayList<Resource> convertToArrayList(HashMap<String, Integer> currentResources) {
@@ -364,29 +311,32 @@ public class NetworkNode implements Node {
 			// but it will be something similar
 		}
 	}
-
+	
 	private void receivePing(Ping msg) {
 		// System.out.println("Ping Author " + msg.getAuthor());
 		if (msg.getOriginator().equals(this.getNodeID())) {
 			// System.out.println("I didn't do anything");
 			return;
 		}
-		if (this.pingHash.get(msg.getOriginator()) != null) {
-			if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
-				return;
-			} else if (this.pingHash.containsKey(msg.getOriginator())) {
+		
+		if(msg.getID().equals("InitialPing")) {
+			if (this.pingHash.get(msg.getOriginator()) != null) {
 				if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
 					return;
-				} else {
-					this.pingHash.get(msg.getOriginator()).add(msg);
+				} else if (this.pingHash.containsKey(msg.getOriginator())) {
+					if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
+						return;
+					} else {
+						this.pingHash.get(msg.getOriginator()).add(msg);
+					}
 				}
+			} else {
+				// System.out.println("I should be creating a new arrayList of
+				// pings");
+				ArrayList<Ping> newArrayList = new ArrayList<Ping>();
+				newArrayList.add(msg);
+				this.pingHash.put(msg.getOriginator(), newArrayList);
 			}
-		} else {
-			// System.out.println("I should be creating a new arrayList of
-			// pings");
-			ArrayList<Ping> newArrayList = new ArrayList<Ping>();
-			newArrayList.add(msg);
-			this.pingHash.put(msg.getOriginator(), newArrayList);
 		}
 
 		Set<String> nodeInfoKeys = nodeInfoMap.keySet();
@@ -395,21 +345,25 @@ public class NetworkNode implements Node {
 		for (String key : nodeInfoKeys) {
 			nodeInfoKeyAL.add(key);
 		}
+		
 		if (!nodeInfoKeyAL.contains(pingOriginator)) {
+			System.out.println("I dont have a node so I am making a new one in initial ping");
 			Location newLocation = msg.getLocation();
 			Time newTime = msg.getTimeSent();
-			// System.out.println("I should be making a new NodeInfo List");
 			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(),
-					new ArrayList<Resource>(), newTime);
+					msg.getCurrentResources(), newTime);
+			newNodeInfo.setBlockchain(msg.getBlockchain());
+			System.out.println("I made the new node info in initial ping");
 			this.nodeInfoMap.put(pingOriginator, newNodeInfo);
 		} else if (nodeInfoKeyAL.contains(pingOriginator)) {
 			// System.out.println("I already had this in here");
 			NodeInfo currentNodeInfo = nodeInfoMap.get(pingOriginator);
 			currentNodeInfo.setLastPingTime(new Time(System.currentTimeMillis()));
 			currentNodeInfo.setMyLocation(msg.getLocation());
+			currentNodeInfo.setBlockchain(msg.getBlockchain());
 		}
 		updateRouteTable();
-		sendToTempNodes(msg);
+		// sendToTempNodes(msg);
 	}
 
 	public void removeOutdatedPings() {
@@ -540,6 +494,7 @@ public class NetworkNode implements Node {
 
 	public void createPingToBroadcast() {
 		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey);
+		newPing.setBlockchain(getBlockchain());
 		newPing.setLocation(new Location().createRandomLocation());
 		newPing.setTime(new Time(System.currentTimeMillis()));
 		distributeMessage(newPing);
@@ -624,7 +579,6 @@ public class NetworkNode implements Node {
 	}
 
 	public void sendMessage(ResourceRequest newRequest) throws InvalidKeyException, SignatureException {
-		// TODO Auto-generated method stub
 		byteArray = newRequest.toString().getBytes(); // convert
 		// message
 		// to series

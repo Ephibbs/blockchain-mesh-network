@@ -8,7 +8,7 @@ public class SignedObject extends Message{
 		super(author);
 		this.byteArray = bytearray;
 		this.sig = sig;
-		this.Author = author; 
+		this.Author = author;
 	}
 
 	/**
