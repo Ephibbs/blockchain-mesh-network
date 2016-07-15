@@ -214,6 +214,8 @@ public class ClientGUI extends Program {
 				t = new Thread(new GUIRefresher(), "refresher");
 				t.start();
 			}
+		} else if (!nodeCreated) { // don't go below unless node is created
+			System.out.println("Must create node first!");
 		} else if (e.getActionCommand().equals("Request Resources")) {
 			try {
 				generateResourceRequest();
