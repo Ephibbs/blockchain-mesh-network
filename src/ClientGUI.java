@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.*;
+import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -33,7 +34,7 @@ public class ClientGUI extends Program {
 	public JTextField nodeName;
 	public JTextField resourceAmount;
 	public JTextField resourceType;
-	public JTextField resourceCategory;
+	//public JTextField resourceCategory;
 	public JTextField acceptNumber;
 	public JTextField bidNumber;
 	public JTextField amount;
@@ -104,7 +105,7 @@ public class ClientGUI extends Program {
 	private void addListeners() {
 		this.resourceType.addActionListener(this);
 		this.resourceAmount.addActionListener(this);
-		this.resourceCategory.addActionListener(this);
+		//this.resourceCategory.addActionListener(this);
 		this.bidNumber.addActionListener(this);
 		// this.amount.addActionListener(this);
 		this.eta.addActionListener(this);
@@ -131,8 +132,8 @@ public class ClientGUI extends Program {
 		this.resourceAmount = new JTextField(TEXT_FIELD_SIZE);
 		add(this.resourceAmount, WEST);
 		add(new JLabel("Enter the Category"), WEST);
-		this.resourceCategory = new JTextField(TEXT_FIELD_SIZE);
-		add(this.resourceCategory, WEST);
+		//this.resourceCategory = new JTextField(TEXT_FIELD_SIZE);
+		//add(this.resourceCategory, WEST);
 		add(new JButton("Request Resources"), WEST);
 
 		
@@ -232,13 +233,18 @@ public class ClientGUI extends Program {
 			System.err.println("Must create node first!");
 		} else if (e.getActionCommand().equals("Request Resources")) {
 
-			if (resourceType.getText().isEmpty() || resourceAmount.getText().isEmpty() || resourceCategory.getText().isEmpty()) {
+			if (resourceType.getText().isEmpty() || resourceAmount.getText().isEmpty()) {
 				System.err.println("Aborting request: one or more fields are empty");
 			} else if (!resourceAmount.getText().matches("\\d+")) { // check if amount is an integer
 				System.err.println("Error: Supply amount is not a valid integer");
 			} else {
 				try {
-					generateResourceRequest();
+					try {
+						generateResourceRequest();
+					} catch (IOException | ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				} catch (InvalidKeyException | SignatureException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -247,9 +253,19 @@ public class ClientGUI extends Program {
 				}
 			}
 		} else if (e.getActionCommand().equals("Generate Bid")) {
-			generateBid();
+			try {
+				generateBid();
+			} catch (InvalidKeyException | SignatureException | ClassNotFoundException | NoSuchAlgorithmException
+					| NoSuchProviderException | IOException e1) {
+				e1.printStackTrace();
+			}
 		} else if (e.getActionCommand().equals("Accept Bid")) {
-			acceptBid();
+			try {
+				acceptBid();
+			} catch (InvalidKeyException | SignatureException | ClassNotFoundException | NoSuchAlgorithmException
+					| NoSuchProviderException | IOException e1) {
+				e1.printStackTrace();
+			}
 		} else if (e.getActionCommand().equals("Check Accepted")) {
 			checkAccepts();
 		} else if (e.getActionCommand().equals("Check Bids")) {
@@ -257,11 +273,26 @@ public class ClientGUI extends Program {
 		} else if (e.getActionCommand().equals("Check Requests")) {
 			checkRequests();
 		} else if (e.getActionCommand().equals("Send Resource")) {
-			sendResource();
+			try {
+				sendResource();
+			} catch (InvalidKeyException | SignatureException | ClassNotFoundException | NoSuchAlgorithmException
+					| NoSuchProviderException | IOException e1) {
+				e1.printStackTrace();
+			}
 		} else if (e.getActionCommand().equals("Receive Resource")) {
-			receiveResource();
+			try {
+				receiveResource();
+			} catch (InvalidKeyException | SignatureException | ClassNotFoundException | NoSuchAlgorithmException
+					| NoSuchProviderException | IOException e1) {
+				e1.printStackTrace();
+			}
 		} else if (e.getActionCommand().equals("Check Resources")) {
-			receiveResource();
+			try {
+				receiveResource();
+			} catch (InvalidKeyException | SignatureException | ClassNotFoundException | NoSuchAlgorithmException
+					| NoSuchProviderException | IOException e1) {
+				e1.printStackTrace();
+			}
 		} else if (e.getActionCommand().equals("Total Messages")) {
 			printTotalMessages();
 		} else if (e.getActionCommand().equals("View Blocks")) {
@@ -331,7 +362,7 @@ public class ClientGUI extends Program {
 	}
 
 	// Message Generation
-	private void generateResourceRequest() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException {
+	private void generateResourceRequest() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException, IOException, ClassNotFoundException {
 		ResourceRequest newRequest = new ResourceRequest(Integer.parseInt(this.resourceAmount.getText()),
 				this.resourceType.getText(), myNode.getNodeID());
 		myNode.sendMessage(newRequest);
@@ -339,7 +370,7 @@ public class ClientGUI extends Program {
 		checkRequests();
 	}
 
-	private void generateBid() {
+	private void generateBid() throws InvalidKeyException, SignatureException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
 		String requestID = this.acceptNumber.getText();
 		int eta = Integer.parseInt(this.eta.getText());
 		// int amount = Integer.parseInt(this.amount.getText());
@@ -347,25 +378,27 @@ public class ClientGUI extends Program {
 		if(myNode.msgMap.containsKey(requestID)
 				&& myNode.msgMap.get(requestID).messageType.equals("ResourceRequest")) {
 			ResourceRequestBid newBid = new ResourceRequestBid(requestID, eta, amount, myNode.getNodeID());
-			myNode.addMessage(newBid);
+			//myNode.addMessage(newBid);
+			myNode.sendMessage(newBid);
 			checkBids();
 		} else {
 			System.err.println("no request with that id");
 		}
 	}
 
-	private void acceptBid() {
+	private void acceptBid() throws InvalidKeyException, SignatureException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
 		String bidID = this.bidNumber.getText();
 		if(myNode.msgMap.containsKey(bidID) && myNode.msgMap.get(bidID).messageType.equals("ResourceRequestBid")) {
 			ResourceAgreement ra = new ResourceAgreement(bidID, myNode.getNodeID());
-			myNode.addMessage(ra);
+			//myNode.addMessage(ra);
+			myNode.sendMessage(ra);
 			checkAccepts();
 		} else {
 			System.err.println("no bid with that id");
 		}
 	}
 
-	private void sendResource() {
+	private void sendResource() throws InvalidKeyException, SignatureException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
 		String MessageID = this.sentResource.getText();
 		if(myNode.msgMap.containsKey(MessageID) && myNode.msgMap.get(MessageID).messageType.equals("ResourceAgreement")) {
 			ResourceAgreement agree = (ResourceAgreement) myNode.msgMap.get(MessageID);
@@ -373,18 +406,20 @@ public class ClientGUI extends Program {
 			ResourceRequest req = (ResourceRequest) myNode.msgMap.get(bid.requestID);
 			ResourceSent rs = new ResourceSent(MessageID, myNode.getNodeID(), req.resourceType, req.amount);
 			System.out.println(rs.amount);
-			myNode.addMessage(rs);
+			//myNode.addMessage(rs);
+			myNode.sendMessage(rs);
 		} else {
 			System.err.println("no resource agreement with that id");
 		}
 	}
 
-	private void receiveResource() {
+	private void receiveResource() throws InvalidKeyException, SignatureException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
 		String MessageID = this.receiveResource.getText();
 		if(myNode.msgMap.containsKey(MessageID) && myNode.msgMap.get(MessageID).messageType.equals("ResourceSent")) {
 			ResourceSent rs = (ResourceSent) myNode.msgMap.get(MessageID);
 			ResourceReceived rr = new ResourceReceived(MessageID, myNode.getNodeID(), rs.getResourceType(), rs.getAmount());
-			myNode.addMessage(rr);
+			//myNode.addMessage(rr);
+			myNode.sendMessage(rr);
 		} else {
 			System.err.println("no resource sent with that id");
 		}
@@ -629,7 +664,7 @@ public class ClientGUI extends Program {
 	}
 
 	private void sendMessage(String message, String sender, String receiver)
-			throws NoSuchAlgorithmException, NoSuchProviderException {
+			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException, ClassNotFoundException, IOException {
 		NetworkNode senderNode = myNode;
 		NetworkNode receiverNode = null;
 		Message currentMessage = null;
@@ -639,7 +674,8 @@ public class ClientGUI extends Program {
 				receiverNode = networkNodes.get(i);
 				// currentMessage = new TextMessage(message,
 				// receiverNode.getNodeID());
-				myNode.addMessage(currentMessage);
+				//myNode.addMessage(currentMessage);
+				myNode.sendMessage(currentMessage);
 			}
 		}
 	}

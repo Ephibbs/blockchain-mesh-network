@@ -69,7 +69,4 @@ public class InitialPing extends Message {
 	public ArrayList<Resource> getCurrentResources() {
 		return currentResources;
 	}
-	
-	
-
 }
