@@ -276,6 +276,14 @@ public class NetworkNode implements Node {
 		int resourceAmt = msg.getAmount();
 		updateResourceInfo(resourceType, 1 * resourceAmt, currentInfo);
 	}
+	
+	private void updateNodeInfo(ResourceSent msg) {
+		String NodeID = msg.getAuthor();
+		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
+		String resourceType = msg.getResourceType();
+		int resourceAmt = msg.getAmount();
+		updateResourceInfo(resourceType, -1 * resourceAmt, currentInfo);
+	}
 
 	private void updateResourceInfo(String resourceType, int resourceAmt, NodeInfo currentInfo) {
 		System.out.println("I got here");
@@ -289,14 +297,6 @@ public class NetworkNode implements Node {
 				System.out.println("I was able to change a resource value by: " + resourceAmt);
 			}
 		}
-	}
-
-	private void updateNodeInfo(ResourceSent msg) {
-		String NodeID = msg.getAuthor();
-		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
-		String resourceType = msg.getType();
-		int resourceAmt = msg.getAmount();
-		updateResourceInfo(resourceType, -1 * resourceAmt, currentInfo);
 	}
 
 	private void sendDirectMessage(Message msg) {
@@ -571,11 +571,11 @@ public class NetworkNode implements Node {
 	}
 
 	public void createInitialPingToBroadcast() {
-		InitialPing newPing = new InitialPing(this.getNodeID(), this.getNodeID(), this.pubKey,
+		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey,
 				this.getNodeInfoList().get(this.nodeID).getResourceList());
 		newPing.setLocation(new Location().createRandomLocation());
 		newPing.setTime(new Time(System.currentTimeMillis()));
-		distributeMessage(newPing);
+		addMessage(newPing);
 	}
 
 	public void sendMessage(ResourceRequest newRequest) throws InvalidKeyException, SignatureException {

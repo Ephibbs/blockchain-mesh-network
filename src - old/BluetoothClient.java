@@ -7,15 +7,18 @@ import java.util.*;
 /*
  * This class connects with node servers around it and sends text to them
  */
-public class BluetoothClient {
+public class BluetoothClient implements Runnable {
 
     private String SERVICE_UUID_STRING = "5F6C6A6E1CFA49B49C831E0D1C9B9DC9";
     private ArrayList<UUID> SERVICE_UUIDS = new ArrayList<UUID>();
     private UUID SERVICE_UUID = new UUID(SERVICE_UUID_STRING, false);
     private int maxNumAttempts;
+    private ArrayList<String> delQ;
 
     private LocalDevice localDevice;
     private DiscoveryAgent discoveryAgent;
+    private ArrayList<String> outQ = new ArrayList<String>();
+    private Thread t;
     
     BluetoothClient() {
        	/*
@@ -23,27 +26,63 @@ public class BluetoothClient {
     	 */
     	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC1", false)); //Colby
     	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC2", false)); //Natalie
-    	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC3", false)); //Andrew
+    	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC3", false)); //Andrew
     	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC4", false)); //Dylan
-    	SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC5", false)); //Evan
+    	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC5", false)); //Evan
     	//SERVICE_UUIDS.add(new UUID("5F6C6A6E1CFA49B49C831E0D1C9B9DC6", false)); //Will
     	/*
     	 * END
     	 */
     	maxNumAttempts = 3;
     }
-
-    public void init() throws BluetoothStateException {
-        localDevice = LocalDevice.getLocalDevice();
-        discoveryAgent = localDevice.getDiscoveryAgent();
-    }
     
-    public void broadcast(String s) throws IOException {
+    public void addToOutQ(String s) throws IOException {
+    	outQ.add(s);
+    }
+    public void broadcast(String s) {
     	for(UUID uuid : SERVICE_UUIDS) {
-    		send(uuid, s);
+    		try {
+				send(uuid, s);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
     }
-    
+    public void start() {
+    	try {
+			localDevice = LocalDevice.getLocalDevice();
+		} catch (BluetoothStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        discoveryAgent = localDevice.getDiscoveryAgent();
+        
+        t = new Thread(this, "bluetooth client");
+		t.start();
+    }
+    public void run() {
+    	System.out.println("running client");
+    	while(true) {
+    		System.out.println(outQ);
+    		delQ = new ArrayList<String>();
+    		if(!outQ.isEmpty()) {
+				for(String s : outQ) {
+					broadcast(s);
+					delQ.add(s);
+				}
+				for(String s : delQ) {
+					outQ.remove(s);
+				}
+    		}
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    }
     public void send(UUID uuid, String s) throws IOException {
     	for(int numAttempts = 0; numAttempts < maxNumAttempts; numAttempts++) {
     		System.out.println("attempt");

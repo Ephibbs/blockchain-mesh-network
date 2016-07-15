@@ -1,4 +1,3 @@
-
 public class BlockDelivery extends Message {
 	public Block block;
 	BlockDelivery(Block block, String auth, String rec) {
