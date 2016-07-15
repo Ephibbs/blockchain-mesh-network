@@ -200,7 +200,6 @@ public class NetworkNode implements Node {
 			}
 			System.out.println("There was a verified message");
 		}
-		//System.out.println("I skipped stuff");
 		
 		ByteArrayInputStream in = new ByteArrayInputStream(this.byteArray);
 		ObjectInputStream is = new ObjectInputStream(in);
@@ -596,16 +595,16 @@ public class NetworkNode implements Node {
 	}
 
 	public void createInitialPingToBroadcast() {
-<<<<<<< HEAD
 		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey,
-=======
-		System.out.println("my Pub Key: " + this.pubKey);
-		InitialPing newPing = new InitialPing(this.getNodeID(), this.getNodeID(), this.pubKey,
->>>>>>> bfefabc99f54757911ee24f017e16e4eb7d416a0
 				this.getNodeInfoList().get(this.nodeID).getResourceList());
 		newPing.setLocation(new Location().createRandomLocation());
 		newPing.setTime(new Time(System.currentTimeMillis()));
-		addMessage(newPing);
+		try {
+			addMessage(newPing);
+		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
+				| ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void sendMessage(Message newMess)
