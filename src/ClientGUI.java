@@ -352,7 +352,8 @@ public class ClientGUI extends Program {
 		if(myNode.msgMap.containsKey(requestID)
 				&& myNode.msgMap.get(requestID).messageType.equals("ResourceRequest")) {
 			ResourceRequestBid newBid = new ResourceRequestBid(requestID, eta, myNode.getNodeID());
-			myNode.addMessage(newBid);
+			myNode.sendMessage(newBid);
+			//myNode.addMessage(newBid);
 			checkBids();
 		} else {
 			System.err.println("no request with that id");
