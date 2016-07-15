@@ -54,7 +54,7 @@ public class ClientGUI extends Program {
 	class GUIRefresher implements Runnable {
 		public void run() {
 			drawNodes();
-			System.out.println("Current Tab: "+openTabID);
+//			System.out.println("Current Tab: "+openTabID);
 			switch(openTabID) {
 				case 0:
 					printTotalMessages();
@@ -229,11 +229,17 @@ public class ClientGUI extends Program {
 		} else if (!nodeCreated) { // don't go below unless node is created
 			System.err.println("Must create node first!");
 		} else if (e.getActionCommand().equals("Request Resources")) {
-			try {
-				generateResourceRequest();
-			} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
-				e1.printStackTrace();
+			if (resourceType.getText().isEmpty() || resourceAmount.getText().isEmpty() || resourceCategory.getText().isEmpty()) {
+				System.err.println("Aborting request: one or more fields are empty");
+			} else if (!resourceAmount.getText().matches("\\d+")) { // check if amount is an integer
+				System.err.println("Error: Supply amount is not a valid integer");
+			} else {
+				try {
+					generateResourceRequest();
+				} catch (NoSuchAlgorithmException | NoSuchProviderException e1) {
+					e1.printStackTrace();
 				}
+			}
 		} else if (e.getActionCommand().equals("Generate Bid")) {
 			generateBid();
 		} else if (e.getActionCommand().equals("Accept Bid")) {
@@ -602,7 +608,7 @@ public class ClientGUI extends Program {
 	}
 
 	private void drawNodes() {
-		System.out.println("Nodes drawn");
+//		System.out.println("Nodes drawn");
 		g.setColor(Color.BLACK);
 		this.myNode.drawNodes(this.g, MAXSIZE, WIDTH, HEIGHT);
 		// this.myNode.drawTemps(this.g, MAXSIZE, WIDTH, HEIGHT);
