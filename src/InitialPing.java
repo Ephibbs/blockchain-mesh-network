@@ -3,6 +3,8 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+//No longer used
+//transferred currentResources to Ping
 public class InitialPing extends Message {
 	
 	public int count = 0;

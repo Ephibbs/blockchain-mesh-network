@@ -253,11 +253,18 @@ public class ClientGUI extends Program {
 				}
 			}
 		} else if (e.getActionCommand().equals("Generate Bid")) {
-			try {
-				generateBid();
-			} catch (InvalidKeyException | SignatureException | ClassNotFoundException | NoSuchAlgorithmException
-					| NoSuchProviderException | IOException e1) {
-				e1.printStackTrace();
+			if (acceptNumber.getText().isEmpty() || eta.getText().isEmpty()) {
+				System.err.println("Cannot generate bid: one or more fields are empty");
+			} else if (!eta.getText().matches("\\d+")) { // eta has to be an integer
+				System.err.println("Error: ETA is not a valid integer");
+			} else {
+				try {
+					generateBid();
+				} catch (InvalidKeyException | SignatureException | ClassNotFoundException | NoSuchAlgorithmException
+						| NoSuchProviderException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		} else if (e.getActionCommand().equals("Accept Bid")) {
 			try {
@@ -338,25 +345,6 @@ public class ClientGUI extends Program {
 				new NodeInfo(this.myNode.getNodeID(), myNode.pubKey, myNode.getLocation(), resources, null));
 	}
 
-	private void viewNodesResources(String nodeName) {
-		generateNodesResourcesBoard();
-		for (int i = 0; i < this.networkNodes.size(); i++) {
-			if (this.networkNodes.get(i).getNodeID().equals(nodeName)) {
-				HashMap<String, Integer> nodeResources = this.networkNodes.get(i).getResources();
-				Set<String> nodesR = nodeResources.keySet();
-				int o = 0;
-				for (String key : nodesR) {
-					String resourceName = key;
-					String resourceAmount = "" + nodeResources.get(key);
-					g.drawString(resourceName, 5, 75 + o * 25);
-					g.drawString(resourceAmount, 10 + 0 / 5, 75 + o * 25);
-					g.drawLine(0, 78 + o * 25, MAXSIZE, 78 + o * 25);
-					o++;
-				}
-			}
-		}
-	}
-
 	public void setMyNode(NetworkNode newNode) {
 		this.myNode = newNode;
 	}
@@ -373,8 +361,7 @@ public class ClientGUI extends Program {
 	private void generateBid() throws InvalidKeyException, SignatureException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
 		String requestID = this.acceptNumber.getText();
 		int eta = Integer.parseInt(this.eta.getText());
-		// int amount = Integer.parseInt(this.amount.getText());
-		int amount = 100;
+		int amount = Integer.parseInt(this.amount.getText());
 		if(myNode.msgMap.containsKey(requestID)
 				&& myNode.msgMap.get(requestID).messageType.equals("ResourceRequest")) {
 			ResourceRequestBid newBid = new ResourceRequestBid(requestID, eta, amount, myNode.getNodeID());
@@ -461,6 +448,25 @@ public class ClientGUI extends Program {
 			g.drawString(originator, 5 + 3 * MAXSIZE / 4, 40 + i * 20);
 		}
 	}
+	
+	private void viewNodesResources(String nodeName) {
+		generateNodesResourcesBoard();
+		for (int i = 0; i < this.networkNodes.size(); i++) {
+			if (this.networkNodes.get(i).getNodeID().equals(nodeName)) {
+				HashMap<String, Integer> nodeResources = this.networkNodes.get(i).getResources();
+				Set<String> nodesR = nodeResources.keySet();
+				int o = 0;
+				for (String key : nodesR) {
+					String resourceName = key;
+					String resourceAmount = "" + nodeResources.get(key);
+					g.drawString(resourceName, 5, 75 + o * 25);
+					g.drawString(resourceAmount, 10 + 0 / 5, 75 + o * 25);
+					g.drawLine(0, 78 + o * 25, MAXSIZE, 78 + o * 25);
+					o++;
+				}
+			}
+		}
+	}
 
 	private void checkBids() {
 		openTabID = 2;
@@ -505,7 +511,7 @@ public class ClientGUI extends Program {
 
 	private void generateBlockView() {
 		openTabID = 4;
-
+		
 		generateBlockBoard();
 		g.setColor(Color.WHITE);
 		ArrayList<Block> blocks = new ArrayList<Block>(myNode.getBlockchain());

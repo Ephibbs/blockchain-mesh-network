@@ -168,4 +168,12 @@ public class Blockchain implements Runnable, Serializable {
     	}
     	return blocks;
     }
+    public ArrayList<String> getBlockchainHashes() {
+    	ArrayList<Block> blocks = getBlockchain();
+    	ArrayList<String> blockHashes = new ArrayList<String>();
+    	for(Block b : blocks) {
+    		blockHashes.add(b.getMyHash());
+    	}
+    	return blockHashes;
+    }
 }

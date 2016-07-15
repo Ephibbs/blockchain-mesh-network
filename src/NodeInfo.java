@@ -13,6 +13,7 @@ public class NodeInfo {
     private Location myLocation = null;
     private ArrayList<Resource> resourceList = new ArrayList<Resource>();
     private Time lastPingTime = null;
+    private ArrayList<Block> blockchainArr = new ArrayList<Block>();
 
     // Constructor
     public NodeInfo(String nodeID, PublicKey pubKey, Location myLocation, ArrayList<Resource> resourceList, Time lastPingTime) {
@@ -83,5 +84,13 @@ public class NodeInfo {
 	 */
 	public PublicKey getPubKey() {
 		return pubKey;
+	}
+	
+	public ArrayList<Block> getBlockchain() {
+		return blockchainArr;
+	}
+	
+	public void setBlockchain(ArrayList<Block> blocks) {
+		blockchainArr = new ArrayList<Block>(blocks);
 	}
 }
