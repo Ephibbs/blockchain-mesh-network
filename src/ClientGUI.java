@@ -53,7 +53,8 @@ public class ClientGUI extends Program {
 	
 	class GUIRefresher implements Runnable {
 		public void run() {
-			System.out.println(""+openTabID);
+			drawNodes();
+			System.out.println("Current Tab: "+openTabID);
 			switch(openTabID) {
 				case 0:
 					printTotalMessages();
@@ -75,7 +76,7 @@ public class ClientGUI extends Program {
 					break;
 			}
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -601,6 +602,7 @@ public class ClientGUI extends Program {
 	}
 
 	private void drawNodes() {
+		System.out.println("Nodes drawn");
 		g.setColor(Color.BLACK);
 		this.myNode.drawNodes(this.g, MAXSIZE, WIDTH, HEIGHT);
 		// this.myNode.drawTemps(this.g, MAXSIZE, WIDTH, HEIGHT);
