@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Utils {
 	static Random rand = new Random();
-	static int LENGTH = 10;
+	static int LENGTH = 5;
 	public static boolean checkHash(Block b, int difficulty) {
 		int diff = b.getDifficulty();
     	if (diff < 1) {
@@ -60,7 +60,7 @@ public class Utils {
 		charPossibilities.add("i");
 		charPossibilities.add("j");
 		charPossibilities.add("k");
-		charPossibilities.add("l");
+		//charPossibilities.add("l");
 		charPossibilities.add("m");
 		charPossibilities.add("n");
 		//charPossibilities.add("o");
@@ -76,7 +76,7 @@ public class Utils {
 		charPossibilities.add("y");
 		charPossibilities.add("z");
 		//charPossibilities.add("0");
-		charPossibilities.add("1");
+		//charPossibilities.add("1");
 		charPossibilities.add("2");
 		charPossibilities.add("3");
 		charPossibilities.add("4");

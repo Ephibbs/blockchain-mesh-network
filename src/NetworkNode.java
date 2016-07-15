@@ -1,6 +1,11 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -11,6 +16,7 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.SignedObject;
 import java.sql.Time;
 import java.util.*;
 
@@ -75,7 +81,7 @@ public class NetworkNode implements Node {
 		blockChain = new Blockchain(this);
 		this.wm = new WifiManager(this);
 		// this.myLocation = this.myLocation.createRandomLocation();
-		
+
 		this.nodeID = id;
 		this.keyGen = KeyPairGenerator.getInstance("DSA", "SUN"); // create key
 		// generator
@@ -92,12 +98,8 @@ public class NetworkNode implements Node {
 		this.pair = keyGen.generateKeyPair();
 		this.privKey = pair.getPrivate();
 		this.pubKey = pair.getPublic();
+		this.publicKeySet.add(this.pubKey);
 		this.blockChain = new Blockchain(this);
-	}
-
-	private Location generateRandomLocation() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public void distributeMessage(Message text) {
@@ -180,11 +182,33 @@ public class NetworkNode implements Node {
 	}
 
 	@Override
-	public void addMessage(Message msg) {
+	public void addMessage(Message mess) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, IOException, ClassNotFoundException {
 		// TODO: later, implement signature checking mechanism for messages
-		// if message is unique, add and
-		// distribute
-		// else do nothing
+		
+		//System.out.println("i got here");
+
+		if(mess.getMessageType().equals("MySignedObject")) {
+			//System.out.println("There was a signed object");
+			this.byteArray = ((MySignedObject) mess).getByteArray();
+			//System.out.println("size of this byte array: " + this.byteArray.length);
+			MySignedObject m = (MySignedObject) mess;
+			if(verifyMessage((MySignedObject) mess)==false){
+				this.byteArray = ((MySignedObject) mess).getByteArray();
+				//System.out.println("size of this byte array: " + this.byteArray.length);
+				//System.out.println("no verified message");
+				return;
+			}
+			System.out.println("There was a verified message");
+		}
+		//System.out.println("I skipped stuff");
+		
+		ByteArrayInputStream in = new ByteArrayInputStream(this.byteArray);
+		ObjectInputStream is = new ObjectInputStream(in);
+		//ResourceRequest newObject = (ResourceRequest) is.readObject();
+		Message msg = (Message) is.readObject();
+		
+//		System.out.println("Message type: " + msg.getMessageType());
+
 		if (!this.totalMessages.contains(msg)) {
 			System.out.println(msg.getType());
 			System.out.println(msg.getID());
@@ -192,6 +216,7 @@ public class NetworkNode implements Node {
 		}
 		if (msg != null && !this.msgMap.containsKey(msg.getID())) {
 			switch (msg.getMessageType()) {
+			//System.out.println("Message type: " + msg.getMessageType());
 			case "ResourceRequest":
 				System.out.println("received resource request");
 				openRequests.add(msg);
@@ -212,11 +237,10 @@ public class NetworkNode implements Node {
 				break;
 			case "ResourceSent":
 				System.out.println("received resource sent");
+				//System.out.println("I should be sending  resource amount: " + ((ResourceSent) msg).getAmount());
 				myResourceSents.add(msg);
 				updateNodeInfo((ResourceSent) msg);
 				blockChain.add(msg);
-				// updateNodeInfo(String nodeName, String type of Resource,
-				// int amount of resource but negative to subtract it)
 				distributeMessage(msg);
 				break;
 			case "ResourceReceived":
@@ -224,8 +248,6 @@ public class NetworkNode implements Node {
 				myResourceReceives.add(msg);
 				updateNodeInfo((ResourceReceived) msg);
 				blockChain.add(msg);
-				// updateNodeInfo(String nodeName, String type of Resource,
-				// int amount of resource but postive to subtract it)
 				distributeMessage(msg);
 				break;
 			case "Ping":
@@ -269,7 +291,7 @@ public class NetworkNode implements Node {
 	}
 
 	private void updateNodeInfo(ResourceReceived msg) {
-		System.out.println("I should be adding more resource received");
+		//System.out.println("I should be adding more resource received");
 		String NodeID = msg.getAuthor();
 		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
 		String resourceType = msg.getResourceType();
@@ -286,7 +308,7 @@ public class NetworkNode implements Node {
 	}
 
 	private void updateResourceInfo(String resourceType, int resourceAmt, NodeInfo currentInfo) {
-		System.out.println("I got here");
+		//System.out.println("I got here");
 		for (int i = 0; i < currentInfo.getResourceList().size(); i++) {
 			Resource cResource = currentInfo.getResourceList().get(i);
 			// System.out.println("resourceType: " + resourceType);
@@ -350,6 +372,8 @@ public class NetworkNode implements Node {
 			System.out.println("I dont have a node so I am making a new one in initial ping");
 			Location newLocation = msg.getLocation();
 			Time newTime = msg.getTimeSent();
+			System.out.println("public key: " + msg.getPublicKey());
+			this.publicKeySet.add(msg.getPublicKey());
 			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(),
 					msg.getCurrentResources(), newTime);
 			newNodeInfo.setBlockchain(msg.getBlockchain());
@@ -476,11 +500,12 @@ public class NetworkNode implements Node {
 	}
 
 	@Override
-	public void addBlock(Block b) {
+	public void addBlock(Block b) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, ClassNotFoundException, IOException {
 		// add any messages that are in b but have not been received to their
 		// respective lists
 		for (Message m : b.getMsgs()) {
-			addMessage(m);
+			//addMessage(m);
+			this.sendMessage(m);
 		}
 		blockChain.add(b);
 	}
@@ -501,10 +526,10 @@ public class NetworkNode implements Node {
 	}
 
 	public void sendToTempNodes(Ping newPing) {
-		for (int i = 0; i < this.tempNodes.size(); i++) {
-			newPing.setRelayer(this.getNodeID());
-			this.tempNodes.get(i).addMessage(newPing);
-		}
+//		for (int i = 0; i < this.tempNodes.size(); i++) {
+//			newPing.setRelayer(this.getNodeID());
+//			this.tempNodes.get(i).addMessage(newPing);
+//		}
 	}
 
 	public Location getLocation() {
@@ -536,14 +561,14 @@ public class NetworkNode implements Node {
 		Set<String> nodeInfoKeys = nodeInfoMap.keySet();
 		int x = 0;
 		int y = 0;
-		//System.out.println("I drew something");
+		// System.out.println("I drew something");
 		for (String key : nodeInfoKeys) {
 			x = nodeInfoMap.get(key).getMyLocation().getX();
 			y = nodeInfoMap.get(key).getMyLocation().getY();
 			if (!this.nodeID.equals(key)) {
 				g.fillOval(MAXSIZE + x, y, width, height);
 			}
-			//System.out.println("I should have drawn other nodes");
+			// System.out.println("I should have drawn other nodes");
 		}
 
 	}
@@ -571,29 +596,57 @@ public class NetworkNode implements Node {
 	}
 
 	public void createInitialPingToBroadcast() {
+<<<<<<< HEAD
 		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey,
+=======
+		System.out.println("my Pub Key: " + this.pubKey);
+		InitialPing newPing = new InitialPing(this.getNodeID(), this.getNodeID(), this.pubKey,
+>>>>>>> bfefabc99f54757911ee24f017e16e4eb7d416a0
 				this.getNodeInfoList().get(this.nodeID).getResourceList());
 		newPing.setLocation(new Location().createRandomLocation());
 		newPing.setTime(new Time(System.currentTimeMillis()));
 		addMessage(newPing);
 	}
 
-	public void sendMessage(ResourceRequest newRequest) throws InvalidKeyException, SignatureException {
-		byteArray = newRequest.toString().getBytes(); // convert
-		// message
-		// to series
-		// of bytes
-		byte[] realSig = new byte[1024];
+	public void sendMessage(Message newMess)
+			throws InvalidKeyException, SignatureException, IOException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchProviderException {
 
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ObjectOutputStream os = new ObjectOutputStream(out);
+		os.writeObject(newMess);
+		os.close();
+
+		byteArray = out.toByteArray();
+		System.out.println("size of that byte array: " + this.byteArray.length);
+
+		byte[] realSig = new byte[1024];
 		dsa.initSign(this.privKey); // sign message with private key
 		dsa.update(byteArray);
 		realSig = dsa.sign();
-		
-		Message newMessage = new SignedObject(this.nodeID, byteArray, realSig);
-		
-		
 
-		//this.distributeSignedMessage(realSig, byteArray, text);
-		this.addMessage(newRequest);
+		Message newMessage = new MySignedObject(this.nodeID, byteArray, realSig);
+
+		this.addMessage(newMessage);
+	}
+	
+	private boolean verifyMessage(MySignedObject msg) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException {
+		// do nothing
+		Signature sig = Signature.getInstance("SHA1withDSA", "SUN");
+		byte[] realSig = msg.getSig();
+		byte[] byteArray2 = msg.getByteArray();
+		//System.out.println(this.publicKeySet.size());
+		for (int i = 0; i < publicKeySet.size(); i++) { // find public key that
+			// can verify message
+			sig.initVerify(publicKeySet.get(i));
+			sig.update(byteArray2);
+			boolean verifies = sig.verify(realSig);
+
+			if (verifies == true) {
+				return true;
+			} else {
+			}
+		}
+		return false;
 	}
 }

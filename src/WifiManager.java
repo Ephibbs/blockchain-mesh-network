@@ -4,8 +4,10 @@ import javax.bluetooth.UUID;
 import javax.microedition.io.*;
 
 import java.io.*;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 import java.util.*;
 
 
@@ -59,7 +61,7 @@ public class WifiManager {
         return Base64.getEncoder().encodeToString(baos.toByteArray());
     }
     
-    public void addReceived(String s) throws ClassNotFoundException, IOException {
+    public void addReceived(String s) throws ClassNotFoundException, IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException {
     	if(verbose) System.out.print("Received string: ");
     	if(verbose) System.out.println(s);
     	Sendable o = (Sendable) fromString(s);
