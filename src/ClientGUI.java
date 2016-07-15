@@ -227,13 +227,10 @@ public class ClientGUI extends Program {
 		} else if (e.getActionCommand().equals("Accept Bid")) {
 			acceptBid();
 		} else if (e.getActionCommand().equals("Check Accepted")) {
-			openTabID = 3;
 			checkAccepts();
 		} else if (e.getActionCommand().equals("Check Bids")) {
-			openTabID = 2;
 			checkBids();
 		} else if (e.getActionCommand().equals("Check Requests")) {
-			openTabID = 1;
 			checkRequests();
 		} else if (e.getActionCommand().equals("Send Resource")) {
 			sendResource();
@@ -242,17 +239,14 @@ public class ClientGUI extends Program {
 		} else if (e.getActionCommand().equals("Check Resources")) {
 			receiveResource();
 		} else if (e.getActionCommand().equals("Total Messages")) {
-			openTabID = 0;
 			printTotalMessages();
 		} else if (e.getActionCommand().equals("View Blocks")) {
-			openTabID = 4;
 			generateBlockView();
 		} else if (e.getActionCommand().equals("Draw Nodes")) {
 			drawNodes();
 		} else if (e.getActionCommand().equals("Create Ping")) {
 			createPing();
 		} else if (e.getActionCommand().equals("View Resources")) {
-			openTabID = 5;
 			System.out.println("failure called from here");
 			viewNodeResources();
 		} 
@@ -268,6 +262,7 @@ public class ClientGUI extends Program {
 	}
 
 	private void createPing() {
+		openTabID = 0; // all messages
 		this.myNode.createPingToBroadcast();
 	}
 
@@ -372,6 +367,7 @@ public class ClientGUI extends Program {
 
 	// GUI data drawing
 	public void printTotalMessages() {
+		openTabID = 0;
 		generateTotalMessages();
 		g.setColor(Color.WHITE);
 		if (myNode.totalMessages != null) {
@@ -389,6 +385,7 @@ public class ClientGUI extends Program {
 	}
 	
 	private void checkRequests() {
+		openTabID = 1;
 		generateMessageBoard();
 		g.setColor(Color.WHITE);
 		ArrayList<Message> availableMessages = myNode.getOpenRequests();
@@ -406,6 +403,7 @@ public class ClientGUI extends Program {
 	}
 
 	private void checkBids() {
+		openTabID = 2;
 		generateBidMessageBoard();
 		g.setColor(Color.WHITE);
 		if (myNode.getBidsToMyRequests() != null) {
@@ -424,6 +422,7 @@ public class ClientGUI extends Program {
 	}
 
 	private void checkAccepts() {
+		openTabID = 3;
 		generateAcceptedMessageBoard();
 		g.setColor(Color.WHITE);
 		if (myNode.getMyResourceAgreements() != null) {
@@ -445,6 +444,8 @@ public class ClientGUI extends Program {
 	}
 
 	private void generateBlockView() {
+		openTabID = 4;
+
 		generateBlockBoard();
 		g.setColor(Color.WHITE);
 		ArrayList<Block> blocks = new ArrayList<Block>(myNode.getBlockchain());
@@ -618,6 +619,7 @@ public class ClientGUI extends Program {
 	}
 
 	public void viewNodeResources() {
+		openTabID = 5;
 		String nodeToView = this.viewResources.getText();
 		System.out.println("here is the failure");
 		NodeInfo nodeInfo = this.myNode.getNodeInfoList().get(nodeToView);
