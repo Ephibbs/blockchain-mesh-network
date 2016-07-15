@@ -111,12 +111,16 @@ public class ClientGUI extends Program {
 
 	// Just the window, don't worry about it
 	private void generateWestFrame() {
+		
+		// Node name
 		add(new JLabel("Enter your Node Name"), WEST);
 		this.nodeName = new JTextField(TEXT_FIELD_SIZE);
 		add(this.nodeName, WEST);
 		add(new JButton("Start My Node"), WEST);
 
-		add(new JLabel("Enter resource Requester"), WEST);
+		
+		// Request resources
+		add(new JLabel("________________________"), WEST);		
 		add(new JLabel("Enter the Supply"), WEST);
 		this.resourceType = new JTextField(TEXT_FIELD_SIZE);
 		add(this.resourceType, WEST);
@@ -128,6 +132,9 @@ public class ClientGUI extends Program {
 		add(this.resourceCategory, WEST);
 		add(new JButton("Request Resources"), WEST);
 
+		
+		// Bidding
+		add(new JLabel("________________________"), WEST);		
 		add(new JLabel("Message Number"), WEST);
 		this.acceptNumber = new JTextField(TEXT_FIELD_SIZE);
 		add(this.acceptNumber, WEST);
@@ -142,7 +149,7 @@ public class ClientGUI extends Program {
 		add(new JLabel("Bid Number"), WEST);
 		this.bidNumber = new JTextField(TEXT_FIELD_SIZE);
 		add(this.bidNumber, WEST);
-
+		
 		add(new JButton("Accept Bid"), WEST);
 
 		// this.removeNode = new JTextField(TEXT_FIELD_SIZE);
@@ -151,12 +158,16 @@ public class ClientGUI extends Program {
 		//
 		// add(new JButton("Move Nodes"), WEST);
 		
+		
+		// Actions
+		add(new JLabel("________________________"), WEST);
 		add(new JLabel("Actions"), WEST);
 		add(new JButton("Draw Nodes"), WEST);
 		add(new JButton("Create Ping"), WEST);
 		
 		
 		// Messages
+		add(new JLabel("________________________"), WEST);
 		add(new JLabel("Messages"), WEST);
 		add(new JButton("Total Messages"), WEST);
 		add(new JButton("Check Requests"), WEST);
