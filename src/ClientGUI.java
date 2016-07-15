@@ -199,7 +199,7 @@ public class ClientGUI extends Program {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Start My Node")) {
 			if (nodeCreated) { // check for multiple clicks
-				System.out.println("Node already created");
+				System.err.println("Node already created");
 			} else {
 				nodeCreated = true;
 				try {
@@ -215,7 +215,7 @@ public class ClientGUI extends Program {
 				t.start();
 			}
 		} else if (!nodeCreated) { // don't go below unless node is created
-			System.out.println("Must create node first!");
+			System.err.println("Must create node first!");
 		} else if (e.getActionCommand().equals("Request Resources")) {
 			try {
 				generateResourceRequest();
