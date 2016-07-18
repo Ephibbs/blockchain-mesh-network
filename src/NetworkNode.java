@@ -441,8 +441,8 @@ public class NetworkNode implements Node {
 	public void makeBlockRequest(String hash) {
 		BlockRequest br = new BlockRequest(hash, nodeID);
 		try {
-			wm.broadcast(br);
-		} catch (IOException e) {
+			addMessage(br);
+		} catch (IOException | InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
