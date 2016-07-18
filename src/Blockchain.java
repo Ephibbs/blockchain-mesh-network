@@ -36,7 +36,7 @@ public class Blockchain implements Runnable, Serializable {
 	// Constructor
     public Blockchain(Node node) {
     	this.node = node;
-    	this.difficulty = 4;
+    	this.difficulty = 2;
     }
 
 	// Accessors

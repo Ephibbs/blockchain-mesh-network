@@ -103,6 +103,7 @@ public class NetworkNode implements Node {
 	}
 
 	public void distributeMessage(Message text) {
+		System.out.println("distributing out " + text.getMessageType());
 		try {
 			wm.broadcast(text);
 		} catch (IOException e) {
@@ -204,14 +205,13 @@ public class NetworkNode implements Node {
 			msg = (Message) is.readObject();
 		}
 		
-		if (!this.msgMap.containsKey(msg.getID())) {
+		if (msg != null && !this.msgMap.containsKey(msg.getID())) {
 			System.out.println("===\nReceived Message type: " + msg.getMessageType());
 			System.out.println(msg.getAuthor());
 			System.out.println(msg.id);
 			System.out.println("===");
-			totalMessages.add(msg);
-		}
-		if (msg != null && !this.msgMap.containsKey(msg.getID())) {
+			
+			// sort message by type
 			switch (msg.getMessageType()) {
 			//System.out.println("Message type: " + msg.getMessageType());
 			case "ResourceRequest":
@@ -257,6 +257,7 @@ public class NetworkNode implements Node {
 				receiveBlockDelivery((BlockDelivery) msg);
 				break;
 			}
+			totalMessages.add(msg);
 			msgMap.put(msg.getID(), msg);
 			this.currentMessageCount++;
 			if (this.currentMessageCount % this.TIMEING == 0) {
@@ -454,7 +455,7 @@ public class NetworkNode implements Node {
 	public void receiveBlockRequest(BlockRequest br) {
 		// if request is not from me
 		if (!br.getAuthor().equals(nodeID)) {
-			// if 
+			// if requesting latest block
 			if (br.getBlockHash().equals("latest")) {
 				Block b = blockChain.getLastBlock();
 				BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author
@@ -471,7 +472,7 @@ public class NetworkNode implements Node {
 					e.printStackTrace();
 				}
 				System.out.println("Made block delivery");
-			} else if (!blockRequestIDs.contains(br.getBlockHash() + br.getAuthor())) { // If
+			} else { // If
 																						// I
 																						// haven't
 																						// received
@@ -496,9 +497,12 @@ public class NetworkNode implements Node {
 					System.out.println("Made block delivery");
 				} else {
 					blockRequestIDs.add(br.getBlockHash() + br.getAuthor());
+					distributeMessage(br);
 					System.out.println("passed on block request");
 				}
 			}
+		} else {
+			distributeMessage(br);
 		}
 	}
 
