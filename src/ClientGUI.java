@@ -505,7 +505,11 @@ public class ClientGUI extends Program {
 			blocks = new ArrayList<Block>(myNode.getBlockchain());
 		} else {
 			NodeInfo nodeInfo = this.myNode.getNodeInfoList().get(nodeID);
-			blocks = new ArrayList<Block>(nodeInfo.getBlockchain());
+			if(nodeInfo != null) {
+				blocks = new ArrayList<Block>(nodeInfo.getBlockchain());
+			} else {
+				blocks = new ArrayList<Block>();
+			}
 		}
 		for (int i=0;i<blocks.size();i++) {
 			Block b = blocks.get(i);
