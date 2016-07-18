@@ -218,16 +218,19 @@ public class NetworkNode implements Node {
 				openRequests.add(msg);
 				blockChain.add(msg);
 				distributeMessage(msg);
+				totalMessages.add(msg);
 				break;
 			case "ResourceRequestBid":
 				bidsToMyRequests.add(msg);
 				blockChain.add(msg);
 				distributeMessage(msg);
+				totalMessages.add(msg);
 				break;
 			case "ResourceAgreement":
 				myResourceAgreements.add(msg);
 				blockChain.add(msg);
 				distributeMessage(msg);
+				totalMessages.add(msg);
 				break;
 			case "ResourceSent":
 				//System.out.println("I should be sending  resource amount: " + ((ResourceSent) msg).getAmount());
@@ -235,12 +238,14 @@ public class NetworkNode implements Node {
 				updateNodeInfo((ResourceSent) msg);
 				blockChain.add(msg);
 				distributeMessage(msg);
+				totalMessages.add(msg);
 				break;
 			case "ResourceReceived":
 				myResourceReceives.add(msg);
 				updateNodeInfo((ResourceReceived) msg);
 				blockChain.add(msg);
 				distributeMessage(msg);
+				totalMessages.add(msg);
 				break;
 			case "Ping":
 				receivePing((Ping) msg);
@@ -257,7 +262,6 @@ public class NetworkNode implements Node {
 				receiveBlockDelivery((BlockDelivery) msg);
 				break;
 			}
-			totalMessages.add(msg);
 			msgMap.put(msg.getID(), msg);
 			this.currentMessageCount++;
 			if (this.currentMessageCount % this.TIMEING == 0) {
