@@ -374,6 +374,9 @@ public class NetworkNode implements Node {
 			Time newTime = msg.getTimeSent();
 			System.out.println("public key: " + msg.getPublicKey());
 			this.publicKeySet.add(msg.getPublicKey());
+			if(msg.getCurrentResources()!=null){
+				this.createPingToBroadcast();
+			}
 			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(),
 					msg.getCurrentResources(), newTime);
 			newNodeInfo.setBlockchain(msg.getBlockchain());
