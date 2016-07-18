@@ -208,7 +208,7 @@ public class NetworkNode implements Node {
 		System.out.println(msg.getAuthor());
 		System.out.println(msg.id);
 		System.out.println("===");
-		if (!this.totalMessages.contains(msg)) {
+		if (!this.msgMap.containsKey(msg.getID())) {
 			System.out.println(msg.getType());
 			System.out.println(msg.getID());
 			totalMessages.add(msg);
@@ -461,37 +461,37 @@ public class NetworkNode implements Node {
 
 	@Override
 	public void receiveBlockRequest(BlockRequest br) {
-//		if (br.getBlockHash().equals("latest")) {
-//			Block b = blockChain.getLastBlock();
-//			BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author
-//																				// of
-//																				// request
-//																				// is
-//																				// the
-//																				// block
-//																				// recipient
-//			distributeMessage(bd);
-//		} else if (!blockRequestIDs.contains(br.getBlockHash() + br.getAuthor())) { // If
-//																					// I
-//																					// haven't
-//																					// received
-//																					// this
-//																					// request
-//			Block b = blockChain.getBlock(br.getBlockHash());
-//			if (b != null) { // if I have the block, make a block delivery
-//				BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author
-//																					// of
-//																					// request
-//																					// is
-//																					// the
-//																					// block
-//																					// recipient
-//				distributeMessage(bd);
-//			} else {
-//				blockRequestIDs.add(br.getBlockHash() + br.getAuthor());
-//				distributeMessage(br);
-//			}
-//		}
+		if (br.getBlockHash().equals("latest")) {
+			Block b = blockChain.getLastBlock();
+			BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author
+																				// of
+																				// request
+																				// is
+																				// the
+																				// block
+																				// recipient
+			distributeMessage(bd);
+		} else if (!blockRequestIDs.contains(br.getBlockHash() + br.getAuthor())) { // If
+																					// I
+																					// haven't
+																					// received
+																					// this
+																					// request
+			Block b = blockChain.getBlock(br.getBlockHash());
+			if (b != null) { // if I have the block, make a block delivery
+				BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author
+																					// of
+																					// request
+																					// is
+																					// the
+																					// block
+																					// recipient
+				distributeMessage(bd);
+			} else {
+				blockRequestIDs.add(br.getBlockHash() + br.getAuthor());
+				distributeMessage(br);
+			}
+		}
 	}
 
 	@Override
