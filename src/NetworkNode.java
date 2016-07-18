@@ -296,7 +296,7 @@ public class NetworkNode implements Node {
 		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
 		String resourceType = msg.getResourceType();
 		int resourceAmt = msg.getAmount();
-		updateResourceInfo(resourceType, 1 * resourceAmt, currentInfo);
+		updateResourceInfo(resourceType, resourceAmt, currentInfo);
 	}
 	
 	private void updateNodeInfo(ResourceSent msg) {
@@ -377,7 +377,7 @@ public class NetworkNode implements Node {
 			if(msg.getCurrentResources()!=null){
 				this.createPingToBroadcast();
 			}
-			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(), newTime);
+			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(), msg.getCurrentResources(), newTime);
 			newNodeInfo.setBlockchain(msg.getBlockchain());
 			System.out.println("I made the new node info in initial ping");
 			this.nodeInfoMap.put(pingOriginator, newNodeInfo);
@@ -473,6 +473,7 @@ public class NetworkNode implements Node {
 																				// block
 																				// recipient
 			distributeMessage(bd);
+			System.out.println("Made block delivery");
 		} else if (!blockRequestIDs.contains(br.getBlockHash() + br.getAuthor())) { // If
 																					// I
 																					// haven't
@@ -489,9 +490,11 @@ public class NetworkNode implements Node {
 																					// block
 																					// recipient
 				distributeMessage(bd);
+				System.out.println("Made block delivery");
 			} else {
 				blockRequestIDs.add(br.getBlockHash() + br.getAuthor());
 				distributeMessage(br);
+				System.out.println("passed on block request");
 			}
 		}
 	}

@@ -327,10 +327,8 @@ public class ClientGUI extends Program {
 		resources.add(new Resource(100, "laptops", null));
 		resources.add(new Resource(6, "raspberry pis", null));
 		resources.add(new Resource(14, "tons of coffee", null));
-		NodeInfo nI = new NodeInfo(this.myNode.getNodeID(), myNode.pubKey, myNode.getLocation(), null);
-		nI.setResourceList(resources);
-		this.myNode.getNodeInfoList().put(this.myNode.getNodeID(), nI);
-		
+		this.myNode.getNodeInfoList().put(this.myNode.getNodeID(),
+				new NodeInfo(this.myNode.getNodeID(), myNode.pubKey, myNode.getLocation(), resources, null));
 	}
 
 	public void setMyNode(NetworkNode newNode) {
@@ -689,12 +687,16 @@ public class ClientGUI extends Program {
 		String nodeToView = this.viewResources.getText();
 		//System.out.println("here is the failure");
 		NodeInfo nodeInfo = this.myNode.getNodeInfoList().get(nodeToView);
-		ArrayList<Resource> resources = nodeInfo.getResourceList();
-		Location nodeLoc = nodeInfo.getMyLocation();
-		int nodeX = nodeLoc.getX();
-		int nodeY = nodeLoc.getY();
-		generateNodeResourceWindow(nodeToView, nodeX, nodeY);
-		displayResources(resources);
+		if(nodeInfo != null) {
+			ArrayList<Resource> resources = nodeInfo.getResourceList();
+			Location nodeLoc = nodeInfo.getMyLocation();
+			int nodeX = nodeLoc.getX();
+			int nodeY = nodeLoc.getY();
+			generateNodeResourceWindow(nodeToView, nodeX, nodeY);
+			displayResources(resources);
+		} else {
+			System.err.println("No node with that id found.");
+		}
 	}
 
 	private void displayResources(ArrayList<Resource> resources) {

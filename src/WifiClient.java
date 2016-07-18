@@ -24,19 +24,7 @@ public class WifiClient implements Runnable {
     private boolean verbose = false;
     
     WifiClient(boolean verbose) {
-       	/*
-    	 * make sure only the line with your name at the end of it has "//" at the beginning of it
-    	 */
-    	//hostNames.add("");
-    	//hostNames.add("BAH5CG621140Y"); //Colby
-    	//hostNames.add("BAH5CG621142S"); //Natalie
-    	//hostNames.add("BAH5CG621142N"); //Andrew
-    	//hostNames.add("BAH5CG62113G8"); //Dylan
-    	//hostNames.add("BAHCND6206GP1"); //Evan
-    	//hostNames.add("BAH5CG62113Z0"); //Will
-    	/*
-    	 * END
-    	 */
+
 		ArrayList<String> names = new ArrayList<String>();
 		names.add("Colby");
 		names.add("Natalie");
@@ -77,7 +65,9 @@ public class WifiClient implements Runnable {
     public void broadcast(String s) {
     	for(String hostName : hostNames) {
     		try {
-				send(hostName, s);
+				if(send(hostName, s)) {
+					if(verbose) System.out.println("sent to " + hostName);
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -96,7 +86,6 @@ public class WifiClient implements Runnable {
 				for(int i=outQ.size()-1;i>-1;i--) {
 					s = outQ.get(i);
 					broadcast(s);
-					if(verbose) System.out.println("sent & removed");
 					outQ.remove(s);
 				}
     		}
@@ -109,7 +98,7 @@ public class WifiClient implements Runnable {
     	}
     }
     
-    public void send(String hostName, String s) throws IOException {
+    public boolean send(String hostName, String s) throws IOException {
     	if(verbose) System.out.println("start sending...");
     	for(int numAttempts = 0; numAttempts < maxNumAttempts; numAttempts++) {
     		if(verbose) System.out.println("attempt");
@@ -125,7 +114,7 @@ public class WifiClient implements Runnable {
 		                new InputStreamReader(System.in))
     		) {
     			out.println(s);
-    			break;
+    			return true;
 		    } catch (UnknownHostException e) {
 		        System.err.println("Don't know about host " + hostName);
 		        //System.exit(1);
@@ -141,6 +130,7 @@ public class WifiClient implements Runnable {
 				e.printStackTrace();
 			}
     	}
+    	return false;
     }
 }
 
