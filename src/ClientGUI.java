@@ -327,8 +327,10 @@ public class ClientGUI extends Program {
 		resources.add(new Resource(100, "laptops", null));
 		resources.add(new Resource(6, "raspberry pis", null));
 		resources.add(new Resource(14, "tons of coffee", null));
-		this.myNode.getNodeInfoList().put(this.myNode.getNodeID(),
-				new NodeInfo(this.myNode.getNodeID(), myNode.pubKey, myNode.getLocation(), resources, null));
+		NodeInfo nI = new NodeInfo(this.myNode.getNodeID(), myNode.pubKey, myNode.getLocation(), null);
+		nI.setResourceList(resources);
+		this.myNode.getNodeInfoList().put(this.myNode.getNodeID(), nI);
+		
 	}
 
 	public void setMyNode(NetworkNode newNode) {

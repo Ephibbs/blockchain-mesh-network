@@ -377,8 +377,7 @@ public class NetworkNode implements Node {
 			if(msg.getCurrentResources()!=null){
 				this.createPingToBroadcast();
 			}
-			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(),
-					msg.getCurrentResources(), newTime);
+			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(), newTime);
 			newNodeInfo.setBlockchain(msg.getBlockchain());
 			System.out.println("I made the new node info in initial ping");
 			this.nodeInfoMap.put(pingOriginator, newNodeInfo);

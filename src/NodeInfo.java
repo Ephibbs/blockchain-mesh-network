@@ -16,11 +16,10 @@ public class NodeInfo {
     private ArrayList<Block> blockchainArr = new ArrayList<Block>();
 
     // Constructor
-    public NodeInfo(String nodeID, PublicKey pubKey, Location myLocation, ArrayList<Resource> resourceList, Time lastPingTime) {
+    public NodeInfo(String nodeID, PublicKey pubKey, Location myLocation, Time lastPingTime) {
         this.nodeID = nodeID;
         this.pubKey = pubKey;
         this.myLocation = myLocation;
-        this.resourceList = resourceList;
         this.lastPingTime = lastPingTime;
     }
     /**
