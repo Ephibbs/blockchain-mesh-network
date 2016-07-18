@@ -465,12 +465,12 @@ public class ClientGUI extends Program {
 				ResourceRequestBid rrbid = (ResourceRequestBid) myNode.getBidsToMyRequests().get(i);
 				String bidID = rrbid.getID();
 				String eta = "" + rrbid.eta;
-				String resourceAmount = "" + rrbid.amount;
+				//String resourceAmount = "" + rrbid.amount;
 				String bidder = rrbid.author;
 				g.drawString(bidID, 5, 40 + i * 20);
-				g.drawString(eta, 5 + MAXSIZE / 4, 40 + i * 20);
-				g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
-				g.drawString(bidder, 5 + 3 * MAXSIZE / 4, 40 + i * 20);
+				g.drawString(eta, 5 + MAXSIZE / 3, 40 + i * 20);
+				//g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
+				g.drawString(bidder, 5 + 2 * MAXSIZE / 3, 40 + i * 20);
 			}
 		}
 	}
@@ -487,12 +487,12 @@ public class ClientGUI extends Program {
 				ResourceRequest rr = (ResourceRequest) myNode.msgMap.get(rrbid.requestID);
 				String messageNumber = rrAgree.getID();
 				String resourceRequested = rr.resourceType;
-				String resourceAmount = "" + rr.amount;
+				//String resourceAmount = "" + rr.amount;
 				String destination = rr.author;
 				g.drawString(messageNumber, 5, 40 + i * 20);
-				g.drawString(resourceRequested, 5 + MAXSIZE / 4, 40 + i * 20);
-				g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
-				g.drawString(destination, 5 + 3 * MAXSIZE / 4, 40 + i * 20);
+				g.drawString(resourceRequested, 5 + MAXSIZE / 3, 40 + i * 20);
+				//g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
+				g.drawString(destination, 5 + 2 * MAXSIZE / 3, 40 + i * 20);
 			}
 		}
 	}
@@ -554,17 +554,17 @@ public class ClientGUI extends Program {
 
 		g.setColor(Color.WHITE);
 
-		g.drawRect(0, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(2 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(3 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(0, 0, MAXSIZE / 3, MAXSIZE);
+		g.drawRect(MAXSIZE / 3, 0, MAXSIZE / 3, MAXSIZE);
+		g.drawRect(2 * MAXSIZE / 3, 0, MAXSIZE / 3, MAXSIZE);
+		//g.drawRect(3 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
 
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g.setColor(Color.WHITE);
 		g.drawString("Bid Number", 5, 20);
-		g.drawString("Time of Arrival", 5 + MAXSIZE / 4, 20);
-		g.drawString("Amount Can Send", 5 + 2 * MAXSIZE / 4, 20);
-		g.drawString("Bidder", 5 + 3 * MAXSIZE / 4, 20);
+		g.drawString("Time of Arrival", 5 + MAXSIZE / 3, 20);
+		//g.drawString("Amount Can Send", 5 + 2 * MAXSIZE / 4, 20);
+		g.drawString("Bidder", 5 + 2 * MAXSIZE / 3, 20);
 		g.drawLine(0, 25, 1 * MAXSIZE, 25);
 	}
 
@@ -573,17 +573,17 @@ public class ClientGUI extends Program {
 		g.fillRect(0, 0, MAXSIZE, MAXSIZE);
 
 		g.setColor(Color.WHITE);
-		g.drawRect(0, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(2 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
-		g.drawRect(3 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
+		g.drawRect(0, 0, MAXSIZE / 3, MAXSIZE);
+		g.drawRect(MAXSIZE / 3, 0, MAXSIZE / 3, MAXSIZE);
+		g.drawRect(2 * MAXSIZE / 3, 0, MAXSIZE / 3, MAXSIZE);
+		//g.drawRect(3 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
 
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g.setColor(Color.WHITE);
 		g.drawString("Message Number", 5, 20);
-		g.drawString("Resource Requested", 5 + MAXSIZE / 4, 20);
-		g.drawString("Amount Requested", 5 + 2 * MAXSIZE / 4, 20);
-		g.drawString("Destination", 5 + 3 * MAXSIZE / 4, 20);
+		g.drawString("Resource Requested", 5 + MAXSIZE / 3, 20);
+		//g.drawString("Amount Requested", 5 + 2 * MAXSIZE / 4, 20);
+		g.drawString("Destination", 5 + 2 * MAXSIZE / 3, 20);
 		g.drawLine(0, 25, 1 * MAXSIZE, 25);
 	}
 
