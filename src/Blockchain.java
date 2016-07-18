@@ -31,7 +31,7 @@ public class Blockchain implements Runnable, Serializable {
 	private PuzzleSolver puzzleSolver;
 	private BlockChecker blockChecker;
 	private Thread t;
-	private boolean verbose = false;
+	private boolean verbose = true;
 
 	// Constructor
     public Blockchain(Node node) {

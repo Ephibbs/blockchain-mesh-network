@@ -185,7 +185,7 @@ public class NetworkNode implements Node {
 	@Override
 	public void addMessage(Message msg) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, IOException, ClassNotFoundException {
 		// TODO: later, implement signature checking mechanism for messages
-
+		System.out.println("===\nReceived Message type: " + msg.getMessageType());
 		if(msg.getMessageType().equals("MySignedObject")) {
 			//System.out.println("There was a signed object");
 			this.byteArray = ((MySignedObject) msg).getByteArray();

@@ -15,7 +15,7 @@ public class WifiManager {
 	private WifiClient client;
 	private WifiServer server;
 	private Node node;
-	private boolean verbose = false;
+	private boolean verbose = true;
 	
 	WifiManager(Node node) {
 		this.node = node;
@@ -70,6 +70,8 @@ public class WifiManager {
     	} else if(o != null && o.getType().equals("Message")) {
     		if(verbose) System.out.print("received Message");
     		node.addMessage((Message) o);
+    	} else {
+    		System.out.println("received something else");
     	}
     }
     
