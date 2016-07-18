@@ -162,7 +162,6 @@ public class ClientGUI extends Program {
 		
 		
 		// Messages
-		add(new JLabel("________________________"), WEST);
 		add(new JLabel("Messages"), WEST);
 		add(new JButton("Total Messages"), WEST);
 		add(new JButton("Check Requests"), WEST);
@@ -498,10 +497,16 @@ public class ClientGUI extends Program {
 
 	private void generateBlockView() {
 		openTabID = 4;
-		
+		String nodeID = nodeIDTextField.getText();
 		generateBlockBoard();
 		g.setColor(Color.WHITE);
-		ArrayList<Block> blocks = new ArrayList<Block>(myNode.getBlockchain());
+		ArrayList<Block> blocks;
+		if(nodeID.equals(myNode.getNodeID())) {
+			blocks = new ArrayList<Block>(myNode.getBlockchain());
+		} else {
+			NodeInfo nodeInfo = this.myNode.getNodeInfoList().get(nodeID);
+			blocks = new ArrayList<Block>(nodeInfo.getBlockchain());
+		}
 		for (int i=0;i<blocks.size();i++) {
 			Block b = blocks.get(i);
 			String s;
