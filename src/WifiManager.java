@@ -15,7 +15,7 @@ public class WifiManager {
 	private WifiClient client;
 	private WifiServer server;
 	private Node node;
-	private boolean verbose = true;
+	private boolean verbose = false;
 	
 	WifiManager(Node node) {
 		this.node = node;
@@ -62,8 +62,6 @@ public class WifiManager {
     }
     
     public void addReceived(String s) throws ClassNotFoundException, IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException {
-    	if(verbose) System.out.print("Received string: ");
-    	if(verbose) System.out.println(s);
     	Sendable o = (Sendable) fromString(s);
     	System.out.println(o.getType());
     	if(o != null && o.getType().equals("Block")) {
