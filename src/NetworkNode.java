@@ -190,7 +190,6 @@ public class NetworkNode implements Node {
 	@Override
 	public void addMessage(Message msg) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, IOException, ClassNotFoundException {
 		// TODO: later, implement signature checking mechanism for messages
-		System.out.println("===\nReceived Message type: " + msg.getMessageType());
 		if(msg.getMessageType().equals("MySignedObject")) {
 			//System.out.println("There was a signed object");
 			this.byteArray = ((MySignedObject) msg).getByteArray();
@@ -211,10 +210,10 @@ public class NetworkNode implements Node {
 		}
 		
 		if (msg != null && !this.msgMap.containsKey(msg.getID())) {
-			System.out.println("===\nReceived Message type: " + msg.getMessageType());
+			System.out.println(">>>\nReceived Message type: " + msg.getMessageType());
 			System.out.println(msg.getAuthor());
 			System.out.println(msg.id);
-			System.out.println("===");
+			System.out.println("<<<");
 			// sort message by type
 			switch (msg.getMessageType()) {
 				//System.out.println("Message type: " + msg.getMessageType());
@@ -445,6 +444,7 @@ public class NetworkNode implements Node {
 
 	@Override
 	public void makeBlockRequest(String hash) {
+		System.out.println("making block request for: "+hash);
 		BlockRequest br = new BlockRequest(hash, nodeID);
 		try {
 			addMessage(br);
@@ -455,12 +455,16 @@ public class NetworkNode implements Node {
 
 	@Override
 	public void receiveBlockDelivery(BlockDelivery bd) {
-		if (nodeID == bd.getRecipient()) { // if the delivery is for me
+		if (nodeID.equals(bd.getRecipient())) { // if the delivery is for me
 			// then add to blockchain
 			System.out.println("Adding the block from the delivery to blockchain...");
-			System.out.print("Block details: ");
-			System.out.println(bd.getBlock().getMsgs().toString());
-			blockChain.add(bd.getBlock());
+			try {
+				addBlock(bd.getBlock());
+			} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
+					| ClassNotFoundException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 			// else pass along block delivery
 			distributeMessage(bd);
@@ -518,9 +522,13 @@ public class NetworkNode implements Node {
 	public void addBlock(Block b) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, ClassNotFoundException, IOException {
 		// add any messages that are in b but have not been received to their
 		// respective lists
+		System.out.println("got block: "+b.getMyHash()+" with msgs: ");
+		for(Message m : b.getMsgs()) {
+			m.printMessage();
+		}
 		for (Message m : b.getMsgs()) {
-			//addMessage(m);
-			this.sendMessage(m);
+			addMessage(m);
+			//this.sendMessage(m);
 		}
 		blockChain.add(b);
 	}

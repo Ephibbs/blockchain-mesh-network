@@ -32,7 +32,7 @@ public class Blockchain {
 	private BlockChecker blockChecker;
 	private Thread t;
 	//print out changes in the blockchain as they happen
-	private boolean verbose = true;
+	private boolean verbose = false;
 
 	// Constructor
     public Blockchain(Node node) {
