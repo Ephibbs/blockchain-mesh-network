@@ -37,7 +37,7 @@ public class Blockchain {
 	// Constructor
     public Blockchain(Node node) {
     	this.node = node;
-    	this.difficulty = 2;
+    	this.difficulty = 3;
     }
 
 	// Accessors

@@ -210,10 +210,10 @@ public class NetworkNode implements Node {
 		}
 		
 		if (msg != null && !this.msgMap.containsKey(msg.getID())) {
-			System.out.println(">>>\nReceived Message type: " + msg.getMessageType());
-			System.out.println(msg.getAuthor());
-			System.out.println(msg.id);
-			System.out.println("<<<");
+			//System.out.println(">>>\nReceived Message type: " + msg.getMessageType());
+			//System.out.println(msg.getAuthor());
+			//System.out.println(msg.id);
+			//System.out.println("<<<");
 			// sort message by type
 			switch (msg.getMessageType()) {
 				//System.out.println("Message type: " + msg.getMessageType());
@@ -615,7 +615,7 @@ public class NetworkNode implements Node {
 		int currentAmount = this.myResources.get(type);
 		this.myResources.remove(type);
 		this.myResources.put(type, currentAmount + amount);
-		System.out.println("I should have changed my resources");
+		//System.out.println("I should have changed my resources");
 	}
 	public void createInitialPingToBroadcast() throws InvalidKeyException, SignatureException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
 		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey,

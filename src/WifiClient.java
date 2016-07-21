@@ -17,7 +17,7 @@ public class WifiClient implements Runnable {
 
     private ArrayList<String> hostNames = new ArrayList<String>();
     private int portNumber = 9001;
-    private int maxNumAttempts = 1;
+    private int maxNumAttempts = 3;
 
     private ArrayList<String> outQ = new ArrayList<String>();
     private Thread t;
