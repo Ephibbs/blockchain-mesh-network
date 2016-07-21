@@ -68,6 +68,6 @@ public abstract class Message extends Sendable implements Serializable {
 
 	// Utility
 	public void printMessage() {
-		System.out.println(" from: " + this.author + " to: " + this.recipient);
+		System.out.println("Message of type: "+messageType+" id: "+id+" from: " + this.author + " to: " + this.recipient);
 	}
 }

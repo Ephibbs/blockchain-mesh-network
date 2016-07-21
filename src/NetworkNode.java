@@ -215,49 +215,50 @@ public class NetworkNode implements Node {
 			System.out.println(msg.getAuthor());
 			System.out.println(msg.id);
 			System.out.println("===");
-			
 			// sort message by type
 			switch (msg.getMessageType()) {
 				//System.out.println("Message type: " + msg.getMessageType());
 				case "ResourceRequest":
-					openRequests.add(msg);
 					blockChain.add(msg);
+					openRequests.add(msg);
 					distributeMessage(msg);
 					totalMessages.add(msg);
 					break;
 				case "ResourceRequestBid":
-					bidsToMyRequests.add(msg);
 					blockChain.add(msg);
+					bidsToMyRequests.add(msg);
 					distributeMessage(msg);
 					totalMessages.add(msg);
 					break;
 				case "ResourceAgreement":
-					myResourceAgreements.add(msg);
 					blockChain.add(msg);
+					myResourceAgreements.add(msg);
 					distributeMessage(msg);
 					totalMessages.add(msg);
 					break;
 				case "ResourceSent":
+					blockChain.add(msg);
 					//System.out.println("I should be sending  resource amount: " + ((ResourceSent) msg).getAmount());
 					myResourceSents.add(msg);
 					updateNodeInfo((ResourceSent) msg);
-					blockChain.add(msg);
 					distributeMessage(msg);
 					totalMessages.add(msg);
 					break;
 				case "ResourceReceived":
+					blockChain.add(msg);
 					myResourceReceives.add(msg);
 					updateNodeInfo((ResourceReceived) msg);
-					blockChain.add(msg);
 					distributeMessage(msg);
 					totalMessages.add(msg);
 					break;
 				case "Ping":
+					blockChain.add(msg);
 					receivePing((Ping) msg);
 					distributeMessage(msg);
 					totalMessages.add(msg);
 					break;
 				case "DirectMessage":
+					blockChain.add(msg);
 					sendDirectMessage(msg);
 					distributeMessage(msg);
 					totalMessages.add(msg);
@@ -456,6 +457,9 @@ public class NetworkNode implements Node {
 	public void receiveBlockDelivery(BlockDelivery bd) {
 		if (nodeID == bd.getRecipient()) { // if the delivery is for me
 			// then add to blockchain
+			System.out.println("Adding the block from the delivery to blockchain...");
+			System.out.print("Block details: ");
+			System.out.println(bd.getBlock().getMsgs().toString());
 			blockChain.add(bd.getBlock());
 		} else {
 			// else pass along block delivery
@@ -649,7 +653,6 @@ public class NetworkNode implements Node {
 
 			if (verifies == true) {
 				return true;
-			} else {
 			}
 		}
 		return false;
