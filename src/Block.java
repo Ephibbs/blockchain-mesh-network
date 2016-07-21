@@ -10,10 +10,11 @@ import java.util.ArrayList;
 import java.io.Serializable;
 
 /*
- * A block that make up the blockchain
+ * A block that makes up the blockchain
  * Parameters: Previous hash string, list of messages
+ * 
  * a block holds a list of messages that have been sent through the network
- * a block is identified by its hash (for know)
+ * a block is identified by its hash (for now)
  */
 
 public class Block extends Sendable implements Serializable {

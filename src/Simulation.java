@@ -106,7 +106,7 @@ public class Simulation {
 			}
 		}
 		
-		System.out.println(this.networkNodes.get(0).blockChain.getLastTreeNode().getMyHash());
+		System.out.println(this.networkNodes.get(0).blockChain.getLastBlock().getMyHash());
 	}
 }
 

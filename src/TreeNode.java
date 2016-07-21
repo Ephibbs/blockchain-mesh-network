@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 /*
- * Leaves of the Tree class, stores blocks
+ * Leaves of the Tree class
  * Parameters: Data object or TreeNode object
  */
 

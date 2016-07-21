@@ -438,7 +438,7 @@ public class SimulationNode implements Node {
 	@Override
 	public void receiveBlock(Block b) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
@@ -604,5 +604,17 @@ public class SimulationNode implements Node {
 			this.publicKeySet.add(publicKey);
 			this.distributePublicKey(publicKey);
 		}
+	}
+
+	@Override
+	public void receiveBlockDelivery(BlockDelivery bd) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void receiveBlockRequest(BlockRequest br) {
+		// TODO Auto-generated method stub
+		
 	}
 }

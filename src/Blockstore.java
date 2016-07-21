@@ -10,14 +10,13 @@ import java.util.HashMap;
  * BlockStore class to store the blocks, each blockchain has this
  */
 
-public class Blockstore implements Serializable {
+public class Blockstore {
 
 	// Variables
 	private TreeNode<Block> root = new TreeNode<Block>(new Block("1", new ArrayList<Message>()));
-	private Tree<Block> blockTree = new Tree<Block>(root);
+	private Tree<Block> blockTree = new Tree<Block>(root); //This represents all possible blockchains
 	private ArrayList<String> treeBlockIDs = new ArrayList<String>(); // stores the hashes of the blocks (their ID)
 	private ArrayList<String> orphanBlockIDs = new ArrayList<String>();
-	//private ArrayList<TreeNode<Block>> allBlocks = new ArrayList<Block>();
 	private HashMap<String, TreeNode<Block>> blockMap = new HashMap<String, TreeNode<Block>>(); // input: hash, output: TreeNode<block> with that hash
 	private ArrayList<Tree<Block>> orphanTrees = new ArrayList<Tree<Block>>(); // list of all the orphan trees
 	private ArrayList<String> messageIDs = new ArrayList<String>();
@@ -78,15 +77,6 @@ public class Blockstore implements Serializable {
 
 				//verify all messages in the block have been received
 				boolean messagesVerified = true;
-				//The below code is commented out until we get the signature code up and running
-				//instead of checking if all the messages have been received
-				//we should verify all the messages signatures
-//				for(Message m : b.getMsgs()) { // check if messageIDs list has all messages in block
-//					if(!messageIDs.contains(m.getHash())) {
-//						messagesVerified = false;
-//						break;
-//					}
-//				}
 				
 				//verify messages aren't in any previous block
 				if(messagesVerified) {

@@ -48,7 +48,6 @@ public class NetworkNode implements Node {
 
 	// Blockchain
 	public Blockchain blockChain;
-	public ArrayList<String> blockRequestIDs = new ArrayList<String>();
 
 	// keep track of messages
 	public ArrayList<Message> totalMessages = new ArrayList<Message>();
@@ -125,6 +124,12 @@ public class NetworkNode implements Node {
 			wm.start();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		try {
+			createInitialPingToBroadcast();
+		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
+				| ClassNotFoundException | IOException e1) {
+			e1.printStackTrace();
 		}
 		//get latest block on blockchain from neighboring nodes
 		makeBlockRequest("latest");
@@ -213,54 +218,58 @@ public class NetworkNode implements Node {
 			
 			// sort message by type
 			switch (msg.getMessageType()) {
-			//System.out.println("Message type: " + msg.getMessageType());
-			case "ResourceRequest":
-				openRequests.add(msg);
-				blockChain.add(msg);
-				distributeMessage(msg);
-				totalMessages.add(msg);
-				break;
-			case "ResourceRequestBid":
-				bidsToMyRequests.add(msg);
-				blockChain.add(msg);
-				distributeMessage(msg);
-				totalMessages.add(msg);
-				break;
-			case "ResourceAgreement":
-				myResourceAgreements.add(msg);
-				blockChain.add(msg);
-				distributeMessage(msg);
-				totalMessages.add(msg);
-				break;
-			case "ResourceSent":
-				//System.out.println("I should be sending  resource amount: " + ((ResourceSent) msg).getAmount());
-				myResourceSents.add(msg);
-				updateNodeInfo((ResourceSent) msg);
-				blockChain.add(msg);
-				distributeMessage(msg);
-				totalMessages.add(msg);
-				break;
-			case "ResourceReceived":
-				myResourceReceives.add(msg);
-				updateNodeInfo((ResourceReceived) msg);
-				blockChain.add(msg);
-				distributeMessage(msg);
-				totalMessages.add(msg);
-				break;
-			case "Ping":
-				receivePing((Ping) msg);
-				distributeMessage(msg);
-				break;
-			case "DirectMessage":
-				sendDirectMessage(msg);
-				distributeMessage(msg);
-				break;
-			case "BlockRequest":
-				receiveBlockRequest((BlockRequest) msg);
-				break;
-			case "BlockDelivery":
-				receiveBlockDelivery((BlockDelivery) msg);
-				break;
+				//System.out.println("Message type: " + msg.getMessageType());
+				case "ResourceRequest":
+					openRequests.add(msg);
+					blockChain.add(msg);
+					distributeMessage(msg);
+					totalMessages.add(msg);
+					break;
+				case "ResourceRequestBid":
+					bidsToMyRequests.add(msg);
+					blockChain.add(msg);
+					distributeMessage(msg);
+					totalMessages.add(msg);
+					break;
+				case "ResourceAgreement":
+					myResourceAgreements.add(msg);
+					blockChain.add(msg);
+					distributeMessage(msg);
+					totalMessages.add(msg);
+					break;
+				case "ResourceSent":
+					//System.out.println("I should be sending  resource amount: " + ((ResourceSent) msg).getAmount());
+					myResourceSents.add(msg);
+					updateNodeInfo((ResourceSent) msg);
+					blockChain.add(msg);
+					distributeMessage(msg);
+					totalMessages.add(msg);
+					break;
+				case "ResourceReceived":
+					myResourceReceives.add(msg);
+					updateNodeInfo((ResourceReceived) msg);
+					blockChain.add(msg);
+					distributeMessage(msg);
+					totalMessages.add(msg);
+					break;
+				case "Ping":
+					receivePing((Ping) msg);
+					distributeMessage(msg);
+					totalMessages.add(msg);
+					break;
+				case "DirectMessage":
+					sendDirectMessage(msg);
+					distributeMessage(msg);
+					totalMessages.add(msg);
+					break;
+				case "BlockRequest":
+					receiveBlockRequest((BlockRequest) msg);
+					totalMessages.add(msg);
+					break;
+				case "BlockDelivery":
+					receiveBlockDelivery((BlockDelivery) msg);
+					totalMessages.add(msg);
+					break;
 			}
 			msgMap.put(msg.getID(), msg);
 			this.currentMessageCount++;
@@ -445,13 +454,12 @@ public class NetworkNode implements Node {
 
 	@Override
 	public void receiveBlockDelivery(BlockDelivery bd) {
-		if (blockRequestIDs.contains(bd.getBlockHash() + bd.getRecipient())) {
-			blockRequestIDs.remove(bd.getBlockHash() + bd.getRecipient());
-			if (nodeID == bd.getRecipient()) { // if the delivery is for me
-				blockChain.add(bd.getBlock());
-			} else {
-				distributeMessage(bd);
-			}
+		if (nodeID == bd.getRecipient()) { // if the delivery is for me
+			// then add to blockchain
+			blockChain.add(bd.getBlock());
+		} else {
+			// else pass along block delivery
+			distributeMessage(bd);
 		}
 	}
 
@@ -459,16 +467,11 @@ public class NetworkNode implements Node {
 	public void receiveBlockRequest(BlockRequest br) {
 		// if request is not from me
 		if (!br.getAuthor().equals(nodeID)) {
-			// if requesting latest block
+			// then if requesting the latest block
 			if (br.getBlockHash().equals("latest")) {
+				//then make a block delivery
 				Block b = blockChain.getLastBlock();
-				BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author
-																					// of
-																					// request
-																					// is
-																					// the
-																					// block
-																					// recipient
+				BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author of request is the block recipient
 				try {
 					addMessage(bd);
 				} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
@@ -476,21 +479,12 @@ public class NetworkNode implements Node {
 					e.printStackTrace();
 				}
 				System.out.println("Made block delivery");
-			} else { // If
-																						// I
-																						// haven't
-																						// received
-																						// this
-																						// request
+			} else {
+				// else check if I have block with this blockhash
 				Block b = blockChain.getBlock(br.getBlockHash());
-				if (b != null) { // if I have the block, make a block delivery
-					BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author
-																						// of
-																						// request
-																						// is
-																						// the
-																						// block
-																						// recipient
+				if (b != null) { // if I have the block
+					// then make a block delivery
+					BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author of request is the block recipient
 					try {
 						addMessage(bd);
 					} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
@@ -500,12 +494,13 @@ public class NetworkNode implements Node {
 					}
 					System.out.println("Made block delivery");
 				} else {
-					blockRequestIDs.add(br.getBlockHash() + br.getAuthor());
+					// else, pass on the block request for someone else to fill
 					distributeMessage(br);
 					System.out.println("passed on block request");
 				}
 			}
 		} else {
+			// else pass along the request
 			distributeMessage(br);
 		}
 	}

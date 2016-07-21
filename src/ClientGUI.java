@@ -204,15 +204,8 @@ public class ClientGUI extends Program {
 					e1.printStackTrace();
 				}
 				beginSimulation();
-				myNode.start();
 				putInitResources();
-				try {
-					createInitialPing();
-				} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
-						| ClassNotFoundException | IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				myNode.start();
 				t = new Thread(new GUIRefresher(), "refresher");
 				t.start();
 			}

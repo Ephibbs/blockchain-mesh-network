@@ -3,6 +3,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Random;
 
+/*
+ * Standard functions
+ */
 public class Utils {
 	static Random rand = new Random();
 	static int LENGTH = 5;

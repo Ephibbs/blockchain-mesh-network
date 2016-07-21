@@ -13,15 +13,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /*
- * This class manages the order of messages that travel through the network, each node has its own copy of the blockchain
- * Blockchain has two threads: 
+ * This class manages the BlockStore (this manages the storage of blocks)
+ * Blockchain has two threads:
  * 		PuzzleSolver - to solve for the next block in the chain
  * 		BlockChecker - to verify that incoming blocks are valid, and adding to blockchain
  * 
  * Parameters: Node node
  */
 
-public class Blockchain implements Runnable, Serializable {
+public class Blockchain {
 
 	// Variables
 	private Blockstore blockStore = new Blockstore();
@@ -31,6 +31,7 @@ public class Blockchain implements Runnable, Serializable {
 	private PuzzleSolver puzzleSolver;
 	private BlockChecker blockChecker;
 	private Thread t;
+	//print out changes in the blockchain as they happen
 	private boolean verbose = true;
 
 	// Constructor
@@ -72,7 +73,12 @@ public class Blockchain implements Runnable, Serializable {
 	}
 
 	// Utility
-	public class PuzzleSolver implements Runnable { // try to solve puzzle
+	
+	/*
+	 * PuzzleSolver class: Constantly attempts to solve the Proof of work for the next block in the blockchain
+	 * ran in its own thread
+	 */
+	public class PuzzleSolver implements Runnable {
     	Thread t;
     	public void run() {
     		while(node.isOnline()) {
@@ -112,7 +118,12 @@ public class Blockchain implements Runnable, Serializable {
     		t.start();
     	}
     }
-    public class BlockChecker implements Runnable { // check incoming blockchain
+	
+	/*
+	 * BlockChecker class: checks that incoming blocks pass the proof of work test and then adds them to the blockchain
+	 * ran in its own thread
+	 */
+    public class BlockChecker implements Runnable {
     	Thread t;
     	public BlockChecker() {
     	}
@@ -143,7 +154,9 @@ public class Blockchain implements Runnable, Serializable {
     		t.start();
     	}
     }
-    public void run() { // actually executing the code
+    
+    // function to start PuzzleSolver and BlockChecker
+    public void start() { // actually executing the code
     	puzzleSolver = new PuzzleSolver();
     	blockChecker = new BlockChecker();
     	
@@ -152,10 +165,7 @@ public class Blockchain implements Runnable, Serializable {
     	blockChecker.start();
     	if(verbose) System.out.println("running blockChecker");
     }
-    public void start() { // run each task independently
-    	t= new Thread(this, "blockChain");
-    	t.start();
-    }
+    
     public void setDifficulty(int difficulty) {
     	this.difficulty = difficulty;
     }
