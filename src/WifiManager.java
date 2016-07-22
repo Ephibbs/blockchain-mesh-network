@@ -15,7 +15,7 @@ public class WifiManager {
 	private WifiClient client;
 	private WifiServer server;
 	private Node node;
-	private boolean verbose = false;
+	private boolean verbose = true;
 	
 	WifiManager(Node node) {
 		this.node = node;
@@ -33,52 +33,26 @@ public class WifiManager {
 		client.start();
 	}
 	
-	void broadcast(Serializable b) throws IOException {
+	void broadcast(Message m) throws IOException {
 		if(verbose) System.out.println("added to Q");
-		String s = toString(b);
-		client.addToOutQ(s);
-	}
-	
-	void send(String hostName, String s) throws IOException {
-		client.send(hostName, s);
-	}
-	
-	private Object fromString( String s ) throws IOException , ClassNotFoundException {
-        byte [] data = Base64.getDecoder().decode( s );
-        ObjectInputStream ois = new ObjectInputStream( 
-                                        new ByteArrayInputStream(  data ) );
-        Object o  = ois.readObject();
-        ois.close();
-        return o;
+		client.addToOutQ(m);
 	}
 
     /** Write the object to a Base64 string. */
-    private String toString( Serializable o ) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream( baos );
-        oos.writeObject( o );
-        oos.close();
-        return Base64.getEncoder().encodeToString(baos.toByteArray());
-    }
     
-    public void addReceived(String s) throws ClassNotFoundException, IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException {
-    	Sendable o = (Sendable) fromString(s);
-    	System.out.println(o.getType());
-    	if(o != null && o.getType().equals("Block")) {
-    		if(verbose) System.out.print("received Block");
-    		node.addBlock((Block) o);
-    	} else if(o != null && o.getType().equals("Message")) {
-    		if(verbose) System.out.print("received Message");
-    		node.addMessage((Message) o);
+    public void addReceived(Message s) throws ClassNotFoundException, IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException {
+    	if(verbose) System.out.println("WifiManager has received message with id: "+s.getID());
+    	if(s != null && s.getType().equals("Message")) {
+    		node.addMessage(s);
     	} else {
-    		System.out.println("received something else");
+    		System.err.println("Uh Oh: received something else...");
     	}
     }
     
     public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException, IOException, ClassNotFoundException {
     	WifiManager wm = new WifiManager();
     	wm.start();
-    	ResourceRequest b = new ResourceRequest(0, "ehy", "ya", "asdf");
+    	BlockRequest b = new BlockRequest("1","e");
     	wm.broadcast(b);
     }
 	    

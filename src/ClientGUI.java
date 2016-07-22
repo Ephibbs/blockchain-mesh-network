@@ -204,7 +204,6 @@ public class ClientGUI extends Program {
 					e1.printStackTrace();
 				}
 				beginSimulation();
-				putInitResources();
 				myNode.start();
 				t = new Thread(new GUIRefresher(), "refresher");
 				t.start();
@@ -305,23 +304,6 @@ public class ClientGUI extends Program {
 	private void createPing() {
 		openTabID = 0; // all messages
 		this.myNode.createPingToBroadcast();
-	}
-
-	private void putInitResources() {
-		// this.myNode.myResources
-		ArrayList<Resource> resources = new ArrayList<Resource>();
-		resources.add(new Resource(500, "water", null));
-		resources.add(new Resource(20, "medical supplies", null));
-		resources.add(new Resource(300, "food", null));
-		resources.add(new Resource(100, "blankets", null));
-		resources.add(new Resource(50, "tents", null));
-		resources.add(new Resource(40, "gre", null));
-		resources.add(new Resource(50, "radios", null));
-		resources.add(new Resource(100, "laptops", null));
-		resources.add(new Resource(6, "raspberry pis", null));
-		resources.add(new Resource(14, "tons of coffee", null));
-		this.myNode.getNodeInfoList().put(this.myNode.getNodeID(),
-				new NodeInfo(this.myNode.getNodeID(), myNode.pubKey, myNode.getLocation(), resources, null));
 	}
 
 	public void setMyNode(NetworkNode newNode) {

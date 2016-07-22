@@ -1,6 +1,7 @@
 import java.security.PublicKey;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by 585728 on 7/8/2016.
@@ -11,16 +12,16 @@ public class NodeInfo {
     private String nodeID = null;
     private PublicKey pubKey = null;
     private Location myLocation = null;
+    private HashMap<String, Resource> resourceMap = new HashMap<String, Resource>();
     private ArrayList<Resource> resourceList = new ArrayList<Resource>();
     private Time lastPingTime = null;
     private ArrayList<Block> blockchainArr = new ArrayList<Block>();
 
     // Constructor
-    public NodeInfo(String nodeID, PublicKey pubKey, Location myLocation, ArrayList<Resource> resourceList, Time lastPingTime) {
+    public NodeInfo(String nodeID, PublicKey pubKey, Location myLocation, Time lastPingTime) {
         this.nodeID = nodeID;
         this.pubKey = pubKey;
         this.myLocation = myLocation;
-        this.resourceList = resourceList;
         this.lastPingTime = lastPingTime;
     }
     /**
@@ -57,12 +58,24 @@ public class NodeInfo {
 	public ArrayList<Resource> getResourceList() {
 		return resourceList;
 	}
+	
+	public void addResource(String type, int amount) {
+		if(resourceMap.containsKey(type)) {
+			resourceMap.get(type).setAmount(amount+resourceMap.get(type).getAmount());
+		} else {
+			Resource r = new Resource(amount, type, null);
+			resourceMap.put(type, r);
+			resourceList.add(r);
+		}
+	}
 
 	/**
 	 * @param resourceList the resourceList to set
 	 */
 	public void setResourceList(ArrayList<Resource> resourceList) {
-		this.resourceList = resourceList;
+		for(Resource r : resourceList) {
+			addResource(r.getType(), r.getAmount());
+		}
 	}
 
 	/**

@@ -17,9 +17,9 @@ public class WifiClient implements Runnable {
 
     private ArrayList<String> hostNames = new ArrayList<String>();
     private int portNumber = 9001;
-    private int maxNumAttempts = 3;
+    private int maxNumAttempts = 1;
 
-    private ArrayList<String> outQ = new ArrayList<String>();
+    private ArrayList<Message> outQ = new ArrayList<Message>();
     private Thread t;
     private boolean verbose = false;
     
@@ -59,27 +59,13 @@ public class WifiClient implements Runnable {
     	this.verbose = verbose;
     }
     
-    public void addToOutQ(String s) throws IOException {
-    	outQ.add(s);
-    }
-    public void broadcast(String s) {
-    	for(String hostName : hostNames) {
-    		try {
-				if(send(hostName, s)) {
-					if(verbose) System.out.println("sent to " + hostName);
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
-    }
     public void start() {
     	t = new Thread(this, "wifi client");
 		t.start();
     }
+    
     public void run() {
-    	String s;
+    	Message s;
     	if(verbose) System.out.println("running client");
     	while(true) {
     		if(!outQ.isEmpty()) {
@@ -98,10 +84,38 @@ public class WifiClient implements Runnable {
     	}
     }
     
-    public boolean send(String hostName, String s) throws IOException {
+    public void addToOutQ(Message m) throws IOException {
+    	outQ.add(m);
+    }
+    
+    public void broadcast(Message s) {
+    	for(String hostName : hostNames) {
+    		try {
+				if(send(hostName, s)) {
+					if(verbose) System.out.println("Sent message with id:  "+s.getID()+ " to: " + hostName);
+				} else {
+					if(verbose) System.err.println("Failed to send "+s.getID() +" to "+hostName);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    }
+    
+    private String toString( Serializable o ) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream( baos );
+        oos.writeObject( o );
+        oos.close();
+        return Base64.getEncoder().encodeToString(baos.toByteArray());
+    }
+    
+    public boolean send(String hostName, Serializable b) throws IOException {
+    	String s = toString(b);
     	if(verbose) System.out.println("start sending...");
     	for(int numAttempts = 0; numAttempts < maxNumAttempts; numAttempts++) {
-    		if(verbose) System.out.println("attempt");
+    		if(verbose) System.out.println("attempt "+numAttempts+1 +"...");
     		try (
 		        Socket echoSocket = new Socket(hostName, portNumber);
 		        PrintWriter out =
@@ -124,7 +138,7 @@ public class WifiClient implements Runnable {
 		        //System.exit(1);
 		    } 
     		try {
-				Thread.sleep(500);
+				Thread.sleep(200);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

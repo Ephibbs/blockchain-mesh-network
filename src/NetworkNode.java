@@ -111,11 +111,26 @@ public class NetworkNode implements Node {
 	}
 
 	public void distributeBlock(Block b) {
-		try {
-			wm.broadcast(b);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		BlockDelivery bd = new BlockDelivery(b, nodeID, null);
+		distributeMessage(bd);
+	}
+	
+	private void putInitResources() {
+		// this.myNode.myResources
+		ArrayList<Resource> resources = new ArrayList<Resource>();
+		resources.add(new Resource(500, "water", null));
+		resources.add(new Resource(20, "medical supplies", null));
+		resources.add(new Resource(300, "food", null));
+		resources.add(new Resource(100, "blankets", null));
+		resources.add(new Resource(50, "tents", null));
+		resources.add(new Resource(40, "gre", null));
+		resources.add(new Resource(50, "radios", null));
+		resources.add(new Resource(100, "laptops", null));
+		resources.add(new Resource(6, "raspberry pis", null));
+		resources.add(new Resource(14, "tons of coffee", null));
+		NodeInfo ni = new NodeInfo(getNodeID(), pubKey, getLocation(), null);
+		ni.setResourceList(resources);
+		getNodeInfoList().put(nodeID, ni);
 	}
 
 	public void start() {
@@ -125,24 +140,33 @@ public class NetworkNode implements Node {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		//get latest block on blockchain from neighboring nodes
+		makeBlockRequest("latest");
 		try {
 			createInitialPingToBroadcast();
 		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
 				| ClassNotFoundException | IOException e1) {
 			e1.printStackTrace();
 		}
-		//get latest block on blockchain from neighboring nodes
-		makeBlockRequest("latest");
+		putInitResources();
+//		ResourceReceived rr = new ResourceReceived(null, nodeID, "water", 5);
+//		try {
+//			sendMessage(rr);
+//		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
+//				| ClassNotFoundException | IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		rr = new ResourceReceived(null, nodeID, "food", 10);
+//		try {
+//			sendMessage(rr);
+//		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
+//				| ClassNotFoundException | IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
-
-	public void broadcastBlock(Block b) {
-		try {
-			wm.broadcast(b);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
+	
 	@Override
 	public HashMap<String, Integer> getResources() {
 		return myResources;
@@ -220,55 +244,54 @@ public class NetworkNode implements Node {
 				case "ResourceRequest":
 					blockChain.add(msg);
 					openRequests.add(msg);
-					distributeMessage(msg);
 					totalMessages.add(msg);
+					distributeMessage(msg);
 					break;
 				case "ResourceRequestBid":
 					blockChain.add(msg);
 					bidsToMyRequests.add(msg);
-					distributeMessage(msg);
 					totalMessages.add(msg);
+					distributeMessage(msg);
 					break;
 				case "ResourceAgreement":
 					blockChain.add(msg);
 					myResourceAgreements.add(msg);
-					distributeMessage(msg);
 					totalMessages.add(msg);
+					distributeMessage(msg);
 					break;
 				case "ResourceSent":
 					blockChain.add(msg);
 					//System.out.println("I should be sending  resource amount: " + ((ResourceSent) msg).getAmount());
 					myResourceSents.add(msg);
 					updateNodeInfo((ResourceSent) msg);
-					distributeMessage(msg);
 					totalMessages.add(msg);
+					distributeMessage(msg);
 					break;
 				case "ResourceReceived":
 					blockChain.add(msg);
 					myResourceReceives.add(msg);
 					updateNodeInfo((ResourceReceived) msg);
-					distributeMessage(msg);
 					totalMessages.add(msg);
+					distributeMessage(msg);
 					break;
 				case "Ping":
-					blockChain.add(msg);
 					receivePing((Ping) msg);
-					distributeMessage(msg);
 					totalMessages.add(msg);
+					distributeMessage(msg);
 					break;
 				case "DirectMessage":
 					blockChain.add(msg);
 					sendDirectMessage(msg);
-					distributeMessage(msg);
 					totalMessages.add(msg);
+					distributeMessage(msg);
 					break;
 				case "BlockRequest":
-					receiveBlockRequest((BlockRequest) msg);
 					totalMessages.add(msg);
+					receiveBlockRequest((BlockRequest) msg);
 					break;
 				case "BlockDelivery":
-					receiveBlockDelivery((BlockDelivery) msg);
 					totalMessages.add(msg);
+					receiveBlockDelivery((BlockDelivery) msg);
 					break;
 			}
 			msgMap.put(msg.getID(), msg);
@@ -295,9 +318,11 @@ public class NetworkNode implements Node {
 	}
 
 	private void updateNodeInfo(ResourceReceived msg) {
-		//System.out.println("I should be adding more resource received");
+		System.out.println("I should be adding more resource received");
 		String NodeID = msg.getAuthor();
 		NodeInfo currentInfo = nodeInfoMap.get(NodeID);
+		System.out.println("node id: "+currentInfo.getNodeID());
+		System.out.println("node resources: "+currentInfo.getResourceList());
 		String resourceType = msg.getResourceType();
 		int resourceAmt = msg.getAmount();
 		updateResourceInfo(resourceType, resourceAmt, currentInfo);
@@ -312,17 +337,8 @@ public class NetworkNode implements Node {
 	}
 
 	private void updateResourceInfo(String resourceType, int resourceAmt, NodeInfo currentInfo) {
-		//System.out.println("I got here");
-		for (int i = 0; i < currentInfo.getResourceList().size(); i++) {
-			Resource cResource = currentInfo.getResourceList().get(i);
-			// System.out.println("resourceType: " + resourceType);
-			// System.out.println("cResource.getType(): " +
-			// cResource.getType());
-			if (cResource.getType().equals(resourceType)) {
-				cResource.setAmount(cResource.getAmount() + resourceAmt);
-				System.out.println("I was able to change a resource value by: " + resourceAmt);
-			}
-		}
+		currentInfo.addResource(resourceType, resourceAmt);
+		System.out.println("I was able to change a resource value by: " + resourceAmt);
 	}
 
 	private void sendDirectMessage(Message msg) {
@@ -344,25 +360,11 @@ public class NetworkNode implements Node {
 			return;
 		}
 		
-		if(msg.getCurrentResources() != null) {
-			if (this.pingHash.get(msg.getOriginator()) != null) {
-				if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
-					return;
-				} else if (this.pingHash.containsKey(msg.getOriginator())) {
-					if (this.pingHash.get(msg.getOriginator()).contains(msg)) {
-						return;
-					} else {
-						this.pingHash.get(msg.getOriginator()).add(msg);
-					}
-				}
-			} else {
-				// System.out.println("I should be creating a new arrayList of
-				// pings");
-				ArrayList<Ping> newArrayList = new ArrayList<Ping>();
-				newArrayList.add(msg);
-				this.pingHash.put(msg.getOriginator(), newArrayList);
-			}
-		}
+		// System.out.println("I should be creating a new arrayList of
+		// pings");
+		ArrayList<Ping> newArrayList = new ArrayList<Ping>();
+		newArrayList.add(msg);
+		this.pingHash.put(msg.getOriginator(), newArrayList);
 
 		Set<String> nodeInfoKeys = nodeInfoMap.keySet();
 		String pingOriginator = msg.getOriginator();
@@ -377,14 +379,12 @@ public class NetworkNode implements Node {
 			Time newTime = msg.getTimeSent();
 			System.out.println("public key: " + msg.getPublicKey());
 			this.publicKeySet.add(msg.getPublicKey());
-			if(msg.getCurrentResources()!=null){
-				this.createPingToBroadcast();
-			}
-			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(), msg.getCurrentResources(), newTime);
+			this.createPingToBroadcast();
+			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(), newTime);
 			newNodeInfo.setBlockchain(msg.getBlockchain());
 			//System.out.println("I made the new node info in initial ping");
 			this.nodeInfoMap.put(pingOriginator, newNodeInfo);
-		} else if (nodeInfoKeyAL.contains(pingOriginator)) {
+		} else {
 			// System.out.println("I already had this in here");
 			NodeInfo currentNodeInfo = nodeInfoMap.get(pingOriginator);
 			currentNodeInfo.setLastPingTime(new Time(System.currentTimeMillis()));
@@ -392,7 +392,6 @@ public class NetworkNode implements Node {
 			currentNodeInfo.setBlockchain(msg.getBlockchain());
 		}
 		updateRouteTable();
-		// sendToTempNodes(msg);
 	}
 
 	public void removeOutdatedPings() {
@@ -447,7 +446,7 @@ public class NetworkNode implements Node {
 		System.out.println("making block request for: "+hash);
 		BlockRequest br = new BlockRequest(hash, nodeID);
 		try {
-			addMessage(br);
+			sendMessage(br);
 		} catch (IOException | InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -455,7 +454,7 @@ public class NetworkNode implements Node {
 
 	@Override
 	public void receiveBlockDelivery(BlockDelivery bd) {
-		if (nodeID.equals(bd.getRecipient())) { // if the delivery is for me
+		if (nodeID.equals(bd.getRecipient()) || bd.getRecipient() == null) { // if the delivery is for me
 			// then add to blockchain
 			System.out.println("Adding the block from the delivery to blockchain...");
 			try {
@@ -481,7 +480,7 @@ public class NetworkNode implements Node {
 				Block b = blockChain.getLastBlock();
 				BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author of request is the block recipient
 				try {
-					addMessage(bd);
+					sendMessage(bd);
 				} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
 						| ClassNotFoundException | IOException e) {
 					e.printStackTrace();
@@ -494,7 +493,7 @@ public class NetworkNode implements Node {
 					// then make a block delivery
 					BlockDelivery bd = new BlockDelivery(b, nodeID, br.getAuthor()); // Author of request is the block recipient
 					try {
-						addMessage(bd);
+						sendMessage(bd);
 					} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
 							| ClassNotFoundException | IOException e) {
 						// TODO Auto-generated catch block
@@ -508,7 +507,7 @@ public class NetworkNode implements Node {
 				}
 			}
 		} else {
-			// else pass along the request
+			// if I'm asking for the block, pass along the request
 			distributeMessage(br);
 		}
 	}
@@ -617,9 +616,9 @@ public class NetworkNode implements Node {
 		this.myResources.put(type, currentAmount + amount);
 		//System.out.println("I should have changed my resources");
 	}
+	
 	public void createInitialPingToBroadcast() throws InvalidKeyException, SignatureException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
-		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey,
-				this.getNodeInfoList().get(this.nodeID).getResourceList());
+		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey);
 		newPing.setLocation(new Location().createRandomLocation());
 		newPing.setTime(new Time(System.currentTimeMillis()));
 		sendMessage(newPing);

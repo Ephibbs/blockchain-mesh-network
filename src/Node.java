@@ -44,8 +44,6 @@ interface Node {
 	
 	public void makeBlockRequest(String hash);
 
-	public void broadcastBlock(Block b);
-
 	// Utility
 	public void start();
 

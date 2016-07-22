@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SignatureException;
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class WifiServer implements Runnable {
     
@@ -54,6 +55,15 @@ public class WifiServer implements Runnable {
 		}
     }
     
+	private Object fromString( String s ) throws IOException , ClassNotFoundException {
+        byte [] data = Base64.getDecoder().decode( s );
+        ObjectInputStream ois = new ObjectInputStream( 
+                                        new ByteArrayInputStream(  data ) );
+        Object o  = ois.readObject();
+        ois.close();
+        return o;
+	}
+    
     public void startServer() throws IOException, ClassNotFoundException, InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException {
     	running = true;
     	if(verbose) System.out.println("running server...");
@@ -68,7 +78,9 @@ public class WifiServer implements Runnable {
 	                new InputStreamReader(clientSocket.getInputStream()));
 	        ) {
 	            String line;
-	        	if((line = in.readLine()) != null) wm.addReceived(line);
+	        	if((line = in.readLine()) != null) {
+	        		wm.addReceived((Message) fromString(line));
+	        	}
 	        	Thread.sleep(500);
 	        } catch (IOException | InterruptedException e) {
 	            System.out.println("Exception caught when trying to listen on port "
