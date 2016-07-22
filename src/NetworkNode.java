@@ -140,31 +140,10 @@ public class NetworkNode implements Node {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		putInitResources();
+		createPingToBroadcast();
 		//get latest block on blockchain from neighboring nodes
 		makeBlockRequest("latest");
-		try {
-			createInitialPingToBroadcast();
-		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
-				| ClassNotFoundException | IOException e1) {
-			e1.printStackTrace();
-		}
-		putInitResources();
-//		ResourceReceived rr = new ResourceReceived(null, nodeID, "water", 5);
-//		try {
-//			sendMessage(rr);
-//		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
-//				| ClassNotFoundException | IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		rr = new ResourceReceived(null, nodeID, "food", 10);
-//		try {
-//			sendMessage(rr);
-//		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
-//				| ClassNotFoundException | IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 	}
 	
 	@Override
@@ -246,18 +225,21 @@ public class NetworkNode implements Node {
 					openRequests.add(msg);
 					totalMessages.add(msg);
 					distributeMessage(msg);
+					createPingToBroadcast();
 					break;
 				case "ResourceRequestBid":
 					blockChain.add(msg);
 					bidsToMyRequests.add(msg);
 					totalMessages.add(msg);
 					distributeMessage(msg);
+					createPingToBroadcast();
 					break;
 				case "ResourceAgreement":
 					blockChain.add(msg);
 					myResourceAgreements.add(msg);
 					totalMessages.add(msg);
 					distributeMessage(msg);
+					createPingToBroadcast();
 					break;
 				case "ResourceSent":
 					blockChain.add(msg);
@@ -266,6 +248,7 @@ public class NetworkNode implements Node {
 					updateNodeInfo((ResourceSent) msg);
 					totalMessages.add(msg);
 					distributeMessage(msg);
+					createPingToBroadcast();
 					break;
 				case "ResourceReceived":
 					blockChain.add(msg);
@@ -273,11 +256,13 @@ public class NetworkNode implements Node {
 					updateNodeInfo((ResourceReceived) msg);
 					totalMessages.add(msg);
 					distributeMessage(msg);
+					createPingToBroadcast();
 					break;
 				case "Ping":
 					receivePing((Ping) msg);
 					totalMessages.add(msg);
 					distributeMessage(msg);
+					if(!msg.author.equals(nodeID)) createPingToBroadcast();
 					break;
 				case "DirectMessage":
 					blockChain.add(msg);
@@ -295,10 +280,10 @@ public class NetworkNode implements Node {
 					break;
 			}
 			msgMap.put(msg.getID(), msg);
-			this.currentMessageCount++;
-			if (this.currentMessageCount % this.TIMEING == 0) {
-				this.createPingToBroadcast();
-			}
+//			this.currentMessageCount++;
+//			if (this.currentMessageCount % this.TIMEING == 0) {
+//				this.createPingToBroadcast();
+//			}
 		}
 	}
 
@@ -379,9 +364,9 @@ public class NetworkNode implements Node {
 			Time newTime = msg.getTimeSent();
 			System.out.println("public key: " + msg.getPublicKey());
 			this.publicKeySet.add(msg.getPublicKey());
-			this.createPingToBroadcast();
 			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(), newTime);
 			newNodeInfo.setBlockchain(msg.getBlockchain());
+			newNodeInfo.setResourceList(msg.getResourceList());
 			//System.out.println("I made the new node info in initial ping");
 			this.nodeInfoMap.put(pingOriginator, newNodeInfo);
 		} else {
@@ -541,10 +526,18 @@ public class NetworkNode implements Node {
 
 	public void createPingToBroadcast() {
 		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey);
+		System.out.println(getBlockchain());
 		newPing.setBlockchain(getBlockchain());
 		newPing.setLocation(new Location().createRandomLocation());
 		newPing.setTime(new Time(System.currentTimeMillis()));
-		distributeMessage(newPing);
+		newPing.setResourceList(this.nodeInfoMap.get(nodeID).getResourceList());
+		try {
+			addMessage(newPing);
+		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchProviderException | SignatureException
+				| ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void sendToTempNodes(Ping newPing) {
@@ -616,13 +609,7 @@ public class NetworkNode implements Node {
 		this.myResources.put(type, currentAmount + amount);
 		//System.out.println("I should have changed my resources");
 	}
-	
-	public void createInitialPingToBroadcast() throws InvalidKeyException, SignatureException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchProviderException, IOException {
-		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey);
-		newPing.setLocation(new Location().createRandomLocation());
-		newPing.setTime(new Time(System.currentTimeMillis()));
-		sendMessage(newPing);
-	}
+
 
 	public void sendMessage(Message newMess)
 			throws InvalidKeyException, SignatureException, IOException, ClassNotFoundException, NoSuchAlgorithmException, NoSuchProviderException {

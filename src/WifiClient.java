@@ -17,7 +17,7 @@ public class WifiClient implements Runnable {
 
     private ArrayList<String> hostNames = new ArrayList<String>();
     private int portNumber = 9001;
-    private int maxNumAttempts = 1;
+    private int maxNumAttempts = 2;
 
     private ArrayList<Message> outQ = new ArrayList<Message>();
     private Thread t;
@@ -68,13 +68,19 @@ public class WifiClient implements Runnable {
     	Message s;
     	if(verbose) System.out.println("running client");
     	while(true) {
-    		if(!outQ.isEmpty()) {
-				for(int i=outQ.size()-1;i>-1;i--) {
-					s = outQ.get(i);
-					broadcast(s);
-					outQ.remove(s);
+    		//if(verbose) System.out.println("WifiClient still running...\noutQ: "+outQ.toString());
+			for(int i=outQ.size()-1;i>-1;i--) {
+				s = outQ.get(i);
+				//if(verbose) System.out.println("Broadcasting out message with id: "+s.getID());
+				broadcast(s);
+				outQ.remove(s);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-    		}
+			}
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -113,6 +119,7 @@ public class WifiClient implements Runnable {
     
     public boolean send(String hostName, Serializable b) throws IOException {
     	String s = toString(b);
+    	int i =0;
     	if(verbose) System.out.println("start sending...");
     	for(int numAttempts = 0; numAttempts < maxNumAttempts; numAttempts++) {
     		if(verbose) System.out.println("attempt "+numAttempts+1 +"...");
@@ -128,7 +135,7 @@ public class WifiClient implements Runnable {
 		                new InputStreamReader(System.in))
     		) {
     			out.println(s);
-    			return true;
+    			i++;
 		    } catch (UnknownHostException e) {
 		        System.err.println("Don't know about host " + hostName);
 		        //System.exit(1);
@@ -144,6 +151,7 @@ public class WifiClient implements Runnable {
 				e.printStackTrace();
 			}
     	}
+    	if(i>0) return true;
     	return false;
     }
 }

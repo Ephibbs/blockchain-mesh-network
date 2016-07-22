@@ -12,6 +12,7 @@ public class Ping extends Message {
 	public PublicKey publicKey = null;
 	public Time timeSent = null;
 	public ArrayList<Block> blockchainArr = new ArrayList<Block>();
+	public ArrayList<Resource> resourceList = new ArrayList<Resource>();
 	
 	public Ping(String sender, String receiver, PublicKey pubKey){
 		// should create a public key whenever you start a node
@@ -59,5 +60,11 @@ public class Ping extends Message {
 	}
 	public ArrayList<Block> getBlockchain() {
 		return blockchainArr;
+	}
+	public ArrayList<Resource> getResourceList() {
+		return resourceList;
+	}
+	public void setResourceList(ArrayList<Resource> resList) {
+		resourceList = resList;
 	}
 }

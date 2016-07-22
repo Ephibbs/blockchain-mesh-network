@@ -296,11 +296,6 @@ public class ClientGUI extends Program {
 //		}
 	}
 
-	private void createInitialPing() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException, ClassNotFoundException, IOException {
-		System.out.println("I should be making my initial ping");
-		this.myNode.createInitialPingToBroadcast();
-	}
-
 	private void createPing() {
 		openTabID = 0; // all messages
 		this.myNode.createPingToBroadcast();
