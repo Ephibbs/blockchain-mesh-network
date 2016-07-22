@@ -262,7 +262,6 @@ public class NetworkNode implements Node {
 					receivePing((Ping) msg);
 					totalMessages.add(msg);
 					distributeMessage(msg);
-					if(!msg.author.equals(nodeID)) createPingToBroadcast();
 					break;
 				case "DirectMessage":
 					blockChain.add(msg);
@@ -367,6 +366,7 @@ public class NetworkNode implements Node {
 			NodeInfo newNodeInfo = new NodeInfo(pingOriginator, msg.getPublicKey(), msg.getLocation(), newTime);
 			newNodeInfo.setBlockchain(msg.getBlockchain());
 			newNodeInfo.setResourceList(msg.getResourceList());
+			createPingToBroadcast();
 			//System.out.println("I made the new node info in initial ping");
 			this.nodeInfoMap.put(pingOriginator, newNodeInfo);
 		} else {
