@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="" key="selection"/>
+		<item value="bm" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="bm"/>
+			<item value="wm"/>
+			<item value="ServiceRecord"/>
+			<item value="wifimanager"/>
 			<item value="shutdown"/>
 			<item value="mainloop"/>
 			<item value="beginSimulation"/>
 			<item value="getMyRe"/>
-			<item value="sendresource"/>
-			<item value="printTotalMe"/>
-			<item value="request"/>
-			<item value="accepted"/>
 		</list>
 		<list key="replacehistory">
 		</list>
@@ -24,7 +24,7 @@
 		<item value="336" key="DIALOG_WIDTH"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 		<item value="454" key="DIALOG_HEIGHT"/>
-		<item value="891" key="DIALOG_X_ORIGIN"/>
-		<item value="251" key="DIALOG_Y_ORIGIN"/>
+		<item value="1074" key="DIALOG_X_ORIGIN"/>
+		<item value="252" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

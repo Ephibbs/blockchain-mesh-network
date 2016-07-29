@@ -16,7 +16,7 @@ public class BluetoothManager {
 	private BluetoothServer server;
 	private Node node;
 	private boolean verbose = true;
-	
+
 	BluetoothManager(Node node) {
 		this.node = node;
 		client = new BluetoothClient();
