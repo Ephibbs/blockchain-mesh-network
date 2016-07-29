@@ -74,11 +74,13 @@ public class NetworkNode implements Node {
 	public HashMap<String, NodeInfo> nodeInfoMap = new HashMap<String, NodeInfo>();
 
 	public WifiManager wm;
+	public BluetoothManager bm;
 
 	NetworkNode(String id) throws NoSuchAlgorithmException, NoSuchProviderException {
 		nodeID = id;
 		blockChain = new Blockchain(this);
-		this.wm = new WifiManager(this);
+		//this.wm = new WifiManager(this);
+		this.bm = BluetoothManager(this);
 		// this.myLocation = this.myLocation.createRandomLocation();
 
 		this.nodeID = id;

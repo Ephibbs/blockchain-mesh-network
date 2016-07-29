@@ -34,22 +34,8 @@ public class WifiServer implements Runnable {
     public void run() {
         try {
 			startServer();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SignatureException e) {
+		} catch (InvalidKeyException | ClassNotFoundException | NoSuchAlgorithmException | NoSuchProviderException
+				| SignatureException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -79,6 +65,7 @@ public class WifiServer implements Runnable {
 	        ) {
 	            String line;
 	        	if((line = in.readLine()) != null) {
+	        		System.out.println("Received String: "+line);
 	        		wm.addReceived((Message) fromString(line));
 	        	}
 	        	Thread.sleep(500);
