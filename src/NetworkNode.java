@@ -531,7 +531,6 @@ public class NetworkNode implements Node {
 
 	public void createPingToBroadcast() {
 		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey);
-		System.out.println(getBlockchain());
 		newPing.setBlockchain(getBlockchain());
 		newPing.setLocation(new Location().createRandomLocation());
 		newPing.setTime(new Time(System.currentTimeMillis()));
