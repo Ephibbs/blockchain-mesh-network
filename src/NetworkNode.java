@@ -51,6 +51,7 @@ public class NetworkNode implements Node {
 	public byte[] byteArray = new byte[1024];
 	public int TIMEING = 10;
 	public int currentMessageCount = 0;
+	public Location currentLocation = null;
 
 	// Blockchain
 	public Blockchain blockChain;
@@ -236,21 +237,21 @@ public class NetworkNode implements Node {
 					openRequests.add(msg);
 					totalMessages.add(msg);
 					distributeMessage(msg);
-					createPingToBroadcast();
+					//createPingToBroadcast();
 					break;
 				case "ResourceRequestBid":
 					blockChain.add(msg);
 					bidsToMyRequests.add(msg);
 					totalMessages.add(msg);
 					distributeMessage(msg);
-					createPingToBroadcast();
+					//createPingToBroadcast();
 					break;
 				case "ResourceAgreement":
 					blockChain.add(msg);
 					myResourceAgreements.add(msg);
 					totalMessages.add(msg);
 					distributeMessage(msg);
-					createPingToBroadcast();
+					//createPingToBroadcast();
 					break;
 				case "ResourceSent":
 					blockChain.add(msg);
@@ -259,7 +260,7 @@ public class NetworkNode implements Node {
 					updateNodeInfo((ResourceSent) msg);
 					totalMessages.add(msg);
 					distributeMessage(msg);
-					createPingToBroadcast();
+					//createPingToBroadcast();
 					break;
 				case "ResourceReceived":
 					blockChain.add(msg);
@@ -267,7 +268,7 @@ public class NetworkNode implements Node {
 					updateNodeInfo((ResourceReceived) msg);
 					totalMessages.add(msg);
 					distributeMessage(msg);
-					createPingToBroadcast();
+					//createPingToBroadcast();
 					break;
 				case "Ping":
 					receivePing((Ping) msg);
@@ -290,10 +291,10 @@ public class NetworkNode implements Node {
 					break;
 			}
 			msgMap.put(msg.getID(), msg);
-//			this.currentMessageCount++;
-//			if (this.currentMessageCount % this.TIMEING == 0) {
-//				this.createPingToBroadcast();
-//			}
+			this.currentMessageCount++;
+			if (this.currentMessageCount % this.TIMEING == 0) {
+				this.createPingToBroadcast();
+			}
 		}
 	}
 
@@ -530,7 +531,15 @@ public class NetworkNode implements Node {
 
 	public void createPing() {
 		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey);
-		newPing.setLocation(new Location().createRandomLocation());
+		//this.currentLocation = new Location().createRandomLocation();
+		newPing.setLocation(this.currentLocation);
+		newPing.setTime(new Time(System.currentTimeMillis()));
+		sendToTempNodes(newPing);
+	}
+	
+	public void createPingWithNoLocationChange(){
+		Ping newPing = new Ping(this.getNodeID(), this.getNodeID(), this.pubKey);
+		newPing.setLocation(this.currentLocation);
 		newPing.setTime(new Time(System.currentTimeMillis()));
 		sendToTempNodes(newPing);
 	}
