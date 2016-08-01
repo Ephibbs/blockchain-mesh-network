@@ -1,11 +1,15 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -19,6 +23,8 @@ import java.security.SignatureException;
 import java.security.SignedObject;
 import java.sql.Time;
 import java.util.*;
+
+import javax.imageio.ImageIO;
 
 /**
  * Created by 585728 on 6/28/2016.
@@ -564,8 +570,21 @@ public class NetworkNode implements Node {
 	}
 
 	public void drawNodes(Graphics g, int MAXSIZE, int width, int height) {
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
+//		g.setColor(Color.LIGHT_GRAY);
+//		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
+		
+		File cFile = new File("Tuck.png");
+		String filePath = cFile.getAbsolutePath();
+		String newFilePath = filePath.replace("bin\\", "");
+		
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(new File(newFilePath));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		g.drawImage(image, MAXSIZE, 0, null);
 
 		g.setColor(Color.RED);
 		g.fillOval(MAXSIZE + this.myLocation.getX(), this.myLocation.getY(), width, height);

@@ -10,6 +10,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -20,6 +22,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class ClientGUI extends Program {
@@ -28,8 +31,8 @@ public class ClientGUI extends Program {
 	public static final int MAXMOVE = 50;
 	public static final int MAXSIZE = 800;
 	public static final int MAXSIZEW = 800;
-	public static final int WIDTH = 10;
-	public static final int HEIGHT = 10;
+	public static final int WIDTH = 50;
+	public static final int HEIGHT = 50;
 
 	public JTextField nodeName;
 	public JTextField resourceAmount;
@@ -630,8 +633,25 @@ public class ClientGUI extends Program {
 
 	private void generateNodeMap() {
 		this.g = this.canvas.getGraphics();
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
+		
+		File cFile = new File("Tuck.png");
+		String filePath = cFile.getAbsolutePath();
+		String newFilePath = filePath.replace("bin\\", "");
+		
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(new File(newFilePath));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		g.drawImage(image, MAXSIZE, 0, null);
+		
+		//g.setColor(Color.LIGHT_GRAY);
+		//g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
+		
+		
+		// here
 		drawNodes();
 	}
 
