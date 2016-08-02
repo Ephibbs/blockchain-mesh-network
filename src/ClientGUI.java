@@ -29,10 +29,17 @@ public class ClientGUI extends Program {
 
 	public static final int TEXT_FIELD_SIZE = 15;
 	public static final int MAXMOVE = 50;
-	public static final int MAXSIZE = 800;
+	public static int MAX = 800;
+	//public static int MAXSIZE = 800;
 	public static final int MAXSIZEW = 800;
 	public static final int WIDTH = 50;
 	public static final int HEIGHT = 50;
+	public static final int FONTSIZE = 30;
+	public int MAXSIZEIMAGE = 400;
+	public int IMAGEY = (800-MAXSIZEIMAGE)/2;
+	public int IMAGEX = (800-MAXSIZEIMAGE)/2;
+	public int MAXSIZE = MAX + IMAGEX;
+	
 
 	public JTextField nodeName;
 	public JTextField resourceAmount;
@@ -382,10 +389,10 @@ public class ClientGUI extends Program {
 				String type = msg.getMessageType();
 				String id = msg.getID();
 				String author = msg.getAuthor();
-				g.drawString(type, 5, 40 + i * 25);
-				g.drawString(id, 5 + MAXSIZE / 3, 40 + i * 25);
-				g.drawString(author, 5 + 2 * MAXSIZE / 3, 40 + i * 25);
-				g.drawLine(0, 45 + i * 25, MAXSIZE, 45 + i * 25);
+				g.drawString(type, 5, (FONTSIZE*2) + i * (FONTSIZE+5));
+				g.drawString(id, 5 + MAXSIZE / 3, (FONTSIZE*2) + i * (FONTSIZE+5));
+				g.drawString(author, 5 + 2 * MAXSIZE / 3, (FONTSIZE*2) + i * (FONTSIZE+5));
+				g.drawLine(0, (2*FONTSIZE+5) + i * (FONTSIZE+5), MAXSIZE, (2*FONTSIZE+5) + i * (FONTSIZE+5));
 			}
 		}
 	}
@@ -401,10 +408,10 @@ public class ClientGUI extends Program {
 			String resourceRequested = rr.resourceType;
 			String resourceAmount = "" + rr.amount;
 			String originator = rr.getAuthor();
-			g.drawString(requestID, 5, 40 + i * 20);
-			g.drawString(resourceRequested, 5 + MAXSIZE / 4, 40 + i * 20);
-			g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
-			g.drawString(originator, 5 + 3 * MAXSIZE / 4, 40 + i * 20);
+			g.drawString(requestID, 5, 2*FONTSIZE + i * FONTSIZE);
+			g.drawString(resourceRequested, 5 + MAXSIZE / 4, 2*FONTSIZE + i * FONTSIZE);
+			g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 2*FONTSIZE + i * FONTSIZE);
+			g.drawString(originator, 5 + 3 * MAXSIZE / 4, 2*FONTSIZE + i * FONTSIZE);
 		}
 	}
 	
@@ -418,9 +425,9 @@ public class ClientGUI extends Program {
 				for (String key : nodesR) {
 					String resourceName = key;
 					String resourceAmount = "" + nodeResources.get(key);
-					g.drawString(resourceName, 5, 75 + o * 25);
-					g.drawString(resourceAmount, 10 + 0 / 5, 75 + o * 25);
-					g.drawLine(0, 78 + o * 25, MAXSIZE, 78 + o * 25);
+					g.drawString(resourceName, 5, 3*FONTSIZE+15 + o * (FONTSIZE+5));
+					g.drawString(resourceAmount, 10 + 0 / 5, 75 + o * (FONTSIZE+5));
+					g.drawLine(0, 3*FONTSIZE+18 + o * (FONTSIZE+5), MAXSIZE, 78 + o * (FONTSIZE+5));
 					o++;
 				}
 			}
@@ -438,10 +445,10 @@ public class ClientGUI extends Program {
 				String eta = "" + rrbid.eta;
 				//String resourceAmount = "" + rrbid.amount;
 				String bidder = rrbid.author;
-				g.drawString(bidID, 5, 40 + i * 20);
-				g.drawString(eta, 5 + MAXSIZE / 3, 40 + i * 20);
+				g.drawString(bidID, 5, 2*FONTSIZE + i * FONTSIZE);
+				g.drawString(eta, 5 + MAXSIZE / 3, 2*FONTSIZE + i * FONTSIZE);
 				//g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
-				g.drawString(bidder, 5 + 2 * MAXSIZE / 3, 40 + i * 20);
+				g.drawString(bidder, 5 + 2 * MAXSIZE / 3, 2*FONTSIZE + i * FONTSIZE);
 			}
 		}
 	}
@@ -460,10 +467,10 @@ public class ClientGUI extends Program {
 				String resourceRequested = rr.resourceType;
 				//String resourceAmount = "" + rr.amount;
 				String destination = rr.author;
-				g.drawString(messageNumber, 5, 40 + i * 20);
-				g.drawString(resourceRequested, 5 + MAXSIZE / 3, 40 + i * 20);
+				g.drawString(messageNumber, 5, 2*FONTSIZE + i * FONTSIZE);
+				g.drawString(resourceRequested, 5 + MAXSIZE / 3, 2*FONTSIZE + i * FONTSIZE);
 				//g.drawString(resourceAmount, 5 + 2 * MAXSIZE / 4, 40 + i * 20);
-				g.drawString(destination, 5 + 2 * MAXSIZE / 3, 40 + i * 20);
+				g.drawString(destination, 5 + 2 * MAXSIZE / 3, 2*FONTSIZE + i * FONTSIZE);
 			}
 		}
 	}
@@ -492,10 +499,10 @@ public class ClientGUI extends Program {
 			} else {
 				s = b.getPrevHash();
 			}
-			g.drawString(b.getMyHash().substring(0, 10),  5, 40 + i * 20);
-			g.drawString(s,  5 + MAXSIZE / 4, 40 + i * 20);
-			g.drawString(Integer.toString(b.getMsgs().size()),  5 + 2 * MAXSIZE / 4, 40 + i * 20);
-			g.drawString(b.getNonce(),  5 + 3 * MAXSIZE / 4, 40 + i * 20);
+			g.drawString(b.getMyHash().substring(0, 10),  5, 2*FONTSIZE + i * FONTSIZE);
+			g.drawString(s,  5 + MAXSIZE / 4, 2*FONTSIZE + i * FONTSIZE);
+			g.drawString(Integer.toString(b.getMsgs().size()),  5 + 2 * MAXSIZE / 4, 2*FONTSIZE + i * FONTSIZE);
+			g.drawString(b.getNonce(),  5 + 3 * MAXSIZE / 4, 2*FONTSIZE + i * FONTSIZE);
 		}
 	}
 
@@ -510,13 +517,13 @@ public class ClientGUI extends Program {
 		g.drawRect(2 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
 		g.drawRect(3 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
 
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.setFont(new Font("TimesRoman", Font.PLAIN, FONTSIZE));
 		g.setColor(Color.WHITE); // Here
-		g.drawString("Hash ID",  5, 20);
-		g.drawString("Previous Hash", 5 + MAXSIZE / 4, 20);
-		g.drawString("Number of Messages", 5 + 2 * MAXSIZE / 4, 20);
-		g.drawString("Nonce", 5 + 3 * MAXSIZE / 4, 20);
-		g.drawLine(0, 25, MAXSIZE, 25);
+		g.drawString("Hash ID",  5, FONTSIZE);
+		g.drawString("Previous Hash", 5 + MAXSIZE / 4, FONTSIZE);
+		g.drawString("Number of Messages", 5 + 2 * MAXSIZE / 4, FONTSIZE);
+		g.drawString("Nonce", 5 + 3 * MAXSIZE / 4, FONTSIZE);
+		g.drawLine(0, FONTSIZE+5, MAXSIZE, FONTSIZE+5);
 	}
 	
 	private void generateBidMessageBoard() {
@@ -530,13 +537,13 @@ public class ClientGUI extends Program {
 		g.drawRect(2 * MAXSIZE / 3, 0, MAXSIZE / 3, MAXSIZE);
 		//g.drawRect(3 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
 
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.setFont(new Font("TimesRoman", Font.PLAIN, FONTSIZE));
 		g.setColor(Color.WHITE);
-		g.drawString("Bid Number", 5, 20);
-		g.drawString("Time of Arrival", 5 + MAXSIZE / 3, 20);
+		g.drawString("Bid Number", 5, FONTSIZE);
+		g.drawString("Time of Arrival", 5 + MAXSIZE / 3, FONTSIZE);
 		//g.drawString("Amount Can Send", 5 + 2 * MAXSIZE / 4, 20);
-		g.drawString("Bidder", 5 + 2 * MAXSIZE / 3, 20);
-		g.drawLine(0, 25, 1 * MAXSIZE, 25);
+		g.drawString("Bidder", 5 + 2 * MAXSIZE / 3, FONTSIZE);
+		g.drawLine(0, FONTSIZE+5, 1 * MAXSIZE, FONTSIZE+5);
 	}
 
 	private void generateAcceptedMessageBoard() {
@@ -549,13 +556,13 @@ public class ClientGUI extends Program {
 		g.drawRect(2 * MAXSIZE / 3, 0, MAXSIZE / 3, MAXSIZE);
 		//g.drawRect(3 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
 
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.setFont(new Font("TimesRoman", Font.PLAIN, FONTSIZE));
 		g.setColor(Color.WHITE);
-		g.drawString("Message Number", 5, 20);
-		g.drawString("Resource Requested", 5 + MAXSIZE / 3, 20);
+		g.drawString("Message Number", 5, FONTSIZE);
+		g.drawString("Resource Requested", 5 + MAXSIZE / 3, FONTSIZE);
 		//g.drawString("Amount Requested", 5 + 2 * MAXSIZE / 4, 20);
-		g.drawString("Destination", 5 + 2 * MAXSIZE / 3, 20);
-		g.drawLine(0, 25, 1 * MAXSIZE, 25);
+		g.drawString("Destination", 5 + 2 * MAXSIZE / 3, FONTSIZE);
+		g.drawLine(0, FONTSIZE+5, 1 * MAXSIZE, FONTSIZE+5);
 	}
 
 	private void generateNodesResourcesBoard() {
@@ -566,13 +573,14 @@ public class ClientGUI extends Program {
 		g.drawRect(0, 0, MAXSIZE / 5, MAXSIZE);
 		g.drawRect(MAXSIZE / 5, 0, 4 * MAXSIZE / 5, MAXSIZE);
 
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.setFont(new Font("TimesRoman", Font.PLAIN, FONTSIZE));
 		g.setColor(Color.WHITE);
-		g.drawString(this.viewResources.getText() + "'s resources at Location ", 5 + 2 * MAXSIZE / 5, 20);
-		g.drawString("Resource Name", 5, 45);
-		g.drawString("Quantity", 5 + MAXSIZE / 5, 45);
-		g.drawLine(0, 25, MAXSIZE, 25);
-		g.drawLine(0, 50, MAXSIZE, 50);
+		//g.drawString("hi", 400, 50);
+		g.drawString(this.viewResources.getText() + "'s resources at Location ", 5 + 2 * MAXSIZE / 5, (FONTSIZE));
+		g.drawString("Resource Name", 5, 2*FONTSIZE+5);
+		g.drawString("Quantity", 5 + MAXSIZE / 5, 2*FONTSIZE+5);
+		g.drawLine(0, FONTSIZE+5, MAXSIZE, FONTSIZE+5);
+		g.drawLine(0, FONTSIZE+10, MAXSIZE, FONTSIZE+10);
 
 	}
 
@@ -587,14 +595,14 @@ public class ClientGUI extends Program {
 		// g.drawRect(3 * MAXSIZE / 5, 0, MAXSIZE / 5, MAXSIZE);
 		// g.drawRect(4 * MAXSIZE / 5, 0, MAXSIZE / 5, MAXSIZE);
 
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.setFont(new Font("TimesRoman", Font.PLAIN, FONTSIZE));
 		g.setColor(Color.WHITE); // Here
-		g.drawString("Message Type", 5, 20);
-		g.drawString("Message ID", 5 + MAXSIZE / 3, 20);
-		g.drawString("Author", 5 + 2 * MAXSIZE / 3, 20);
+		g.drawString("Message Type", 5, FONTSIZE);
+		g.drawString("Message ID", 5 + MAXSIZE / 3, FONTSIZE);
+		g.drawString("Author", 5 + 2 * MAXSIZE / 3, FONTSIZE);
 		// g.drawString("Originator", 5 + 3 * MAXSIZE / 5, 20);
 		// g.drawString("Message Type", 5 + 4 * MAXSIZE / 5, 20);
-		g.drawLine(0, 25, MAXSIZE, 25);
+		g.drawLine(0, FONTSIZE+5, MAXSIZE, FONTSIZE+5);
 	}
 
 	private void generateMessageBoard() {
@@ -607,13 +615,13 @@ public class ClientGUI extends Program {
 		g.drawRect(2 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
 		g.drawRect(3 * MAXSIZE / 4, 0, MAXSIZE / 4, MAXSIZE);
 
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.setFont(new Font("TimesRoman", Font.PLAIN, FONTSIZE));
 		g.setColor(Color.WHITE); // Here
-		g.drawString("Message Number", 5, 20);
-		g.drawString("Resource Requested", 5 + MAXSIZE / 4, 20);
-		g.drawString("Amount Requested", 5 + 2 * MAXSIZE / 4, 20);
-		g.drawString("Originator", 5 + 3 * MAXSIZE / 4, 20);
-		g.drawLine(0, 25, MAXSIZE, 25);
+		g.drawString("Message Number", 5, FONTSIZE);
+		g.drawString("Resource Requested", 5 + MAXSIZE / 4, FONTSIZE);
+		g.drawString("Amount Requested", 5 + 2 * MAXSIZE / 4, FONTSIZE);
+		g.drawString("Originator", 5 + 3 * MAXSIZE / 4, FONTSIZE);
+		g.drawLine(0, FONTSIZE+5, MAXSIZE, FONTSIZE+5);
 	}
 
 	public void beginSimulation() {
@@ -634,7 +642,11 @@ public class ClientGUI extends Program {
 	private void generateNodeMap() {
 		this.g = this.canvas.getGraphics();
 		
-		File cFile = new File("Tuck.png");
+		String fName = "Tuck" + MAXSIZEIMAGE + ".png";
+		//System.out.println(fName);
+		File cFile = new File(fName);
+		
+		//File cFile = new File("Tuck.png");
 		String filePath = cFile.getAbsolutePath();
 		String newFilePath = filePath.replace("bin\\", "");
 		
@@ -693,9 +705,9 @@ public class ClientGUI extends Program {
 		for (int i = 0; i < resources.size(); i++) {
 			String amount = String.valueOf(resources.get(i).getAmount());
 			String type = resources.get(i).getType();
-			g.drawString(amount, 5, 70 + i * 25);
-			g.drawString(type, 5 + MAXSIZE/5, 70+i*25);
-			g.drawLine(0, 73+i*25, MAXSIZE, 73+i*25);
+			g.drawString(amount, 5, (FONTSIZE*3 + 10) + i * (FONTSIZE + 5));
+			g.drawString(type, 5 + MAXSIZE/5, (FONTSIZE*3 + 10)+i*(FONTSIZE+5));
+			g.drawLine(0, (FONTSIZE*3 + 13)+i*(FONTSIZE+5), MAXSIZE, (FONTSIZE*3 + 13)+i*(FONTSIZE+5));
 		}
 	}
 
@@ -707,13 +719,13 @@ public class ClientGUI extends Program {
 		g.drawRect(0, 0, MAXSIZE / 5, MAXSIZE);
 		g.drawRect(MAXSIZE / 5, 0, 4 * MAXSIZE / 5, MAXSIZE);
 
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.setFont(new Font("TimesRoman", Font.PLAIN, FONTSIZE));
 		g.setColor(Color.WHITE);
-		g.drawString(nodeToView + "'s resources at Location X:  " + nodeX + " Y: " + nodeY, 5 + 3 * MAXSIZE / 10, 20);
-		g.drawString("Quantity", 5, 45);
-		g.drawString("Name", 5 + MAXSIZE / 5, 45);
-		g.drawLine(0, 25, MAXSIZE, 25);
-		g.drawLine(0, 50, MAXSIZE, 50);
+		g.drawString(nodeToView + "'s resources at Location X:  " + nodeX + " Y: " + nodeY, 5 + 3 * MAXSIZE / 10, (FONTSIZE));
+		g.drawString("Quantity", 5, 2*FONTSIZE+5);
+		g.drawString("Name", 5 + MAXSIZE / 5, 2*FONTSIZE+5);
+		g.drawLine(0, FONTSIZE+5, MAXSIZE, FONTSIZE+5);
+		g.drawLine(0, 2*FONTSIZE+10, MAXSIZE, 2*FONTSIZE+10);
 	}
 
 }

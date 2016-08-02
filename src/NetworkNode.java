@@ -39,6 +39,8 @@ public class NetworkNode implements Node {
 	public String nodeID = null;
 	public Random rand = new Random();
 	public HashMap<String, Integer> myResources = new HashMap<String, Integer>();
+	public int MAXSIZEIMAGE = 400;
+	public int IMAGEY = (800-MAXSIZEIMAGE)/2;
 
 	// Encryption Set
 	public ArrayList<PublicKey> publicKeySet = new ArrayList<PublicKey>();
@@ -582,7 +584,11 @@ public class NetworkNode implements Node {
 //		g.setColor(Color.LIGHT_GRAY);
 //		g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);
 		
-		File cFile = new File("Tuck.png");
+		String fName = "Tuck" + MAXSIZEIMAGE + ".png";
+		//System.out.println(fName);
+		File cFile = new File(fName);
+		
+		//File cFile = new File("Tuck.png");
 		String filePath = cFile.getAbsolutePath();
 		String newFilePath = filePath.replace("bin\\", "");
 		
@@ -593,7 +599,8 @@ public class NetworkNode implements Node {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		g.drawImage(image, MAXSIZE, 0, null);
+		//g.drawImage(image, MAXSIZE, 0, null);
+		g.drawImage(image, MAXSIZE, IMAGEY, null);
 
 		g.setColor(Color.RED);
 		g.fillOval(MAXSIZE + this.myLocation.getX(), this.myLocation.getY(), width, height);
