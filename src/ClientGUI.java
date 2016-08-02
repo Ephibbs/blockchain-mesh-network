@@ -32,8 +32,8 @@ public class ClientGUI extends Program {
 	public static int MAX = 800;
 	//public static int MAXSIZE = 800;
 	public static final int MAXSIZEW = 800;
-	public static final int WIDTH = 50;
-	public static final int HEIGHT = 50;
+	public static final int WIDTH = 30;
+	public static final int HEIGHT = 30;
 	public static final int FONTSIZE = 30;
 	public int MAXSIZEIMAGE = 400;
 	public int IMAGEY = (800-MAXSIZEIMAGE)/2;
@@ -657,7 +657,8 @@ public class ClientGUI extends Program {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		g.drawImage(image, MAXSIZE, 0, null);
+//		g.drawImage(image, MAXSIZE, 0, null);
+		g.drawImage(image, MAXSIZE + IMAGEX, IMAGEY, null);
 		
 		//g.setColor(Color.LIGHT_GRAY);
 		//g.fillRect(MAXSIZE, 0, MAXSIZE, MAXSIZE);

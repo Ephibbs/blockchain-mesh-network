@@ -2,9 +2,10 @@ import java.io.Serializable;
 import java.util.Random;
 
 public class Location implements Serializable{
+	public int MAXSIZEIMAGE = 400;
 	public int x = 0;
 	public int y = 0;
-	public int size = 10;
+	public int size = 30;
 	Random rn = new Random();
 	public Location(int x, int y){
 		this.x = x;
@@ -14,7 +15,7 @@ public class Location implements Serializable{
 		//createRandomLocation();
 	}
 	public Location createRandomLocation() {
-		return new Location(rn.nextInt(800 - 2 * size) + size, rn.nextInt(800 - 2 * size) + size);
+		return new Location(rn.nextInt(MAXSIZEIMAGE - 2 * size) + size, rn.nextInt(MAXSIZEIMAGE - 2 * size) + size);
 	}
 	public int getX(){
 		return this.x;

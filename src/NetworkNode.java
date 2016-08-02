@@ -40,7 +40,10 @@ public class NetworkNode implements Node {
 	public Random rand = new Random();
 	public HashMap<String, Integer> myResources = new HashMap<String, Integer>();
 	public int MAXSIZEIMAGE = 400;
+	public int MAX = 800;
 	public int IMAGEY = (800-MAXSIZEIMAGE)/2;
+	public int IMAGEX = (800-MAXSIZEIMAGE)/2;
+	public int MAXSIZE = MAX + IMAGEX;
 
 	// Encryption Set
 	public ArrayList<PublicKey> publicKeySet = new ArrayList<PublicKey>();
@@ -600,10 +603,13 @@ public class NetworkNode implements Node {
 			e.printStackTrace();
 		}
 		//g.drawImage(image, MAXSIZE, 0, null);
-		g.drawImage(image, MAXSIZE, IMAGEY, null);
+		g.drawImage(image, MAXSIZE + IMAGEX, IMAGEY, null);
+		//System.out.println("f: " + (MAXSIZE + IMAGEX));
 
 		g.setColor(Color.RED);
-		g.fillOval(MAXSIZE + this.myLocation.getX(), this.myLocation.getY(), width, height);
+		//g.fillOval(MAXSIZE + this.myLocation.getX(), this.myLocation.getY(), width, height);
+		//System.out.println("t: " + (MAXSIZE + IMAGEX + this.myLocation.getX()));
+		g.fillOval(MAXSIZE + IMAGEX + this.myLocation.getX(), IMAGEY + this.myLocation.getY(), width, height);
 		g.setColor(Color.BLACK);
 
 		// need to get the locations of other nodes
@@ -620,7 +626,8 @@ public class NetworkNode implements Node {
 			x = nodeInfoMap.get(key).getMyLocation().getX();
 			y = nodeInfoMap.get(key).getMyLocation().getY();
 			if (!this.nodeID.equals(key)) {
-				g.fillOval(MAXSIZE + x, y, width, height);
+				System.out.println(MAXSIZE + IMAGEX + x);
+				g.fillOval(MAXSIZE + IMAGEX + x, IMAGEY + y, width, height);
 			}
 			// System.out.println("I should have drawn other nodes");
 		}
