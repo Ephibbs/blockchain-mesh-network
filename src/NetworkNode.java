@@ -39,11 +39,18 @@ public class NetworkNode implements Node {
 	public String nodeID = null;
 	public Random rand = new Random();
 	public HashMap<String, Integer> myResources = new HashMap<String, Integer>();
-	public int MAXSIZEIMAGE = 400;
+//	public int MAXSIZEIMAGE = 400;
+//	public int MAX = 800;
+//	public int IMAGEY = (800-MAXSIZEIMAGE)/2;
+//	public int IMAGEX = (800-MAXSIZEIMAGE)/2;
+//	public int MAXSIZE = MAX + IMAGEX;
 	public int MAX = 800;
+	public int MAXSIZEIMAGE = 700;
 	public int IMAGEY = (800-MAXSIZEIMAGE)/2;
-	public int IMAGEX = (800-MAXSIZEIMAGE)/2;
-	public int MAXSIZE = MAX + IMAGEX;
+	//public int IMAGEX = (800-MAXSIZEIMAGE)/2;
+	//public int IMAGEY = 0;
+	public int IMAGEX = 0;
+	public int MAXSIZE = MAX + 200;
 
 	// Encryption Set
 	public ArrayList<PublicKey> publicKeySet = new ArrayList<PublicKey>();

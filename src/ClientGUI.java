@@ -35,10 +35,12 @@ public class ClientGUI extends Program {
 	public static final int WIDTH = 30;
 	public static final int HEIGHT = 30;
 	public static final int FONTSIZE = 30;
-	public int MAXSIZEIMAGE = 400;
+	public int MAXSIZEIMAGE = 700;
 	public int IMAGEY = (800-MAXSIZEIMAGE)/2;
-	public int IMAGEX = (800-MAXSIZEIMAGE)/2;
-	public int MAXSIZE = MAX + IMAGEX;
+	//public int IMAGEX = (800-MAXSIZEIMAGE)/2;
+	//public int IMAGEY = 0;
+	public int IMAGEX = 0;
+	public int MAXSIZE = MAX + 200;
 	
 
 	public JTextField nodeName;

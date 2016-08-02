@@ -2,7 +2,7 @@ import java.io.Serializable;
 import java.util.Random;
 
 public class Location implements Serializable{
-	public int MAXSIZEIMAGE = 400;
+	public int MAXSIZEIMAGE = 700;
 	public int x = 0;
 	public int y = 0;
 	public int size = 30;
