@@ -166,11 +166,11 @@ public class ClientGUI extends Program {
 		add(new JButton("Accept Bid"), WEST);
 		
 		
-		// Actions
-		add(new JLabel("________________________"), WEST);
-		add(new JLabel("Actions"), WEST);
-		add(new JButton("Draw Nodes"), WEST);
-		add(new JButton("Create Ping"), WEST);
+//		// Actions
+//		add(new JLabel("________________________"), WEST);
+//		add(new JLabel("Actions"), WEST);
+//		add(new JButton("Draw Nodes"), WEST);
+//		add(new JButton("Create Ping"), WEST);
 		
 		
 		// Messages
