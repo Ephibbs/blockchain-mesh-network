@@ -158,7 +158,8 @@ public class ClientGUI extends Program {
 		this.eta = new JTextField(TEXT_FIELD_SIZE);
 		add(this.eta, WEST);
 		add(new JButton("Generate Bid"), WEST);
-
+		
+		add(new JLabel("________________________"), WEST);	
 		add(new JLabel("Bid Number"), WEST);
 		this.bidNumber = new JTextField(TEXT_FIELD_SIZE);
 		add(this.bidNumber, WEST);
@@ -174,12 +175,14 @@ public class ClientGUI extends Program {
 		
 		
 		// Messages
-		add(new JLabel("Messages"), WEST);
+		add(new JLabel("________________________"), WEST);	
+		//add(new JLabel("Messages"), WEST);
 		add(new JButton("Total Messages"), WEST);
 		add(new JButton("Check Requests"), WEST);
 		add(new JButton("Check Bids"), WEST);
 		add(new JButton("Check Accepted"), WEST);
 		
+		add(new JLabel("________________________"), WEST);			
 		this.nodeIDTextField = new JTextField(TEXT_FIELD_SIZE);
 		add(nodeIDTextField, WEST);
 		add(new JButton("View Blocks"), WEST);
@@ -188,14 +191,17 @@ public class ClientGUI extends Program {
 		add(this.viewResources, NORTH);
 		add(new JButton("View Resources"), NORTH);
 
+		add(new JLabel("|"), NORTH);	
 		this.sentResource = new JTextField(TEXT_FIELD_SIZE);
 		add(this.sentResource, NORTH);
 		add(new JButton("Send Resource"), NORTH);
 
+		add(new JLabel("|"), NORTH);
 		this.receiveResource = new JTextField(TEXT_FIELD_SIZE);
 		add(this.receiveResource, NORTH);
 		add(new JButton("Receive Resource"), NORTH);
 
+		add(new JLabel("|"), NORTH);
 		this.shortestPathTo = new JTextField(TEXT_FIELD_SIZE);
 		add(this.shortestPathTo, NORTH);
 		add(new JButton("Show Fastest Path"), NORTH);

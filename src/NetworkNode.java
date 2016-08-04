@@ -141,16 +141,20 @@ public class NetworkNode implements Node {
 	private void putInitResources() {
 		// this.myNode.myResources
 		ArrayList<Resource> resources = new ArrayList<Resource>();
-		resources.add(new Resource(500, "water", null));
-		resources.add(new Resource(20, "medical supplies", null));
-		resources.add(new Resource(300, "food", null));
-		resources.add(new Resource(100, "blankets", null));
-		resources.add(new Resource(50, "tents", null));
-		resources.add(new Resource(40, "gre", null));
-		resources.add(new Resource(50, "radios", null));
-		resources.add(new Resource(100, "laptops", null));
-		resources.add(new Resource(6, "raspberry pis", null));
-		resources.add(new Resource(14, "tons of coffee", null));
+		resources.add(new Resource(500, "Cases of Water", null));
+		resources.add(new Resource(20, "Medical Supplies", null));
+		resources.add(new Resource(300, "Food", null));
+		resources.add(new Resource(100, "Blankets", null));
+		resources.add(new Resource(50, "Tents", null));
+		resources.add(new Resource(50, "Radios", null));
+		resources.add(new Resource(100, "Laptops", null));
+		resources.add(new Resource(6, "Raspberry Pis", null));
+		resources.add(new Resource(14, "Tons of Coffee", null));
+		resources.add(new Resource(100, "Respirators", null));
+		resources.add(new Resource(1000, "Gallons of Gas", null));
+		resources.add(new Resource(12, "Nurses", null));
+		resources.add(new Resource(36, "Hospital Beds", null));
+		resources.add(new Resource(99, "Scalpels", null));
 		NodeInfo ni = new NodeInfo(getNodeID(), pubKey, getLocation(), null);
 		ni.setResourceList(resources);
 		getNodeInfoList().put(nodeID, ni);
